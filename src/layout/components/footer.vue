@@ -1,0 +1,40 @@
+<template>
+    
+    <t-row>
+        <t-col :span="6" :offset="3" class="col_container">
+            <p class="footer_text">
+                &copy; 2024 ChenNing. All Rights Reserved. Themed by TDesign
+            </p>
+        </t-col>
+    </t-row>
+    
+</template>
+
+<script>
+export default {
+    name: 'componentFooter',
+    components: {
+        
+    },
+    methods: {
+    }
+}
+</script>
+
+<style>
+
+.col_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding-left: 16px; */
+}
+
+.footer_text {
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+</style>
