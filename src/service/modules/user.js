@@ -2,6 +2,7 @@ import axios from 'axios';
 import { USER_API_URL, USER_API_LIST } from '@/config/ApiConfig';
 
 const request = (url, method, params, data) => {
+  console.log("请求", url, method, params, data);
   return new Promise((resolve, reject) => {
     axios({
       url: url,
@@ -43,6 +44,11 @@ const logout = () => request(
   {}, {}
 );
 
+const register = (params) => request(
+  `${USER_API_URL}${USER_API_LIST.register}`, 'post',
+  {}, params
+);
+
 const me = () => request(
   `${USER_API_URL}${USER_API_LIST.me}`, 'get',
   {}, {}
@@ -51,5 +57,6 @@ const me = () => request(
 export default {
   login,
   logout,
+  register,
   me
 };
