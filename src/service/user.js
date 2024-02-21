@@ -1,13 +1,13 @@
 import axios from 'axios';
 import VueCookies from "vue-cookies";
 
-const BaseUserURL = 'http://' + window.location.hostname + ':8000/users/';
-const BaseApiURL = 'http://' + window.location.hostname + ':8000/api/';
+const BaseUserURL = 'http://' + window.location.hostname + ':5050/user/';
+const BaseApiURL = 'http://' + window.location.hostname + ':5050/api/';
 
 export const UserLogAPI = {
     login(params) {
         return new Promise((resolve, reject) => {
-            axios.get(BaseUserURL + 'login/', {
+            axios.post(BaseUserURL + 'login/', {
                 params: params
             })
                 .then(resp => {
@@ -15,7 +15,7 @@ export const UserLogAPI = {
                         throw new Error(resp.data.message);
                     }
 
-                    VueCookies.set("USER_NAME", params.username, '30d');
+                    VueCookies.set("userName", params.username, '30d');
                     VueCookies.set("USER_TOKEN", resp.data.token, '3d');
 
                     resolve(resp);
