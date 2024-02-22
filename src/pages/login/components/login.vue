@@ -23,17 +23,28 @@
 
         <t-row>
             <t-col :span="3">
-                <t-checkbox>记住我</t-checkbox>
+                <t-checkbox v-model="formData.rememberMe">记住我</t-checkbox>
             </t-col>
             <t-col :span="9">
 
-                <span><t-link theme="primary" style="float: right;">游客进入</t-link></span>
+                <span>
+                  <t-link 
+                    theme="primary" style="float: right;"
+                    @click="$router.push('/portal/wawa')"
+                  >
+                    游客进入
+                  </t-link>
+                </span>
 
-                <div style="margin-left: 2px; margin-right: 2px; float: right;">
+                <!-- <div style="margin-left: 2px; margin-right: 2px; float: right;">
                     <t-divider layout="vertical" />
                 </div>
 
-                <span><t-link theme="primary" style="float: right;">微信扫一扫</t-link></span>
+                <span>
+                  <t-link theme="primary" style="float: right;">
+                    微信扫一扫
+                  </t-link>
+                </span> -->
 
             </t-col>
         </t-row>
@@ -56,14 +67,14 @@
                 <div style="margin: 4px; float: right;"></div>
 
                 <t-form-item style="float: right;">
-                    <t-popup placement="left" content="不开放注册喵" showArrow>
-                        <t-button 
-                          variant="text"
-                          @click="$emit('updateSelected', 'register')"
-                        >
-                        注册
-                      </t-button>
-                    </t-popup>
+                    
+                  <t-button 
+                    variant="text"
+                    @click="$emit('updateSelected', 'register')"
+                  >
+                  注册
+                  </t-button>
+
                 </t-form-item>
 
             </t-col>
@@ -83,8 +94,12 @@ import {
 import api from '@/service';
 
 const FORM_RULES = {
-  username: [{ required: true, message: '用户名、邮箱和手机号码总得来一个喵', type: 'error' }],
-  token: [{ required: true, message: '没有空的Token喵', type: 'error' }],
+  username: [
+    { required: true, message: '用户名、邮箱和手机号码总得来一个喵', type: 'error' }
+  ],
+  password: [
+    { required: true, message: '密码不能为空', type: 'error' }
+  ],
 };
 
 export default {
@@ -103,7 +118,7 @@ export default {
         password: '',
         repassword: '',
 
-        token: '',
+        rememberMe: false,
       },
       FORM_RULES,
     }
@@ -123,6 +138,7 @@ export default {
             userName: this.formData.username,
             email: "",
             password: this.formData.password,
+            rememberMe: this.formData.rememberMe,
           }
         ).then((data) => {
           

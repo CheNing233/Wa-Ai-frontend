@@ -28,6 +28,7 @@
                                         @updateLoading="(loading) => (this.isLoading = loading)" 
                                         @updateSelected="(selected) => (this.selectedTab = selected)"
                                     />
+                                    
                                 </t-tab-panel>
                             </t-tabs>
 

@@ -40,11 +40,22 @@
             </t-input>
         </t-form-item>
 
-        <t-row style="margin-top: 20px;">
+        <t-row style="margin-top: 20px; margin-bottom: 20px;">
 
-            <t-col :span="12">
-                <t-form-item>
-                    <t-button block theme="primary" type="submit">注册</t-button>
+            <t-col :span="6">
+                <t-form-item style="float: left;">
+                  <t-button 
+                    variant="outline" 
+                    @click="$emit('updateSelected', 'login')"
+                  >
+                  已经有账号？返回登录
+                  </t-button>
+                </t-form-item>
+            </t-col>
+
+            <t-col :span="6">
+                <t-form-item style="float: right;">
+                    <t-button theme="primary" type="submit">注册</t-button>
                 </t-form-item>
             </t-col>
 
@@ -66,8 +77,24 @@ import {
 import api from '@/service';
 
 const FORM_RULES = {
-  username: [{ required: true, message: '用户名、邮箱和手机号码总得来一个喵', type: 'error' }],
-//   token: [{ required: true, message: '没有空的Token喵', type: 'error' }],
+  username: [
+    { required: true, message: '用来登录的用户名，不能不写喵', type: 'error' }
+  ],
+  nickname: [
+    { required: true, message: '昵称必填', type: 'error'  },
+  ],
+  email: [
+    { required: true, message: '邮箱必填' , type: 'error' },
+    { email: { ignore_max_length: true }, message: '请输入正确的邮箱地址', type: 'error'  },
+  ],
+  password: [
+    { required: true, message: '密码必填', type: 'error'  },
+    { min: 6, message: '密码长度不能小于6位', type: 'error'  },
+  ],
+  repassword: [
+    { required: true, message: '重复密码必填', type: 'error'  },
+    { min: 6, message: '密码长度不能小于6位', type: 'error'  },
+  ],
 };
 
 export default {
@@ -102,7 +129,7 @@ export default {
       if (validateResult === true) {
 
         this.$emit('updateLoading', true);
-
+        console.log(validateResult);
         console.log(this.formData);
         api.userApi.register(
           {
@@ -129,6 +156,14 @@ export default {
         this.$message.warning(firstError);
       }
 
+    },
+
+    twoPwdValidator() {
+      if (this.formData.password !== this.formData.rePassword) {
+        return false;
+      } else{
+        return true;
+      }
     },
 },
 }
