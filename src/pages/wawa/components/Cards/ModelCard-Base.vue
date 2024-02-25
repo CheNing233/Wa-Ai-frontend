@@ -139,7 +139,7 @@ export default {
         }
     },
     created() {
-        // this.fresh();
+        this.fresh();
     },
 }
 </script>

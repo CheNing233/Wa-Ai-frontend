@@ -39,27 +39,27 @@
                 </t-col>
                 <t-col flex="1">
                     <t-space style="float: right; flex-wrap: wrap; ">
-                        <t-button variant="outline" size="small"
+                        <t-button variant="text" size="small"
                             @click="() => {workbenchParams.hr_scale = 1;}"
                         >
                             1x
                         </t-button>
-                        <t-button variant="outline" size="small"
+                        <t-button variant="text" size="small"
                             @click="() => {workbenchParams.hr_scale = 1.5;}"
                         >
                             1.5x
                         </t-button>
-                        <t-button variant="outline" size="small"
+                        <t-button variant="text" size="small"
                             @click="() => {workbenchParams.hr_scale = 2;}"
                         >
                             2x
                         </t-button>
-                        <t-button variant="outline" size="small"
+                        <t-button variant="text" size="small"
                             @click="() => {workbenchParams.hr_scale = 3;}"
                         >
                             3x
                         </t-button>
-                        <t-button variant="outline" size="small"
+                        <t-button variant="text" size="small"
                             @click="() => {workbenchParams.hr_scale = 4;}"
                         >
                             4x

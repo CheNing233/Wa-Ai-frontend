@@ -7,7 +7,7 @@
             <template #actions>
             <t-space>
                 <t-button
-                    variant="outline"
+                    variant="text"
                     size="small"
                 >
                     推荐
@@ -36,7 +36,7 @@
                     <strong>基础模型：</strong>
                 </t-col>
                 <t-col flex="shrink">
-                    <t-button variant="outline" size="small"
+                    <t-button variant="text" size="small"
                     >
                         选择
                     </t-button>
@@ -54,7 +54,7 @@
                     <strong>LoRa 模型：</strong>
                 </t-col>
                 <t-col flex="shrink">
-                    <t-button variant="outline" size="small"
+                    <t-button variant="text" size="small"
                     >
                         添加
                     </t-button>
@@ -76,10 +76,20 @@
                     <strong>Embedding 模型：</strong>
                 </t-col>
                 <t-col flex="shrink">
-                    <t-button variant="outline" size="small"
+                    <t-button variant="text" size="small"
                     >
                         添加
                     </t-button>
+                </t-col>
+            </t-row>
+
+            <t-row :gutter="[8, 8]">
+                <t-col 
+                    v-for="(item, index) in workbenchSelected.EMBEDDING" 
+                    :key="index"
+                    :span="12"
+                >
+                    <LoraCard :props="item"/>
                 </t-col>
             </t-row>
 
@@ -88,10 +98,16 @@
                     <strong>VAE 模型：</strong>
                 </t-col>
                 <t-col flex="shrink">
-                    <t-button variant="outline" size="small"
+                    <t-button variant="text" size="small"
                     >
                         选择
                     </t-button>
+                </t-col>
+            </t-row>
+
+            <t-row :gutter="[8, 8]">
+                <t-col flex="1">
+                    <CheckpointCard :props="workbenchSelected.VAE" />
                 </t-col>
             </t-row>
 

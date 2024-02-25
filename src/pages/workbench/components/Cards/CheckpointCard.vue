@@ -1,7 +1,7 @@
 <template>
     <t-card>
         <t-tag size="small" style="position: absolute; top: -12px; left: 84px; z-index: 10;">
-            {{  props ? props.type : 'None' }}
+            {{  props ? (props.type ? props.type: 'None') : 'None' }}
         </t-tag>
         <t-row :gutter="[20,8]" style="flex-wrap: nowrap;">
 

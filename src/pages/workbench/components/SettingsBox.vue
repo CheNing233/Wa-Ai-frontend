@@ -36,22 +36,22 @@
                 </t-col>
                 <t-col flex="1">
                     <t-space style="float: right; flex-wrap: wrap; ">
-                        <t-button variant="outline" size="small"
+                        <t-button variant="text" size="small"
                             @click="() => {workbenchParams.height = 1024; workbenchParams.width = 768;}"
                         >
                             1024×768
                         </t-button>
-                        <t-button variant="outline" size="small"
+                        <t-button variant="text" size="small"
                             @click="() => {workbenchParams.height = 768; workbenchParams.width = 1024;}"
                         >
                             768×1024
                         </t-button>
-                        <t-button variant="outline" size="small"
+                        <t-button variant="text" size="small"
                             @click="() => {workbenchParams.height = 768; workbenchParams.width = 768;}"
                         >
                             768×768
                         </t-button>
-                        <t-button variant="outline" size="small"
+                        <t-button variant="text" size="small"
                             @click="() => {workbenchParams.height = 640; workbenchParams.width = 640;}"
                         >
                             640×640

@@ -24,20 +24,20 @@
                         :key="index"
                         size="large"
                     >
-                        <span>
+                        <span style="padding-right: 6px;">
                             {{ value.weight != 1 ? '(' : null }}{{ value.value }}{{ value.weight != 1 ? ':'+ value.weight + ')' : null }}
                         </span>
-                        <t-button size="small" shape="square" variant="text" 
+                        <t-button  shape="square" variant="text" 
                             @click="IncTag(index)"
                         >
                             <AddIcon style="margin: 0px;" slot="icon" shape="square" />
                         </t-button>
-                        <t-button size="small" shape="square" variant="text" 
+                        <t-button  shape="square" variant="text" 
                             @click="DecTag(index)"
                         >
                             <RemoveIcon style="margin: 0px;" slot="icon" shape="square" />
                         </t-button>
-                        <t-button size="small" shape="square" variant="text" 
+                        <t-button  shape="square" variant="text" 
                             @click="delTag(index)"
                         >
                             <CloseIcon style="margin: 0px;" slot="icon" shape="square" />
@@ -56,7 +56,6 @@
                     <t-button
                         v-for="(value, index) in transformedPageContent"
                         :key="index"
-                        size="small"
                         variant="outline"
                         @click="addTag(value.label, value.value)"
                     >
