@@ -54,20 +54,24 @@
           
           <template #dropdown>
             <t-dropdown-menu>
-              <t-dropdown-item :value="1" @click="$router.push('/user')">
+
+              <t-dropdown-item 
+                v-if="isLogin"
+                :value="1" 
+                @click="$router.push('/user')"
+              >
                 个人中心
               </t-dropdown-item>
-              <t-dropdown-item :value="2">我的图片</t-dropdown-item>
-              <t-dropdown-item :value="8">我的预设</t-dropdown-item>
-              <t-dropdown-item :value="3">我的帖子</t-dropdown-item>
-              <t-dropdown-item :value="4">我的模型</t-dropdown-item>
+
               <t-dropdown-item :value="5">
                 深色模式
                 <t-switch style="float: right;"></t-switch>
               </t-dropdown-item>
+
               <t-dropdown-item :value="6">设置</t-dropdown-item>
+
               <t-dropdown-item :value="7" @click="$router.push('/login')">
-                退出登录
+                {{ isLogin ? '退出登录' : '登录' }}
               </t-dropdown-item>
               
             </t-dropdown-menu>
@@ -98,6 +102,7 @@ import {
 import { NavItems } from '@/config/NavConfig.js';
 // import { getUserPromptPresets } from '@/api/get_sdmodels_list.js';
 
+import api from '@/service';
 
 export default {
   name: 'componentHeader',
@@ -111,6 +116,7 @@ export default {
   },
   data() {
     return {
+      isLogin: false,
       headMenuValue: '',
       menu_items: NavItems,
     };
@@ -127,8 +133,12 @@ export default {
   },
   methods: {
     fresh() {
-      console.log(this.$route.path);
-      this.headMenuValue = this.$route.path;
+      api.userApi.isLogin().then(resp => {
+        if (resp) {
+          this.isLogin = resp.data;
+          console.log("islogin", resp.data);
+        }
+      })
     },
     handleMenu(value) {
       this.$router.push(value);

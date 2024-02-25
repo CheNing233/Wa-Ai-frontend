@@ -44,7 +44,7 @@
                             <t-col :span="8">
                                 <t-link hover="color" variant="text" class="ellipsis_container">
                                     <UserIcon slot="prefix-icon" shape="square" style="color: #8A8A8A;" />
-                                    <span class="ellipsis_text" style="color: #8A8A8A;">{{ props.author }}</span>
+                                    <span class="ellipsis_text" style="color: #8A8A8A;">{{ authorName }}</span>
                                 </t-link>
                             </t-col>
                             <t-col :span="4">
@@ -77,6 +77,8 @@ import {
     ControlPlatformIcon
 } from 'tdesign-icons-vue';
 
+import api from '@/service';
+
 export default {
     name: 'BaseCard',
     components: {
@@ -89,11 +91,22 @@ export default {
     ],
     data() {
         return {
+            authorName: '',
             star: false,
             isSelected: false,
         }
     },
     methods: {
+        fresh(){
+            const PARAMS = {
+                userId: this.props.authorId
+            };
+
+            api.userApi.getUsernameById(PARAMS)
+            .then(resp => {
+                this.authorName = resp.data;
+            });
+        },
         handleBtnRunClick(){
             var selected = this.$store.getters.workbenchGetSelected;
 
@@ -122,6 +135,9 @@ export default {
         handleImageOnClick() {
             console.log(this.$store.getters.workbenchGetSelected)
         }
+    },
+    created() {
+        this.fresh();
     },
 }
 </script>

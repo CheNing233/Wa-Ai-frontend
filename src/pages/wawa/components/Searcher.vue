@@ -124,6 +124,7 @@ export default {
     padding-top: 20px;
 
     .title {
+        text-align: center;
         display: block;
         width: 100%;
     }

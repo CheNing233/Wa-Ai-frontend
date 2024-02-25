@@ -109,7 +109,7 @@
 <script>
 import componentImageCard from './Cards/ImageCard.vue'; 
 
-import { UserDataAPI } from "@/service/user.js"
+// import { UserDataAPI } from "@/service/user.js"
 
 export default {
     name: 'ModelsCloud',
@@ -160,21 +160,21 @@ export default {
         },
         freshPage(){
 
-            const PARAMS = {
-                search: null,
-                page: this.pageCurrent,
-                itemsPerPage: this.pageSize,
-            };
+            // const PARAMS = {
+            //     search: null,
+            //     page: this.pageCurrent,
+            //     itemsPerPage: this.pageSize,
+            // };
             
 
-            UserDataAPI.getSdimagesList(PARAMS)
-                .then(resp => {
-                    this.pageContent = resp.data;
-                    this.itemsTotal = resp.count;
-                })
-                .catch(err => {
-                    this.$message.error("获取数据失败: " + err.message)
-                });
+            // UserDataAPI.getSdimagesList(PARAMS)
+            //     .then(resp => {
+            //         this.pageContent = resp.data;
+            //         this.itemsTotal = resp.count;
+            //     })
+            //     .catch(err => {
+            //         this.$message.error("获取数据失败: " + err.message)
+                // });
             
         }
     },

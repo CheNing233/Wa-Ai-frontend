@@ -95,7 +95,7 @@ import {
     ControlPlatformIcon
 } from 'tdesign-icons-vue';
 
-import { FilesAPI } from '@/service/file.js';
+// import { FilesAPI } from '@/service/file.js';
 
 export default {
     name: 'BaseCard',
@@ -120,13 +120,13 @@ export default {
         handleImageOnClick() {
         },
         asyncGetImage() {
-            FilesAPI.getImage(this.props.imageid)
-                .then(res => {
-                    this.bannerImage ="data:image/png;base64," + res;
-                })
-                .catch(err => {
-                    this.$message.error("图片加载失败: " + err.message)
-                });
+            // FilesAPI.getImage(this.props.imageid)
+            //     .then(res => {
+            //         this.bannerImage ="data:image/png;base64," + res;
+            //     })
+            //     .catch(err => {
+            //         this.$message.error("图片加载失败: " + err.message)
+            //     });
         },
     },
     created() {

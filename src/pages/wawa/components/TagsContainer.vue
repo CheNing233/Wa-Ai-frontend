@@ -98,8 +98,8 @@ import {
 import { SdModelsTypes } from '@/config/SdModelsTypes.js';
 
 // import { getPromptTagsList } from '@/api/get_sdmodels_list.js';
-import { SdListAPI } from '@/service/sd.js';
-
+// import { SdListAPI } from '@/service/sd.js';
+import api from '@/service/index.js';
 
 export default {
     name: 'componentPromptsCloud',
@@ -189,25 +189,26 @@ export default {
                     this.$router.currentRoute.query.search || null;
                 
                 const PARAMS = {
-                    search: this.search,
+                    searchQuery: this.search,
                     page: this.pageCurrent,
-                    itemsPerPage: this.pageSize,
+                    pageSize: this.pageSize,
                 };
 
-                SdListAPI.getSdtagsList(PARAMS)
+                api.tagApi.getSdTagsList(PARAMS)
+                // SdListAPI.getSdtagsList(PARAMS)
                     .then(resp => {
-                        this.pageContent = resp.data;
-                        this.itemsTotal = resp.count;
+                        this.pageContent = resp.data.imageTags;
+                        this.itemsTotal = resp.data.selectCount;
 
                         this.transformedPageContent = this.pageContent.map((item) => {
                             return {
-                                label: item.cn,
-                                value: item.en,
+                                label: item.nameCn,
+                                value: item.nameEn,
                             }
                         });
                     })
-                    .catch(err => {
-                        this.$message.error("获取数据失败: " + err.message)
+                    .catch(error => {
+                        this.$message.error("获取数据失败: " + error)
                     });
                 
             }

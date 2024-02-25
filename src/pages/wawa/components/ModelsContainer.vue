@@ -57,7 +57,9 @@ import componentModelCard from './Cards/ModelCard-Base.vue';
 
 import { SdModelsTypes } from '@/config/SdModelsTypes.js';
 
-import { SdListAPI } from '@/service/sd.js';
+// import { SdListAPI } from '@/service/sd.js';
+
+import api from '@/service/index.js';
 
 export default {
     name: 'ModelsCloud',
@@ -127,16 +129,17 @@ export default {
                     this.$router.currentRoute.query.search || null;
         
                 const PARAMS = {
-                    modelName: this.props.name,
-                    title: this.searchTitle,
+                    type: this.props.name,
+                    searchQuery: this.searchTitle,
                     page: this.pageCurrent,
-                    itemsPerPage: this.pageSize,
+                    pageSize: this.pageSize,
                 };
 
-                SdListAPI.getSdmodelsList(PARAMS)
+                api.modelApi.getSdModelsList(PARAMS)
                     .then(resp => {
-                        this.pageContent = resp.data;
-                        this.itemsTotal = resp.count;
+                        this.pageContent = resp.data.models;
+                        this.itemsTotal = resp.data.count;
+
                     })
                     .catch(err => {
                         this.$message.error("获取数据失败: " + err.message)
