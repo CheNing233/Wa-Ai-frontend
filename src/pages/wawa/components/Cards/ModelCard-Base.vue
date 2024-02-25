@@ -102,10 +102,12 @@ export default {
                 userId: this.props.authorId
             };
 
+            
             api.userApi.getUsernameById(PARAMS)
             .then(resp => {
                 this.authorName = resp.data;
             });
+                
         },
         handleBtnRunClick(){
             var selected = this.$store.getters.workbenchGetSelected;
@@ -137,7 +139,7 @@ export default {
         }
     },
     created() {
-        this.fresh();
+        // this.fresh();
     },
 }
 </script>

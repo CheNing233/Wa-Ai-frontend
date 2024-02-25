@@ -9,7 +9,7 @@
             />
         </t-col>
         <t-col :span="12" align="center">
-            <span> test </span>
+            <span> {{ userInfo.username }} </span>
         </t-col>
         <t-col :span="12" align="center">
 
@@ -17,7 +17,8 @@
                 <t-tabs v-model="userTab" @change="tabChange" align="left">
 
                     <t-tab-panel value="profile" label="个人中心" class="detail_container">
-                        <t-descriptions
+                        <UserProfile />
+                        <!-- <t-descriptions
                             title="基本"
                             :column="$store.getters.getDisplayMobile ? 1 : 2"
                             style="padding-top: 32px;"
@@ -44,7 +45,7 @@
                             <t-descriptions-item label="我的预设">191</t-descriptions-item>
                             <t-descriptions-item label="我的帖子">810</t-descriptions-item>
                             <t-descriptions-item label="我的模型">233</t-descriptions-item>
-                        </t-descriptions>
+                        </t-descriptions> -->
                     </t-tab-panel>
 
                     <t-tab-panel value="likes" label="我的收藏">
@@ -77,18 +78,30 @@
 <script>
 import componentImagesManager from './components/ImagesManager.vue';
 
+import UserProfile from './components/profile.vue'
 
 import { UserModelsTypes } from '@/config/UserModelsTypes.js';
+
+import api from '@/service';
 
 export default {
     name: 'page-portal',
     components: {
         componentModelsManager: componentImagesManager,
+        UserProfile
     },
     data() {
         return {
             filterType: UserModelsTypes,
             userTab: 'profile',
+
+            userInfo: {
+                username: '正在请求...',
+                nickname: '正在请求...',
+                email: '正在请求...',
+                gender: '正在请求...',
+                describe: '正在请求...',
+            },
         }
     },
     methods: {
@@ -100,20 +113,26 @@ export default {
                 }
             });
         },
-        generateRandomText() {
-            var maxLength = 400; // 填充文字的最大长度
-            var length = Math.floor(Math.random() * maxLength) + 1; // 生成随机长度
-
-            var text = "";
-            var characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // 可选的字符集
-
-            for (var i = 0; i < length; i++) {
-                var randomIndex = Math.floor(Math.random() * characters.length);
-                text += characters.charAt(randomIndex);
-            }
-
-            return text;
-        }
+        getUserInfo() {
+            api.userApi.me().then(resp => {
+                if (resp.data == null){
+                    return;
+                }
+                this.userInfo = {
+                    username: resp.data.userName || '',
+                    nickname: resp.data.nickName || '',
+                    email: resp.data.email || '',
+                    gender: '武装直升机',
+                    describe: resp.data.description || ''
+                };
+            })
+            .catch(err => {
+                this.$message.error("获取数据失败: " + err)
+            });
+        },
+    },
+    created() {
+        this.getUserInfo()
     }
 }
 </script>

@@ -11,6 +11,14 @@
                     </t-col>
                     
                     <t-col flex="shrink" style="float: right;">
+                        <t-input placeholder="搜索...">
+                            <template #suffixIcon>
+                                <SearchIcon :style="{ cursor: 'pointer' }" />
+                            </template>
+                        </t-input>
+                    </t-col>
+
+                    <t-col flex="shrink" style="float: right;">
                         <t-date-range-picker 
                             v-model="timeRange" 
                             :presets="timePresets" 
@@ -108,13 +116,14 @@
 
 <script>
 import componentImageCard from './Cards/ImageCard.vue'; 
-
+import { SearchIcon } from 'tdesign-icons-vue';
 // import { UserDataAPI } from "@/service/user.js"
 
 export default {
     name: 'ModelsCloud',
     components: {
         componentImageCard,
+        SearchIcon,
     },
     props: [
         'props'
@@ -125,6 +134,8 @@ export default {
     {
         return {
             manageState: false,
+
+            search:'',
 
             timeRange: [new Date(), new Date()],
             timePresets: {

@@ -22,6 +22,7 @@
                     <t-tag
                         v-for="(value, index) in tagsCollector"
                         :key="index"
+                        size="large"
                     >
                         <span>
                             {{ value.weight != 1 ? '(' : null }}{{ value.value }}{{ value.weight != 1 ? ':'+ value.weight + ')' : null }}

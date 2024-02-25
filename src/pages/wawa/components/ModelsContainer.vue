@@ -142,7 +142,7 @@ export default {
 
                     })
                     .catch(err => {
-                        this.$message.error("获取数据失败: " + err.message)
+                        this.$message.error("获取数据失败: " + err)
                     });
                 
             }

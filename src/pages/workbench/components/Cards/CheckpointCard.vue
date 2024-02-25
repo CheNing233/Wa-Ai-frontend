@@ -1,39 +1,37 @@
 <template>
     <t-card>
-        <t-tag size="small" style="position: absolute; top: -2px; left: -2px; z-index: 10;">
+        <t-tag size="small" style="position: absolute; top: -12px; left: 84px; z-index: 10;">
             {{  props ? props.type : 'None' }}
         </t-tag>
         <t-row :gutter="[20,8]" style="flex-wrap: nowrap;">
 
             
             <t-col flex="shrink">
-                <div style="width: 64px; height: 64px; overflow: visible;">
+                <div style="width: 48px; height: 48px; overflow: visible;">
                     <t-image
                         src="https://tdesign.gtimg.com/demo/demo-image-1.png"
                         shape="round"
-                        style="left: -17px; top: -10px; width: 88px; height: 88px"
+                        style="left: -18px; top: -11px; width: 72px; height: 72px"
                         fit="cover"
                     />
                 </div>
-                
             </t-col>
             
-            <t-col flex="1" style="overflow: hidden; padding-top: 0px;">
+            <t-col flex="1" style="overflow: hidden; padding-top: 8px;">
 
                 <t-row :gutter="[8,0]">
-                    <t-col :span="12">
-                        <div class="title_container">
-                            <span class="title">
-                                {{  props ? props.title : '请选择一个模型' }}
-                            </span>
-                        </div>
-                    </t-col>
 
                     <t-col :span="12">
-                        <t-collapse borderless="borderless" expand-icon-placement="left">
-                            <t-collapse-panel size="small" >
+                        <t-collapse expand-icon-placement="left">
+                            <t-collapse-panel >
                                 <template #header>
-                                    模型设置
+                                    <div style="position: absolute; left: 48px; top: 10px; right: 16px;">
+                                        <div class="title_container">
+                                            <span class="title">
+                                                {{  props ? props.title : '请选择一个模型' }}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </template>
                                 <template #headerRightContent>
                                     

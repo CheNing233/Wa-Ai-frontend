@@ -65,7 +65,7 @@
                 <t-col 
                     v-for="(item, index) in workbenchSelected.LORA" 
                     :key="index"
-                    flex="1"
+                    :span="12"
                 >
                     <LoraCard :props="item"/>
                 </t-col>

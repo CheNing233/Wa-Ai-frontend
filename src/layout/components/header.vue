@@ -47,7 +47,7 @@
           <t-button 
             variant="outline" 
             shape="square"
-           
+            @click="fresh"
           >
             <UserIcon slot="icon" shape="square" />
           </t-button>
@@ -136,7 +136,6 @@ export default {
       api.userApi.isLogin().then(resp => {
         if (resp) {
           this.isLogin = resp.data;
-          console.log("islogin", resp.data);
         }
       })
     },
