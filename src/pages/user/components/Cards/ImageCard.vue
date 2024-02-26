@@ -53,7 +53,7 @@
                         <t-row>
                             <t-col :span="12">
                                 <t-link hover="color" class="ellipsis_container">
-                                    <span class="ellipsis_text image_title" >{{ props.title }}</span>
+                                    <span class="ellipsis_text image_title" >{{ props.id }}</span>
                                 </t-link>
                             </t-col>
                         </t-row>
@@ -95,6 +95,8 @@ import {
     ControlPlatformIcon
 } from 'tdesign-icons-vue';
 
+import api from '@/service';
+
 // import { FilesAPI } from '@/service/file.js';
 
 export default {
@@ -113,24 +115,36 @@ export default {
             opacity: 1,
             star: false,
             isSelected: false,
+            userName: '',
             bannerImage: "data:image/png;base64,"
         }
     },
     methods: {
         handleImageOnClick() {
         },
-        asyncGetImage() {
-            // FilesAPI.getImage(this.props.imageid)
-            //     .then(res => {
-            //         this.bannerImage ="data:image/png;base64," + res;
-            //     })
-            //     .catch(err => {
-            //         this.$message.error("图片加载失败: " + err.message)
-            //     });
+        asyncGetInfo() {
+            const PARAMS = {
+                id: this.props.userId,
+            };
+
+            api.userApi.getUsernameById(PARAMS)
+                .then(res => {
+                    this.userName = res.data;
+                })
+                .catch(err => {
+                    this.$message.error("请求失败: " + err)
+                });
+
+                // .then(res => {
+                //     this.bannerImage ="data:image/png;base64," + res;
+                // })
+                // .catch(err => {
+                //     this.$message.error("图片加载失败: " + err)
+                // });
         },
     },
     created() {
-        this.asyncGetImage();
+        this.asyncGetInfo();
     },
 }
 </script>

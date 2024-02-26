@@ -7,9 +7,10 @@ import login from '@/pages/login/index.vue'
 import componentImageDialog from '@/components/imageDialog/index.vue'
 
 import { UserRouter } from './modules/user.js';
+import { ModelRouter } from './modules/model.js';
 
 // 动态路由
-export const asyncRouterList = [...UserRouter];
+export const asyncRouterList = [...UserRouter, ...ModelRouter];
 
 // 固定路由
 const defaultRouterList = [

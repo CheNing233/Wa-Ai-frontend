@@ -18,42 +18,14 @@
 
                     <t-tab-panel value="profile" label="个人中心" class="detail_container">
                         <UserProfile />
-                        <!-- <t-descriptions
-                            title="基本"
-                            :column="$store.getters.getDisplayMobile ? 1 : 2"
-                            style="padding-top: 32px;"
-                        >
-                            <t-descriptions-item label="昵称">TDesign</t-descriptions-item>
-                            <t-descriptions-item label="性别">武装直升机</t-descriptions-item>
-                            <t-descriptions-item label="描述">流萤天下第一可爱</t-descriptions-item>
-                            <t-descriptions-item label="是否玩原神星铁（重要）">是</t-descriptions-item>
-                            <t-descriptions-item label="邮箱">139****0609@abc.com</t-descriptions-item>
-                            <t-descriptions-item label="管理员">是</t-descriptions-item>
-                            <t-descriptions-item label="最近登录">2024-02-14 08:55:43.091011</t-descriptions-item>
-                            <t-descriptions-item label="注册时间">2024-01-23 20:03:41.784903</t-descriptions-item>
-                        </t-descriptions>
-
-                        <t-descriptions 
-                            title="数据"
-                            :column="$store.getters.getDisplayMobile ? 1 : 3"
-                            style="padding-top: 32px;"
-                        >
-                            <t-descriptions-item label="运行统计">666</t-descriptions-item>
-                            <t-descriptions-item label="今日运行">6</t-descriptions-item>
-                            <t-descriptions-item label="我的收藏">114</t-descriptions-item>
-                            <t-descriptions-item label="我的图片">514</t-descriptions-item>
-                            <t-descriptions-item label="我的预设">191</t-descriptions-item>
-                            <t-descriptions-item label="我的帖子">810</t-descriptions-item>
-                            <t-descriptions-item label="我的模型">233</t-descriptions-item>
-                        </t-descriptions> -->
                     </t-tab-panel>
 
                     <t-tab-panel value="likes" label="我的收藏">
                         12345
                     </t-tab-panel>
 
-                    <t-tab-panel :value="filterType.Image" label="我的图片">
-                        <componentModelsManager :props="{ name: filterType.Image }" />
+                    <t-tab-panel :value="filterType.Image" label="我的生成">
+                        <UserGenerate :props="{ name: filterType.Image }" />
                     </t-tab-panel>
 
                     <t-tab-panel value="presets" label="我的预设">
@@ -76,9 +48,8 @@
 </template>
 
 <script>
-import componentImagesManager from './components/ImagesManager.vue';
-
 import UserProfile from './components/profile.vue'
+import UserGenerate from './components/generate.vue';
 
 import { UserModelsTypes } from '@/config/UserModelsTypes.js';
 
@@ -87,8 +58,8 @@ import api from '@/service';
 export default {
     name: 'page-portal',
     components: {
-        componentModelsManager: componentImagesManager,
-        UserProfile
+        UserProfile,
+        UserGenerate
     },
     data() {
         return {

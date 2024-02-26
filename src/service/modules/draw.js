@@ -15,6 +15,7 @@ const request = (url, method, params, data) => {
       .then((res) => {
         if (res.status === 200) {
           if (res.data.success === true) {
+            console.log("返回成功", res.data);
             resolve(res.data);
           }
           else {
