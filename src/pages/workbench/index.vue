@@ -155,7 +155,7 @@ import settingBox from './components/SettingsBox.vue';
 import hiresbox from './components/HiresBox.vue';
 import HistoryBox from './components/HistoryBox.vue';
 
-// import { SdServiceAPI } from '@/service/sd.js';
+import api from '@/service';
 
 export default {
   name: 'componentWorkdrawer',
@@ -210,12 +210,13 @@ export default {
   },
   methods: {
     handleBtnGeneratedClick() {
+      api.drawApi.txt2img()
       // SdServiceAPI.getGenerated()
-      //   .then((res) => {
-      //     this.$message.success(res);
-      //   }).catch((err) => {
-      //     this.$message.error(err);
-      //   });
+        .then((res) => {
+          this.$message.success("任务ID " + res.data + " 已压入喵");
+        }).catch((err) => {
+          this.$message.error(err);
+        });
     },
 
     handleWorkbenchResize(element) {

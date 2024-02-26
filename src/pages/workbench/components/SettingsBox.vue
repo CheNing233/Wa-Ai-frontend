@@ -37,24 +37,19 @@
                 <t-col flex="1">
                     <t-space style="float: right; flex-wrap: wrap; ">
                         <t-button variant="text" size="small"
-                            @click="() => {workbenchParams.height = 1024; workbenchParams.width = 768;}"
+                            @click="() => {workbenchParams.height = 512; workbenchParams.width = 768;}"
                         >
-                            1024×768
+                            768×512
                         </t-button>
                         <t-button variant="text" size="small"
-                            @click="() => {workbenchParams.height = 768; workbenchParams.width = 1024;}"
+                            @click="() => {workbenchParams.height = 768; workbenchParams.width = 512;}"
                         >
-                            768×1024
+                            512×768
                         </t-button>
                         <t-button variant="text" size="small"
                             @click="() => {workbenchParams.height = 768; workbenchParams.width = 768;}"
                         >
                             768×768
-                        </t-button>
-                        <t-button variant="text" size="small"
-                            @click="() => {workbenchParams.height = 640; workbenchParams.width = 640;}"
-                        >
-                            640×640
                         </t-button>
                     </t-space>
                 </t-col>
@@ -65,7 +60,7 @@
                 </t-col>
                 <t-col flex="1">
                     <t-slider 
-                        v-model="workbenchParams.height" 
+                        v-model="workbenchParams.width" 
                         :show-tooltip="true" 
                         :max="2048" 
                         :min="32" 
@@ -83,7 +78,7 @@
                 <t-col flex="1">
                 
                     <t-slider 
-                        v-model="workbenchParams.width" 
+                        v-model="workbenchParams.height" 
                         :show-tooltip="true" 
                         :max="2048" 
                         :min="32" 

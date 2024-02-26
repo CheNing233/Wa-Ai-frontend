@@ -133,6 +133,7 @@ export default {
   },
   methods: {
     fresh() {
+      this.headMenuValue = this.$route.path;
       api.userApi.isLogin().then(resp => {
         if (resp) {
           this.isLogin = resp.data;

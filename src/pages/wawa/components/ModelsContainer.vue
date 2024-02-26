@@ -78,11 +78,11 @@ export default {
     {
         return {
             itemsTotal: 0,
-            pageSize: 30,
+            pageSize: 8,
             pageCurrent: 1,
             pageSizeOptions: [
                 { label: '每页 1 条', value: 1 },
-                { label: '每页 10 条', value: 10 },
+                { label: '每页 8 条', value: 8 },
                 { label: '每页 30 条', value: 30 },
                 { label: '每页 50 条', value: 50 },
                 { label: '每页 100 条', value: 100 },
@@ -122,7 +122,7 @@ export default {
                 this.filterName == this.filterTypes.ComP
             ){
                 this.pageSize = 
-                    parseInt(this.$router.currentRoute.query.filter_size) || 30;
+                    parseInt(this.$router.currentRoute.query.filter_size) || 8;
                 this.pageCurrent = 
                     parseInt(this.$router.currentRoute.query.filter_page) || 1;
                 this.searchTitle = 

@@ -8,10 +8,31 @@ const workbench = {
         showOverlay: true,
         selectItem: "txt2img",
         txt2imgSelect: {
-            "CHECKPOINT": '',
+            "CHECKPOINT": {
+                "id":277,
+                "title":"tmndMix_tmndMixSPRAINBOW",
+                "type":"CHECKPOINT",
+                "body":null,
+                "publishTime":"2024-02-18T11:44:52.000+00:00",
+                "createTime":"2024-02-17T16:00:00.000+00:00",
+                "updateTime":"2024-02-17T16:00:00.000+00:00",
+                "authorId":1,
+                "status":"Published",
+                "filename":"tmndMix_tmndMixSPRAINBOW"},
             "LORA": [],
             "EMBEDDING": [],
-            "VAE": 'ClearVAE_NansLess1.safetensors',
+            "VAE": {
+                "id":250,
+                "title":"ClearVAE_NansLess1.safetensors",
+                "type":"VAE",
+                "body":null,
+                "publishTime":"2024-02-18T11:44:52.000+00:00",
+                "createTime":"2024-02-17T16:00:00.000+00:00",
+                "updateTime":"2024-02-17T16:00:00.000+00:00",
+                "authorId":1,
+                "status":"Published",
+                "filename":"ClearVAE_NansLess1.safetensors"
+            },
         },
         txt2imgParams: {
             "prompt": "",
