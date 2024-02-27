@@ -168,8 +168,8 @@ export default {
             api.taskApi.getTaskByUser(PARAMS)
                 .then(resp => {
                     console.log("getTaskByUser", resp);
-                    this.pageContent = resp.data;
-                    this.itemsTotal = resp.total;
+                    this.pageContent = resp.data.list;
+                    this.itemsTotal = resp.data.selectTotal;
                 })
                 .catch(err => {
                     this.$message.error("获取数据失败: " + err)

@@ -1,6 +1,6 @@
 <template>
     <t-image 
-        :src="bannerImage" 
+        :src="props.imageURL" 
         fit="cover" 
         class="image" 
         shape="round"
@@ -62,7 +62,7 @@
                             <t-col :span="8">
                                 <t-link hover="color" variant="text" class="ellipsis_container">
                                     <UserIcon slot="prefix-icon" shape="square" style="" />
-                                    <span class="ellipsis_text" style="">{{ props.author }}</span>
+                                    <span class="ellipsis_text" style="">{{ props.nickName }}</span>
                                 </t-link>
                             </t-col>
                             <t-col :span="4">
@@ -95,7 +95,7 @@ import {
     ControlPlatformIcon
 } from 'tdesign-icons-vue';
 
-import api from '@/service';
+// import api from '@/service';
 
 // import { FilesAPI } from '@/service/file.js';
 
@@ -116,31 +116,14 @@ export default {
             star: false,
             isSelected: false,
             userName: '',
-            bannerImage: "data:image/png;base64,"
+            bannerImage: ""
         }
     },
     methods: {
         handleImageOnClick() {
         },
         asyncGetInfo() {
-            const PARAMS = {
-                id: this.props.userId,
-            };
-
-            api.userApi.getUsernameById(PARAMS)
-                .then(res => {
-                    this.userName = res.data;
-                })
-                .catch(err => {
-                    this.$message.error("请求失败: " + err)
-                });
-
-                // .then(res => {
-                //     this.bannerImage ="data:image/png;base64," + res;
-                // })
-                // .catch(err => {
-                //     this.$message.error("图片加载失败: " + err)
-                // });
+            
         },
     },
     created() {
