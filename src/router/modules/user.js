@@ -1,7 +1,7 @@
 import userCenter from '@/pages/user/index.vue'
 import workbench from '@/pages/workbench/index.vue'
 
-import componentImageDialog from '@/components/imageDialog/index.vue'
+import componentImageDialog from '@/pages/image/index.vue'
 
 export const UserRouter = [{
     path: '/user',

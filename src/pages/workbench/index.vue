@@ -1,141 +1,146 @@
 <template>
-  <t-drawer id="workbench" 
-      :visible.sync="workbenchDisplay" 
-      :placement="workbenchPlacement" 
-      :size="workbenchSize"
-      :showOverlay="workbenchShowOverlay"
-      :preventScrollThrough="false"
-      :header="false" 
-      :footer="false"  
-      :closeBtn="false"
-      sizeDraggable
+  <t-drawer id="workbench"
+            :visible.sync="workbenchDisplay"
+            :placement="workbenchPlacement"
+            :size="workbenchSize"
+            :showOverlay="workbenchShowOverlay"
+            :preventScrollThrough="false"
+            :header="false"
+            :footer="false"
+            :closeBtn="false"
+            sizeDraggable
   >
 
-  <div style="position: absolute; left: 16px; top: 16px; right: 16px; bottom: 16px; overflow: hidden;">
+    <div style="position: absolute; left: 16px; top: 16px; right: 16px; bottom: 16px; overflow: hidden;">
 
-    <t-row :gutter="[0, 8]">
-      <t-col flex="auto">
-        
-          <t-radio-group 
-            v-show="displayWorkbenchSmall"
-            v-model="workbenchCurrentTab"
-            variant="default-filled"
+      <t-row :gutter="[0, 8]">
+        <t-col flex="auto">
+
+          <t-radio-group
+              v-show="displayWorkbenchSmall"
+              v-model="workbenchCurrentTab"
+              variant="default-filled"
           >
-            <t-radio-button value="launch"><ControlPlatformIcon /></t-radio-button>
-            <t-radio-button value="history"><HistoryIcon /></t-radio-button>
+            <t-radio-button value="launch">
+              <ControlPlatformIcon/>
+            </t-radio-button>
+            <t-radio-button value="history">
+              <HistoryIcon/>
+            </t-radio-button>
           </t-radio-group>
-        
+
           <t-tag v-show="!displayWorkbenchSmall">
             WA酱工作台
           </t-tag>
-        
-      </t-col>
-      <t-col :flex="112">
-        <t-space :size="8" style="float: right;">
 
-          <t-tooltip content="允许点击外面关闭" placement="bottom">
-            <t-button variant="outline" shape="square" @click="switchShowOverlay">
-              <HighlightIcon slot="icon" shape="square" />
+        </t-col>
+        <t-col :flex="112">
+          <t-space :size="8" style="float: right;">
+
+            <t-tooltip content="允许点击外面关闭" placement="bottom">
+              <t-button variant="outline" shape="square" @click="switchShowOverlay">
+                <HighlightIcon slot="icon" shape="square"/>
+              </t-button>
+            </t-tooltip>
+
+            <t-button
+                variant="outline"
+                shape="square"
+                v-if="displayMobile"
+                @click="switchPlacement"
+            >
+              <ArrowUpDown1Icon slot="icon" shape="square"/>
             </t-button>
-          </t-tooltip>
 
-          <t-button 
-            variant="outline" 
-            shape="square" 
-            v-if="displayMobile" 
-            @click="switchPlacement"
-          >
-            <ArrowUpDown1Icon slot="icon" shape="square" />
-          </t-button>
+            <t-button
+                variant="outline"
+                shape="square"
+                v-if="!displayMobile"
+                @click="switchPlacement"
+            >
+              <ArrowLeftRight1Icon slot="icon" shape="square"/>
+            </t-button>
 
-          <t-button 
-            variant="outline" 
-            shape="square" 
-            v-if="!displayMobile" 
-            @click="switchPlacement"
-          >
-            <ArrowLeftRight1Icon slot="icon" shape="square" />
-          </t-button>
+            <t-button
+                variant="outline"
+                shape="square"
+                v-if="displayMobile && (workbenchSize == '80%')"
+                @click="switchSize"
+            >
+              <FullscreenIcon slot="icon" shape="square"/>
+            </t-button>
 
-          <t-button 
-            variant="outline" 
-            shape="square" 
-            v-if="displayMobile && (workbenchSize == '80%')" 
-            @click="switchSize"
-          >
-            <FullscreenIcon slot="icon" shape="square" />
-          </t-button>
+            <t-button
+                variant="outline"
+                shape="square"
+                v-if="displayMobile && (workbenchSize == '100%')"
+                @click="switchSize"
+            >
+              <FullscreenExitIcon slot="icon" shape="square"/>
+            </t-button>
 
-          <t-button 
-            variant="outline" 
-            shape="square" 
-            v-if="displayMobile && (workbenchSize == '100%')" 
-            @click="switchSize"
-          >
-            <FullscreenExitIcon slot="icon" shape="square" />
-          </t-button>
+            <t-button theme="primary" shape="square" @click="workbenchDisplay = false">
+              <CloseIcon slot="icon" shape="square"/>
+            </t-button>
 
-          <t-button theme="primary" shape="square" @click="workbenchDisplay = false">
-            <CloseIcon slot="icon" shape="square" />
-          </t-button>
-
-        </t-space>
-      </t-col>
-    </t-row>
-
-    <t-row :gutter="[8, 8]" style="margin-top: 8px; width: 100%;">
-      <t-col 
-        :span="displayWorkbenchSmall ? (workbenchCurrentTab == 'launch' ? 12 : 0) : 5" 
-        class="left_container"
-      >
-        
-          <t-tabs v-model="value">
-          <t-tab-panel value="txt2img" label="文生图" style="padding-top: 16px;">
-            <t-space direction="vertical" style="width: 100%;">
-            <ModelsBox />
-            <promptBox />
-            <settingBox />
-            <hiresbox />
-            
-            
           </t-space>
-          </t-tab-panel>
-          <t-tab-panel value="img2img" label="图生图">
-            
-          </t-tab-panel>
-          <t-tab-panel value="extra" label="图像放大">
-            
-          </t-tab-panel>
-          <t-tab-panel value="tag" label="反推">
-            
-          </t-tab-panel>
-        </t-tabs>
-        <t-button 
-          block
-          style="position: sticky; left: 0; bottom: 8px; margin-top: 24px; float: right; z-index: 100;"
-          @click="handleBtnGeneratedClick"
+        </t-col>
+      </t-row>
+
+      <t-row :gutter="[8, 8]" style="margin-top: 8px; width: 100%;">
+        <t-col
+            :span="displayWorkbenchSmall ? (workbenchCurrentTab == 'launch' ? 12 : 0) : 5"
+            class="left_container"
         >
-          在线生成
-        </t-button>
-      </t-col>
+
+          <t-tabs v-model="value">
+            <t-tab-panel value="txt2img" label="文生图" style="padding-top: 16px;">
+              <t-space direction="vertical" style="width: 100%;">
+                <ModelsBox/>
+                <promptBox/>
+                <settingBox/>
+                <hiresbox/>
 
 
-      <t-col 
-        :span="displayWorkbenchSmall ? (workbenchCurrentTab == 'history' ? 12 : 0) : 7"
-        class="right_container" 
-      >
-        <HistoryBox />
-        
-      </t-col>
-    </t-row>
-  </div>
-</t-drawer>
+              </t-space>
+            </t-tab-panel>
+            <t-tab-panel value="img2img" label="图生图">
+
+            </t-tab-panel>
+            <t-tab-panel value="extra" label="图像放大">
+
+            </t-tab-panel>
+            <t-tab-panel value="tag" label="反推">
+
+            </t-tab-panel>
+          </t-tabs>
+          <t-button
+              block
+              style="position: sticky; padding: 8px; left: 0; bottom: 8px; margin-top: 24px; float: right; z-index: 100;"
+              @click="handleBtnGeneratedClick"
+              :loading="generateBtnLoading"
+          >
+            在线生成
+          </t-button>
+        </t-col>
+
+
+        <t-col
+            :span="displayWorkbenchSmall ? (workbenchCurrentTab == 'history' ? 12 : 0) : 7"
+            class="right_container"
+        >
+          <HistoryBox/>
+
+        </t-col>
+      </t-row>
+    </div>
+  </t-drawer>
 </template>
 
 <script>
 import {
   CloseIcon,
-  FullscreenIcon, 
+  FullscreenIcon,
   FullscreenExitIcon,
   ArrowUpDown1Icon,
   ArrowLeftRight1Icon,
@@ -179,50 +184,72 @@ export default {
     settingBox,
     hiresbox,
     HistoryBox
-},
+  },
   data() {
     return {
       workbenchObserver: null,
       workbenchCurrentTab: 'launch',
       value: 'txt2img',
-      
+      generateBtnLoading: false,
     }
   },
   computed: {
-    displayMobile: function () {return this.$store.getters.getDisplayMobile},
-    displayWorkbenchSmall: function () {return this.$store.getters.getDisplayWorkbenchSmall},
+    displayMobile: function () {
+      return this.$store.getters.getDisplayMobile
+    },
+    displayWorkbenchSmall: function () {
+      return this.$store.getters.getDisplayWorkbenchSmall
+    },
     workbenchDisplay: {
-      get: function () {return this.$store.getters.workbenchGetDisplay},
-      set: function (newValue) {this.$store.commit('workbenchSetDisplay', newValue)}
+      get: function () {
+        return this.$store.getters.workbenchGetDisplay
+      },
+      set: function (newValue) {
+        this.$store.commit('workbenchSetDisplay', newValue)
+      }
     },
     workbenchSize: {
-      get: function () {return this.$store.getters.workbenchGetSize},
-      set: function (newValue) {this.$store.commit('workbenchSetSize', newValue)}
+      get: function () {
+        return this.$store.getters.workbenchGetSize
+      },
+      set: function (newValue) {
+        this.$store.commit('workbenchSetSize', newValue)
+      }
     },
     workbenchShowOverlay: {
-      get: function () {return this.$store.getters.workbenchGetShowOverlay},
-      set: function (newValue) {this.$store.commit('workbenchSetShowOverlay', newValue)}
+      get: function () {
+        return this.$store.getters.workbenchGetShowOverlay
+      },
+      set: function (newValue) {
+        this.$store.commit('workbenchSetShowOverlay', newValue)
+      }
     },
     workbenchPlacement: {
-      get: function () {return this.$store.getters.workbenchGetPlacement},
-      set: function (newValue) {this.$store.commit('workbenchSetPlacement', newValue)},
+      get: function () {
+        return this.$store.getters.workbenchGetPlacement
+      },
+      set: function (newValue) {
+        this.$store.commit('workbenchSetPlacement', newValue)
+      },
     },
   },
   methods: {
     handleBtnGeneratedClick() {
+      this.generateBtnLoading = true;
       api.drawApi.txt2img()
-      // SdServiceAPI.getGenerated()
-        .then((res) => {
-          this.$message.success("任务ID " + res.data + " 已压入喵");
-        }).catch((err) => {
-          this.$message.error(err);
-        });
+          .then((res) => {
+            this.$message.success("任务ID " + res.data + " 已压入喵");
+          }).catch((err) => {
+            this.$message.error(err);
+          }).finally(() => {
+            this.generateBtnLoading = false;
+      });
     },
 
     handleWorkbenchResize(element) {
-      if (element.offsetWidth < 600) 
+      if (element.offsetWidth < 600)
         this.$store.commit('setDisplayWorkbenchSmall', true);
-      else 
+      else
         this.$store.commit('setDisplayWorkbenchSmall', false);
     },
     switchShowOverlay() {
@@ -251,31 +278,32 @@ export default {
         this.handleWorkbenchResize(entry.target);
       }
     });
-    
+
     this.workbenchObserver.observe(document.querySelector(
-      '.t-drawer__content-wrapper'
+        '.t-drawer__content-wrapper'
     ));
 
   },
   beforeDestroy() {
     try {
       this.workbenchObserver.unobserve(document.querySelector(
-        '.t-drawer__content-wrapper'
+          '.t-drawer__content-wrapper'
       ))
     } catch (error) {
       console.log('workbenchObserver unobserve');
     }
-    
+
   },
 }
 </script>
 
 <style scoped>
 .left_container {
-  height: calc(100vh - 72px); 
-  overflow-y: scroll; 
+  height: calc(100vh - 72px);
+  overflow-y: scroll;
   overflow-x: hidden;
 }
+
 .right_container {
   width: 100%;
   height: calc(100vh - 72px);

@@ -7,7 +7,6 @@ const ImageDialog = {
         imageDialogSetDisplay(state, payload) {
             state.display = payload
         },
-        
     },
     getters: {
         imageDialogGetDisplay(state) {

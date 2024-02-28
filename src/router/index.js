@@ -2,12 +2,12 @@ import VueRouter from 'vue-router';
 
 import wawa from '@/pages/wawa/index.vue'
 import workbench from '@/pages/workbench/index.vue'
+import imagedialog from '@/pages/image/index.vue'
 import login from '@/pages/login/index.vue'
 
-import componentImageDialog from '@/components/imageDialog/index.vue'
 
-import { UserRouter } from './modules/user.js';
-import { ModelRouter } from './modules/model.js';
+import {UserRouter} from './modules/user.js';
+import {ModelRouter} from './modules/model.js';
 
 // 动态路由
 export const asyncRouterList = [...UserRouter, ...ModelRouter];
@@ -24,7 +24,7 @@ const defaultRouterList = [
                 components: {
                     default: login,
                     componentWorkbench: workbench,
-                    componentImageDialog: componentImageDialog
+                    componentImageDialog: imagedialog
                 },
             },
         ]
@@ -40,7 +40,7 @@ const defaultRouterList = [
                 components: {
                     default: wawa,
                     componentWorkbench: workbench,
-                    componentImageDialog: componentImageDialog
+                    componentImageDialog: imagedialog
                 },
             },
             {
@@ -48,7 +48,7 @@ const defaultRouterList = [
                 components: {
                     default: wawa,
                     componentWorkbench: workbench,
-                    componentImageDialog: componentImageDialog
+                    componentImageDialog: imagedialog
                 },
             },
         ],
@@ -65,7 +65,7 @@ const createRouter = () =>
         mode: 'history',
         routes: defaultRouterList,
         scrollBehavior() {
-            return { x: 0, y: 0 };
+            return {x: 0, y: 0};
         },
     });
 
