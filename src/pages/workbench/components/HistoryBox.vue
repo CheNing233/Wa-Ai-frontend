@@ -202,10 +202,11 @@ export default {
           "updateTime": "2024-02-28T11:09:15.000+00:00"
         },
       ],
+      listSize:7,
 
       overlayContentM:true,
       overlayTriggerT:'hover',
-      showOverlay: Array.from({ length: 7 }, () => false),
+      showOverlay: [],
       manageButtonStr: false
     }
 
@@ -237,6 +238,11 @@ export default {
     },
 
   },
+
+  created() {
+    this.showOverlay = Array.from({ length: this.listSize }, () => false);
+  },
+
   computed: {
     displayWorkbenchSmall: function () {
       return this.$store.getters.getDisplayWorkbenchSmall
