@@ -1,8 +1,8 @@
 <script src="../../../store/modules/ImageDialog.js"></script>
 <template xmlns:t-col="http://www.w3.org/1999/html">
   <div>
+    <!--顶部按钮 -->
     <t-row style="display: flex; justify-content: space-between;">
-
       <t-space style="margin-top: 10px">
         <t-radio-group variant="primary-filled" default-value="list" >
           <t-radio-button value="list" @click="changeView('list')"><ListIcon /></t-radio-button>
@@ -15,9 +15,9 @@
         <t-button ghost @click="manageBS " v-else>管理</t-button>
         <t-button ghost>筛选</t-button>
       </t-space>
-
     </t-row>
 
+    <!--图片展示 -->
     <t-row>
       <t-card
           style="position: relative;
@@ -57,13 +57,10 @@
               </div>
 
             </t-col>
-            <t-col style="display: flex; justify-content: center; width: 100%; height: 3vh;bottom: 60px">
-            </t-col>
-            <t-col style="display: flex; justify-content: center; width: 100%;">
-              世界尽头了喵(＞﹏＜)
-            </t-col>
-            <t-col style="display: flex; justify-content: center; width: 100%; height: 18vh;bottom: 60px">
-            </t-col>
+
+            <t-col style="display: flex; justify-content: center; width: 100%; height: 3vh;bottom: 60px"/>
+            <t-col style="display: flex; justify-content: center; width: 100%;">世界尽头了喵(＞﹏＜)</t-col>
+            <t-col style="display: flex; justify-content: center; width: 100%; height: 18vh;bottom: 60px" />
           </t-row>
 
         </t-row>
@@ -104,6 +101,7 @@ export default {
           window.open(url, '_blank');
         };
 
+        //悬停遮罩
         return (
               <div v-show={this.overlayContentM}
                 style={{
@@ -112,7 +110,7 @@ export default {
                   background: 'rgba(0,0,0,.4)',
                   color: '#fff',
                 }}>
-                <div style="padding: 5px">
+                <div style="padding: 10px">
                   <t-button
                             size="small"
                             variant="outline"
@@ -222,6 +220,7 @@ export default {
       this.manageButtonStr=true
     },
 
+    //管理选中
     toggleOverlay(index) {
       if (this.overlayTriggerT!=='hover'){
         this.showOverlay = this.showOverlay.map((item, idx) => (idx === index ? !item : item));
