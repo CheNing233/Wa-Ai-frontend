@@ -11,7 +11,7 @@
       </t-space>
 
       <t-space style="margin-top: 10px" size="small">
-        <t-button ghost @click="manageBST" v-if="this.manageButtonStr">完成</t-button>
+        <t-button @click="manageBST" v-if="this.manageButtonStr">完成</t-button>
         <t-button ghost @click="manageBS " v-else>管理</t-button>
         <t-button ghost>筛选</t-button>
       </t-space>
