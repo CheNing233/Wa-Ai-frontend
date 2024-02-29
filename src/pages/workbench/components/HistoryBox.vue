@@ -11,8 +11,8 @@
       </t-space>
 
       <t-space style="margin-top: 10px" size="small">
-        <t-button ghost @click="manageBST">完成</t-button>
-        <t-button ghost @click="manageBS">管理</t-button>
+        <t-button ghost @click="manageBST" v-if="this.manageButtonStr">完成</t-button>
+        <t-button ghost @click="manageBS " v-else>管理</t-button>
         <t-button ghost>筛选</t-button>
       </t-space>
 
@@ -41,15 +41,16 @@
             >
               <div @click="toggleOverlay(index)"
                    style="position: relative; width: 100%; display: flex; align-items: center;">
-
                 <div>
+
                   <t-image
                       :src="item.imageURL"
                       :overlayContent="() => renderMask(item)"
-                      :overlayTrigger=overlayTriggerT
+                      :overlayTrigger="overlayTriggerT"
                       style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 0.75"
                       fit="cover"
                       shape="round"
+                      lazy="lazy"
                   />
                   <div v-show="showOverlay[index]===true" class="overlay">
                     <div class="overlay-content"></div>
@@ -161,7 +162,6 @@ export default {
   data() {
     return {
       renderMask :(item)=> {
-
         const handleDownload = (url) => {
           // 处理下载操作
           console.log('Download image:', url);
@@ -280,9 +280,8 @@ export default {
 
       overlayContentM:true,
       overlayTriggerT:'hover',
-      checked: [],
-      //showOverlay: false,
-      showOverlay: Array.from({ length: 7 }, () => false)
+      showOverlay: Array.from({ length: 7 }, () => false),
+      manageButtonStr: false
     }
 
   },
@@ -296,6 +295,7 @@ export default {
     manageBS(){
       this.overlayTriggerT= 'always'
       this.overlayContentM=false;
+      this.manageButtonStr=true
     },
 
     toggleOverlay(index) {
@@ -306,6 +306,8 @@ export default {
 
     },
     manageBST(){
+      this.showOverlay=Array.from({ length: 7 }, () => false)
+      this.manageButtonStr=false
       this.overlayTriggerT= 'hover'
       this.overlayContentM=true;
     },
