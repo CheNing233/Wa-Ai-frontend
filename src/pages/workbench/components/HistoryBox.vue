@@ -25,9 +25,6 @@
         max-height: 100%;
         margin-top: 13px;
         ">
-
-        <!--行列布局-->
-
         <t-row>
           <t-row :gutter="[6, 6]" style="position: relative; overflow-y: scroll; max-height: 770px"
                  align="center">
@@ -71,69 +68,9 @@
 
         </t-row>
 
-
-
-        <!--
-        <t-col
-            style="position: absolute;
-            display: flow;
-             left: 8px;
-             right: 8px;
-             top: 30px;
-             bottom: 150px;
-             overflow-y: scroll;"
-        >
-          <t-col v-for="(item, index) in list" :key="item.id" style="margin: 22px;">
-
-            <div @click="toggleOverlay(index)"
-                 style="position: relative; width: 100%; display: flex; align-items: center;" >
-              <t-image
-                  :src="item.imageURL"
-                  :overlayContent="() => renderMask(item)"
-                  :overlayTrigger=overlayTriggerT
-                  style="width: 40%;"
-                  fit="cover"
-              />
-
-              <div v-show="showOverlay[index]===true" class="overlay">
-                <div class="overlay-content" >
-
-
-                </div>
-              </div>
-            </div>
-          </t-col>
-
-
-          <t-col>
-
-          </t-col>
-
-        </t-col>-->
-        <!-- <componentModelsManager :props="{ name: '我的图片' }" /> -->
-
-
       </t-card>
     </t-row>
 
-
-    <!--
-    <t-row style="display: flex; justify-content: flex-end;">
-      <t-col style="margin-top: 30px;margin-right: 20px;">
-        <t-descriptions
-            size="small"
-            colon>
-          <t-descriptions-item label="共选择">5</t-descriptions-item>
-        </t-descriptions>
-      </t-col >
-
-      <t-col style="margin-top: 30px;margin-right: 20px;">
-        <t-button>下载</t-button>
-      </t-col >
-
-
-    </t-row>
-    -->
 
   </div>
 
@@ -163,9 +100,7 @@ export default {
     return {
       renderMask :(item)=> {
         const handleDownload = (url) => {
-          // 处理下载操作
           console.log('Download image:', url);
-          // 这里可以添加下载逻辑，比如打开新窗口下载图片
           window.open(url, '_blank');
         };
 
@@ -287,11 +222,8 @@ export default {
   },
 
   methods: {
-    changeView(model){
-      if (model==='grid'){
-        //alert('grid')
-      }
-    },
+
+    //点击管理
     manageBS(){
       this.overlayTriggerT= 'always'
       this.overlayContentM=false;
@@ -305,6 +237,7 @@ export default {
       }
 
     },
+    //点击完成
     manageBST(){
       this.showOverlay=Array.from({ length: 7 }, () => false)
       this.manageButtonStr=false
@@ -313,11 +246,6 @@ export default {
     },
 
   },
-  beforeCreate(){
-
-  },
-
-
   computed: {
     displayWorkbenchSmall: function () {
       return this.$store.getters.getDisplayWorkbenchSmall
