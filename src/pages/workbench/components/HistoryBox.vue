@@ -105,19 +105,13 @@ export default {
         };
 
         return (
-            <div
+              <div v-show={this.overlayContentM}
                 style={{
                   height:'100%',
                   textAlign: 'right',
                   background: 'rgba(0,0,0,.4)',
                   color: '#fff',
                 }}>
-              <div v-show={this.overlayContentM}
-                   style={{
-
-                     height:'100%',
-                     textAlign: 'right',
-                   }}>
                 <div style="padding: 5px">
                   <t-button
                             size="small"
@@ -127,8 +121,6 @@ export default {
                   </t-button>
                 </div>
               </div>
-
-            </div>
         )
 
       },
