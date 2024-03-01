@@ -26,12 +26,22 @@
         <t-col
             :span="displayMobile ? 12 : 8"
         >
-          <t-image
-              :src="imageParams.imageUrl"
-              fit="contain"
+          <t-image-viewer
+              :images="[imageParams.imageUrl]"
+              :closeOnEscKeydown="true"
+              :closeOnOverlay="true"
+              v-model="viewerVisible"
               class="image_container"
-          />
-
+          >
+            <template #trigger="{ open }">
+              <t-image
+                  :src="imageParams.imageUrl"
+                  fit="contain"
+                  class="image_container"
+                  @click="open"
+              />
+            </template>
+          </t-image-viewer>
         </t-col>
 
         <t-col
@@ -48,7 +58,7 @@
               </t-avatar>
               <t-space size="1px" direction="vertical">
                 <span>{{ userInfo.nickName }}</span>
-                <span style="font-size: 13px; color: rgba(0,0,0,0.54);">{{createTime}} 发布</span>
+                <span style="font-size: 13px; color: rgba(0,0,0,0.54);">{{ createTime }} 发布</span>
               </t-space>
             </t-space>
 
@@ -91,6 +101,8 @@ export default {
   },
   data() {
     return {
+      viewerVisible: false,
+      viewerOpen: null,
       userInfo: {
         "id": 1,
         "nickName": "123",
@@ -243,6 +255,8 @@ export default {
 .image_container {
   width: 100%;
   height: 100vh;
+
+  cursor: pointer;
 }
 
 .params_container {
