@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IMAGE_API_URL, IMAGE_API_LIST } from '@/config/ApiConfig';
+import {IMAGE_API_URL, IMAGE_API_LIST} from '@/config/ApiConfig';
 
 const request = (url, method, params, data) => {
     console.log("请求", url, method, params, data);
@@ -15,13 +15,11 @@ const request = (url, method, params, data) => {
                 if (res.status === 200) {
                     if (res.data.success === true) {
                         resolve(res.data);
-                    }
-                    else {
+                    } else {
                         console.log("返回错误", res.data);
                         reject(res.data.errorMsg);
                     }
-                }
-                else {
+                } else {
                     console.log("请求错误", res);
                     reject(`status = ${res.status}; statusText = ${res.statusText}`);
                 }
@@ -34,7 +32,7 @@ const request = (url, method, params, data) => {
 }
 
 const getSdImageDetail = (params) => request(
-    `${IMAGE_API_URL}${IMAGE_API_LIST.getSdImageDetail}`, 'get',
+    `${IMAGE_API_URL}${IMAGE_API_LIST.getSdImageDetail}/${params.id}`, 'get',
     params, {}
 );
 

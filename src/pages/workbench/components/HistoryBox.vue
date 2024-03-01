@@ -21,6 +21,9 @@
           <t-button variant="outline" @click="changeManageStatus">
             {{ manageStatus ? '取消' : '选择' }}
           </t-button>
+          <t-button variant="outline" shape="square" :loading="reFreshPageLoading" @click="freshPage">
+            <RefreshIcon slot="icon" shape="square"/>
+          </t-button>
         </t-space>
 
       </t-col>
@@ -56,7 +59,8 @@ import {
   // ControlPlatformIcon,
   Delete1Icon,
   DownloadIcon,
-  ShareIcon
+  ShareIcon,
+  RefreshIcon,
 } from 'tdesign-icons-vue';
 
 import componentImageCard from './Cards/imageCard.vue'
@@ -72,6 +76,7 @@ export default {
     Delete1Icon,
     DownloadIcon,
     ShareIcon,
+    RefreshIcon,
   },
   data() {
     return {
@@ -90,11 +95,15 @@ export default {
 
       manageSelected: [],
       manageStatus: false,
+
+      reFreshPageLoading: false,
     }
 
   },
   methods: {
     freshPage() {
+      this.reFreshPageLoading = true;
+
       const PARAMS = {
         page: 1,
         pageSize: this.imageListSize,
@@ -107,7 +116,9 @@ export default {
           })
           .catch(err => {
             this.$message.error("获取数据失败: " + err)
-          });
+          }).finally(() => {
+        this.reFreshPageLoading = false;
+      });
     },
 
     changeManageStatus() {
@@ -118,9 +129,9 @@ export default {
     handleOverlayClick(id) {
       if (this.manageStatus) {//global select status
 
-        if(this.checkIdExists(id)){
+        if (this.checkIdExists(id)) {
           this.deleteItem(id);
-        }else{
+        } else {
           this.insertItem(id);
         }
 

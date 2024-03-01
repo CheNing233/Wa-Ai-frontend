@@ -1,7 +1,7 @@
 <template>
 
   <t-image
-      :src="imageContent.imageURL"
+      :src="imageContent.imageUrl"
       fit="cover"
       class="image_item"
       shape="round"

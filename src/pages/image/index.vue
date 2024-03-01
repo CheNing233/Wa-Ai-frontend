@@ -27,15 +27,16 @@
             :span="displayMobile ? 12 : 8"
         >
           <t-image-viewer
-              :images="[imageParams.imageUrl]"
+              :images="[imageUrl]"
               :closeOnEscKeydown="true"
               :closeOnOverlay="true"
+              :imageScale="{ max: 2000 }"
               v-model="viewerVisible"
               class="image_container"
           >
             <template #trigger="{ open }">
               <t-image
-                  :src="imageParams.imageUrl"
+                  :src="imageUrl"
                   fit="contain"
                   class="image_container"
                   @click="open"
@@ -65,7 +66,7 @@
             <t-descriptions itemLayout="horizontal"
                             class="params_container"
                             :column="1"
-                            :label-style="{ whiteSpace: 'nowrap', }"
+                            :label-style="{ wordBreak: 'break-all', minWidth: '100px' }"
                             :content-style="{ wordBreak: 'break-all', whiteSpace: 'normal' }"
             >
               <t-descriptions-item
@@ -108,6 +109,7 @@ export default {
         "nickName": "123",
         "avatar": null,
       },
+      imageUrl: null,
       imageParams: {
         "prompt": "",
         "steps": "",
@@ -182,7 +184,6 @@ export default {
       sortedKeys.forEach((key) => {
         sortedObject[key] = obj[key];
       });
-      console.log("sortedObject", sortedObject);
       return sortedObject;
     },
 
@@ -193,9 +194,12 @@ export default {
 
       api.sdimageApi.getSdImageDetail(PARAMS)
           .then(resp => {
-            this.imageParams = resp.data.params;
+            this.imageParams = JSON.parse(resp.data.params);
             this.userInfo = resp.data.user;
             this.createTime = resp.data.createTime;
+            this.imageUrl = resp.data.imageUrl;
+
+            console.log("this.imageParams", this.imageParams);
 
             // 将对象展开
             this.imageParams = this.flattenObject(this.imageParams);
@@ -203,18 +207,18 @@ export default {
                 this.imageParams,
                 [
                   "prompt",
-                  "negative_prompt",
+                  "negativePrompt",
                   "steps",
                   "seed",
-                  "sampler_name",
-                  "cfg_scale",
+                  "samplerName",
+                  "cfgScale",
                   "width",
                   "height",
-                  "enable_hr",
-                  "denoising_strength",
-                  "hr_scale",
-                  "hr_upscaler",
-                  "hr_second_pass_steps",
+                  "enableHr",
+                  "denoisingStrength",
+                  "hrScale",
+                  "hrUpscaler",
+                  "hrSecondPassSteps",
                 ]
             );
 
