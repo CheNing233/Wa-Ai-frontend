@@ -38,6 +38,12 @@ const getSdModelsList = (params) => request(
   params, {}
 );
 
+const getSdModelDetail = (params) => request(
+  `${MODEL_API_URL}${MODEL_API_LIST.getSdModelDetail}`, 'get',
+  params, {}
+);
+
 export default {
   getSdModelsList,
+  getSdModelDetail,
 };

@@ -22,7 +22,8 @@
       >
         <t-button
             size="small"
-            variant="outline"
+            theme="default"
+            variant="base"
             shape="square"
             @click="handleBtnEnlargeClick"
         >

@@ -6,16 +6,15 @@
       >
         <t-breadcrumb :maxItemWidth="'150'">
           <t-breadcrumbItem :to="{ path: '/portal/' }">首页</t-breadcrumbItem>
-          <!--          <t-breadcrumbItem :to="{ path: '/portal/', query: { filter_name: 'CHECKPOINT' } }">CHECKPOINT</t-breadcrumbItem>-->
-          <t-breadcrumbItem :maxWidth="'160'">test</t-breadcrumbItem>
+          <t-breadcrumbItem :maxWidth="'160'">{{modelDetail.title}}</t-breadcrumbItem>
         </t-breadcrumb>
-        <h1>test</h1>
+        <h1 style="word-break: break-all; line-height: 1.2">{{modelDetail.title}}</h1>
         <t-space breakLine :size="2">
           <template #separator>
             <t-divider layout="vertical"/>
           </template>
           <t-tag>
-            CHECKPOINT
+            {{modelDetail.type}}
           </t-tag>
 
           <div style="display: flex; justify-content: center;">
@@ -23,24 +22,33 @@
 
             </t-avatar>
             <span style="padding-left: 8px;">
-                            123
-                        </span>
+              123
+            </span>
           </div>
 
           <span>
-                        2024年2月24日 07:58 更新
-                    </span>
+            {{modelDetail.updateTime}} 更新
+          </span>
         </t-space>
       </t-col>
       <t-col
           flex="shrink"
           style="padding-top: 16px;"
       >
-        <t-button
-            variant="outline"
-        >
-          收藏
-        </t-button>
+        <t-space breakLine>
+          <t-button
+              variant="outline"
+          >
+            <ThumbUp1Icon slot="icon" shape="square" />
+            {{modelDetail.liked}} 点赞
+          </t-button>
+          <t-button
+              variant="outline"
+          >
+            <StarIcon slot="icon" shape="square" />
+            0 收藏
+          </t-button>
+        </t-space>
       </t-col>
     </t-row>
 
@@ -94,13 +102,17 @@
 
         <t-space direction="vertical" style="width: 100%;">
 
-          <t-descriptions :column="1">
-            <t-descriptions-item label="运行">666</t-descriptions-item>
-            <t-descriptions-item label="下载">404</t-descriptions-item>
-            <t-descriptions-item label="上传时间">2024年2月24日 07:55</t-descriptions-item>
-            <t-descriptions-item label="模型类型">CHECKPOINT</t-descriptions-item>
-            <t-descriptions-item label="具体类别">SD 1.5</t-descriptions-item>
-            <t-descriptions-item label="引用名称">test</t-descriptions-item>
+          <t-descriptions
+              :column="1"
+              :label-style="{ whiteSpace: 'nowrap', }"
+              :content-style="{ wordBreak: 'break-all', whiteSpace: 'normal' }"
+          >
+            <t-descriptions-item label="运行">某后端又没写</t-descriptions-item>
+            <t-descriptions-item label="下载">某后端又没写</t-descriptions-item>
+            <t-descriptions-item label="上传时间">{{modelDetail.createTime}}</t-descriptions-item>
+            <t-descriptions-item label="模型类型">{{modelDetail.type}}</t-descriptions-item>
+            <t-descriptions-item label="具体类别">某后端又没写</t-descriptions-item>
+            <t-descriptions-item label="引用名称">{{modelDetail.filename}}</t-descriptions-item>
           </t-descriptions>
 
           <t-row :gutter="[16, 16]" style="padding: 16px;">
@@ -125,14 +137,14 @@
           </t-row>
 
 
-          <div style="padding: 16px 16px 16px 16px;">
+          <t-space direction="vertical" style="padding: 16px 16px 16px 16px;">
             <t-row :gutter="[16, 16]">
               <t-col flex="1" style="display: flex; align-items: center;">
                 <t-tag size="large" variant="outline">
                   <template #icon>
                     <DiscountIcon/>
                   </template>
-                  触发词
+                  正向提示词（触发词）
                 </t-tag>
               </t-col>
 
@@ -150,7 +162,32 @@
                 </t-space>
               </t-col>
             </t-row>
-          </div>
+
+            <t-row :gutter="[16, 16]">
+              <t-col flex="1" style="display: flex; align-items: center;">
+                <t-tag size="large" variant="outline">
+                  <template #icon>
+                    <DiscountIcon/>
+                  </template>
+                  反向提示词
+                </t-tag>
+              </t-col>
+
+              <t-col flex="shrink">
+                <t-button variant="outline" style="width: 100%;">
+                  复制
+                </t-button>
+              </t-col>
+
+              <t-col :span="12">
+                <t-space breakLine>
+                  <t-tag v-for="(value, index) in tags" :key="index" size="large">
+                    {{ value }}
+                  </t-tag>
+                </t-space>
+              </t-col>
+            </t-row>
+          </t-space>
 
         </t-space>
 
@@ -164,14 +201,22 @@
 <script>
 import {
   ControlPlatformIcon,
-  DiscountIcon
+  DiscountIcon,
+
+  ThumbUp1Icon,
+  StarIcon
 } from 'tdesign-icons-vue';
+
+import api from '@/service'
 
 export default {
   name: 'ModelDetail',
   components: {
     ControlPlatformIcon,
-    DiscountIcon
+    DiscountIcon,
+
+    ThumbUp1Icon,
+    StarIcon
   },
   data() {
     return {
@@ -202,6 +247,9 @@ export default {
         'tag9',
         'tag10',
       ],
+
+      modelId: null,
+      modelDetail: {},
     }
   },
   computed: {
@@ -218,11 +266,30 @@ export default {
     },
   },
   methods: {
+    freshPage() {
+      const PARAMS = {
+        id: this.modelId,
+      };
+
+      api.modelApi.getSdModelDetail(PARAMS)
+          .then(resp => {
+            this.modelDetail = resp.data;
+          })
+          .catch(err => {
+            this.$message.error("获取数据失败: " + err)
+          });
+
+    },
+
     handleListImageOnClick(i) {
       console.log(i);
       this.image = i;
     }
   },
+  created() {
+    this.modelId = this.$router.currentRoute.query.id;
+    this.freshPage();
+  }
 }
 </script>
 
@@ -259,4 +326,5 @@ export default {
   height: 100px;
   margin-right: 8px;
 }
+
 </style>

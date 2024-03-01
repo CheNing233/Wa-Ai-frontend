@@ -27,7 +27,7 @@
             :span="displayMobile ? 12 : 8"
         >
           <t-image
-              :src="images[image].src"
+              :src="imageParams.imageUrl"
               fit="contain"
               class="image_container"
           />
@@ -47,21 +47,23 @@
                 T
               </t-avatar>
               <t-space size="1px" direction="vertical">
-                <span>nickName</span>
-                <span style="font-size: 13px; color: rgba(0,0,0,0.54);">2024年1月9日 15:41 发布</span>
+                <span>{{ userInfo.nickName }}</span>
+                <span style="font-size: 13px; color: rgba(0,0,0,0.54);">{{createTime}} 发布</span>
               </t-space>
             </t-space>
 
             <t-descriptions itemLayout="horizontal"
                             class="params_container"
                             :column="1"
+                            :label-style="{ whiteSpace: 'nowrap', }"
+                            :content-style="{ wordBreak: 'break-all', whiteSpace: 'normal' }"
             >
               <t-descriptions-item
                   v-for="(value, key) in imageParams"
                   :key="key"
                   :label="key"
               >
-                {{value}}
+                {{ value }}
               </t-descriptions-item>
 
             </t-descriptions>
@@ -80,6 +82,8 @@ import {
   CloseIcon
 } from 'tdesign-icons-vue';
 
+import api from '@/service'
+
 export default {
   name: 'componentImageDialog',
   components: {
@@ -87,40 +91,34 @@ export default {
   },
   data() {
     return {
-      image: 0,
-      images: [
-        {
-          src: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
-          title: '图片1111111111111111111111111111111111111111111111111111111111111111标题',
-          desc: '图片1描述'
-        },
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-2.png', title: '图片2标题', desc: '图片2描述'},
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-3.png', title: '图片3标题', desc: '图片3描述'},
-      ],
-
+      userInfo: {
+        "id": 1,
+        "nickName": "123",
+        "avatar": null,
+      },
       imageParams: {
         "prompt": "",
-        "steps": 28,
-        "seed": -1,
-        "sampler_name": "Euler a",
-        "cfg_scale": 7.0,
-        "width": 512,
-        "height": 768,
+        "steps": "",
+        "seed": "",
+        "sampler_name": "",
+        "cfg_scale": "",
+        "width": "",
+        "height": "",
         "negative_prompt": "",
-        "enable_hr": true,
-        "denoising_strength": 0.58,
-        "n_iter": 1,
-        "hr_scale": 2.0,
-        "hr_upscaler": "Latent",
-        "hr_second_pass_steps": 20,
+        "enable_hr": "",
+        "denoising_strength": "",
+        "n_iter": "",
+        "hr_scale": "",
+        "hr_upscaler": "",
+        "hr_second_pass_steps": "",
         "override_settings": {
           "sd_model_checkpoint": "",
-          "sd_vae": "ClearVAE_NansLess1.safetensors",
-          "CLIP_stop_at_last_layers": 2,
-          "eta_noise_seed_delta": 0,
+          "sd_vae": "",
+          "CLIP_stop_at_last_layers": "",
+          "eta_noise_seed_delta": "",
         },
       },
-
+      createTime: '',
     }
   },
   computed: {
@@ -131,6 +129,9 @@ export default {
       set: function (newValue) {
         this.$store.commit('imageDialogSetDisplay', newValue)
       }
+    },
+    imageDialogImageId: function () {
+      return this.$store.getters.imageDialogGetImageId
     },
     displayMobile: function () {
       return this.$store.getters.getDisplayMobile
@@ -173,28 +174,43 @@ export default {
       return sortedObject;
     },
 
-    fresh() {
-      this.imageParams = this.flattenObject(this.imageParams);
-      this.imageParams = this.sortObjectKeys(
-          this.imageParams,
-          [
-            "prompt",
-            "negative_prompt",
-            "steps",
-            "seed",
-            "sampler_name",
-            "cfg_scale",
-            "width",
-            "height",
-            "enable_hr",
-            "denoising_strength",
-            "hr_scale",
-            "hr_upscaler",
-            "hr_second_pass_steps",
-          ]
-      );
-    }
+    freshPage() {
+      const PARAMS = {
+        id: this.imageDialogImageId,
+      };
 
+      api.sdimageApi.getSdImageDetail(PARAMS)
+          .then(resp => {
+            this.imageParams = resp.data.params;
+            this.userInfo = resp.data.user;
+            this.createTime = resp.data.createTime;
+
+            // 将对象展开
+            this.imageParams = this.flattenObject(this.imageParams);
+            this.imageParams = this.sortObjectKeys(
+                this.imageParams,
+                [
+                  "prompt",
+                  "negative_prompt",
+                  "steps",
+                  "seed",
+                  "sampler_name",
+                  "cfg_scale",
+                  "width",
+                  "height",
+                  "enable_hr",
+                  "denoising_strength",
+                  "hr_scale",
+                  "hr_upscaler",
+                  "hr_second_pass_steps",
+                ]
+            );
+
+            console.log("this.imageParams", this.imageParams);
+          }).catch(err => {
+        this.$message.error("获取数据失败: " + err)
+      });
+    }
   },
   created() {
     this.fresh();
@@ -204,6 +220,9 @@ export default {
       if (!newVal) {
         this.$refs.scrollableDiv.scrollTop = 0;
       }
+    },
+    imageDialogImageId() {
+      this.freshPage();
     }
   }
 }
@@ -228,7 +247,8 @@ export default {
 
 .params_container {
   height: calc(100vh - 72px);
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .image_overlay {

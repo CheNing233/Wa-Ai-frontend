@@ -72,24 +72,27 @@ export default {
     'manageStatus'
   ],
   methods: {
-    freshPage(){
+    freshPage() {
       const PARAMS = {
         id: this.imageProfile.imageId,
       };
 
       api.sdimageApi.getSdImageDetail(PARAMS)
-        .then(resp => {
-          this.imageContent = resp.data;
-        })
-        .catch(err => {
-          this.$message.error("获取数据失败: " + err)
-        });
+          .then(resp => {
+            this.imageContent = resp.data;
+          })
+          .catch(err => {
+            this.$message.error("获取数据失败: " + err)
+          });
     },
 
     handleOverlayClick(id) {
       if (this.manageStatus) {//global select status
         this.isSelected = !this.isSelected;
         this.$emit('selectEvent', id);
+      } else {
+        this.$store.commit('imageDialogSetImageId', this.imageContent.id);
+        this.$store.commit('imageDialogSetDisplay', true);
       }
     },
   },
@@ -122,6 +125,8 @@ export default {
   border-radius: 4px;
   opacity: 0;
   transition: opacity 0.3s;
+
+  cursor: pointer;
 }
 
 .overlay:hover {
