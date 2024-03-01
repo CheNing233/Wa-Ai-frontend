@@ -6,10 +6,8 @@ const ImageDialog = {
     },
     mutations: {
         imageDialogSetDisplay(state, payload) {
-            state.display = payload
-        },
-        imageDialogSetImageId(state, payload) {
-            state.imageId = payload
+            state.imageId = payload.imageId
+            state.display = payload.display
         },
     },
     getters: {

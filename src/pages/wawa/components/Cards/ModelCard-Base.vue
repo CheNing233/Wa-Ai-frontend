@@ -118,7 +118,10 @@ export default {
 
     },
     handleBtnEnlargeClick() {
-      this.$store.commit('imageDialogSetDisplay', true);
+      this.$store.commit('imageDialogSetDisplay', {
+        display: true,
+        imageId: null
+      });
     },
 
     handleBtnRunClick() {

@@ -92,8 +92,13 @@ export default {
         this.isSelected = !this.isSelected;
         this.$emit('selectEvent', id);
       } else {
-        this.$store.commit('imageDialogSetImageId', this.imageContent.id);
-        this.$store.commit('imageDialogSetDisplay', true);
+        this.$store.commit(
+            'imageDialogSetDisplay',
+            {
+              display: true,
+              imageId: this.imageContent.id
+            }
+        );
       }
     },
   },

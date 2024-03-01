@@ -141,7 +141,10 @@ export default {
         return this.$store.getters.imageDialogGetDisplay
       },
       set: function (newValue) {
-        this.$store.commit('imageDialogSetDisplay', newValue)
+        this.$store.commit(
+            'imageDialogSetDisplay',
+            {display: newValue, imageId: this.imageDialogImageId}
+        )
       }
     },
     imageDialogImageId: function () {
@@ -237,8 +240,10 @@ export default {
         this.$refs.scrollableDiv.scrollTop = 0;
       }
     },
-    imageDialogImageId() {
-      this.freshPage();
+    imageDialogDisplay(newVal) {
+      if (newVal) {
+        this.freshPage();
+      }
     }
   }
 }
