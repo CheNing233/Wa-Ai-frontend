@@ -129,8 +129,7 @@
             :span="displayWorkbenchSmall ? (workbenchCurrentTab == 'history' ? 12 : 0) : 7"
             class="right_container"
         >
-          <HistoryBox/>
-
+            <HistoryBox/>
         </t-col>
       </t-row>
     </div>
