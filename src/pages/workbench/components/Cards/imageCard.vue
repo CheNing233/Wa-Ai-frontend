@@ -69,7 +69,8 @@ export default {
   },
   props: [
     'imageProfile',
-    'manageStatus'
+    'manageStatus',
+    'reFreshPageIndicator'
   ],
   methods: {
     freshPage() {
@@ -104,6 +105,9 @@ export default {
       if (!this.manageStatus) {
         this.isSelected = false;
       }
+    },
+    reFreshPageIndicator() {
+      this.freshPage();
     }
   }
 }

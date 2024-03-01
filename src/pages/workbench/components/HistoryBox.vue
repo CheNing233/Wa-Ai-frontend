@@ -43,6 +43,7 @@
           <componentImageCard
               :imageProfile="item"
               :manageStatus="manageStatus"
+              :reFreshPageIndicator="reFreshPageIndicator"
               @selectEvent="handleOverlayClick"
           />
 
@@ -97,12 +98,14 @@ export default {
       manageStatus: false,
 
       reFreshPageLoading: false,
+      reFreshPageIndicator: true,
     }
 
   },
   methods: {
     freshPage() {
       this.reFreshPageLoading = true;
+      this.reFreshPageIndicator = !this.reFreshPageIndicator;
 
       const PARAMS = {
         page: 1,
