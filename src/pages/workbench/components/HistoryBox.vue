@@ -8,7 +8,8 @@
       <t-col flex="shrink">
 
         <t-space size="small" style="float: right; margin-right: -16px">
-          <t-button theme="danger" shape="square" v-if="manageStatus">
+          <t-button theme="danger" shape="square" :loading="delTaskLoading" @click="handleDeleteSelected"
+                    v-if="manageStatus">
             <Delete1Icon slot="icon" shape="square"/>
           </t-button>
           <t-button shape="square" v-if="manageStatus">
@@ -18,7 +19,7 @@
             <ShareIcon slot="icon" shape="square"/>
             发帖
           </t-button>
-          <t-button variant="outline" @click="changeManageStatus">
+          <t-button variant="outline" @click="handleChangeManageStatus">
             {{ manageStatus ? '取消' : '选择' }}
           </t-button>
           <t-button variant="outline" shape="square" :loading="reFreshPageLoading" @click="freshPage">
@@ -68,6 +69,7 @@ import componentImageCard from './Cards/imageCard.vue'
 
 import api from '@/service'
 
+
 export default {
   name: 'componentHistoryBox',
   components: {
@@ -79,6 +81,9 @@ export default {
     ShareIcon,
     RefreshIcon,
   },
+  props: [
+    'generateSignal'
+  ],
   data() {
     return {
       timeFilterRange: [new Date(), new Date()],
@@ -98,12 +103,14 @@ export default {
       manageStatus: false,
 
       reFreshPageLoading: false,
+      delTaskLoading: false,
       reFreshPageIndicator: true,
     }
 
   },
   methods: {
     freshPage() {
+      this.imageList = [];
       this.reFreshPageLoading = true;
       this.reFreshPageIndicator = !this.reFreshPageIndicator;
 
@@ -124,9 +131,42 @@ export default {
       });
     },
 
-    changeManageStatus() {
+    handleChangeManageStatus() {
       this.manageStatus = !this.manageStatus;
       this.manageSelected = [];
+    },
+
+    handleDeleteSelected() {
+
+      if (this.manageSelected.length === 0) {
+        this.$message.warning('请先选择要删除的项');
+        return;
+      }
+
+      this.delTaskLoading = true;
+
+      let reqs = []
+
+      for (let i in this.manageSelected) {
+        reqs.push(
+            api.taskApi.deleteTask(
+                {taskId: this.manageSelected[i]}
+            )
+        )
+      }
+
+      Promise.all(reqs)
+          .then(resp => {
+            this.$message.success(`删除成功（共 ${resp.length} 个）`);
+            this.freshPage();
+          })
+          .catch(err => {
+            this.$message.error("删除失败: " + err)
+          }).finally(() => {
+        this.delTaskLoading = false;
+        this.handleChangeManageStatus();
+        this.freshPage();
+      });
     },
 
     handleOverlayClick(id) {
@@ -161,6 +201,11 @@ export default {
   },
   created() {
     this.freshPage();
+  },
+  watch: {
+    generateSignal() {
+      this.freshPage();
+    }
   }
 }
 </script>

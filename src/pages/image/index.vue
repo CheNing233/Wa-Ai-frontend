@@ -11,6 +11,12 @@
         ref="scrollableDiv"
         :style="{ overflowY: displayMobile ? 'scroll' : 'hidden' }"
     >
+      <t-loading
+          style="position: absolute; top: 12px; right: 64px; z-index: 6666"
+          :loading="imageLoading"
+          size="32px"
+      >
+      </t-loading>
 
       <t-button
           variant="outline"
@@ -23,6 +29,7 @@
 
 
       <t-row :gutter="[16, 16]">
+
         <t-col
             :span="displayMobile ? 12 : 8"
         >
@@ -59,7 +66,7 @@
               </t-avatar>
               <t-space size="1px" direction="vertical">
                 <span>{{ userInfo.nickName }}</span>
-                <span style="font-size: 13px; color: rgba(0,0,0,0.54);">{{ createTime }} 发布</span>
+                <span style="font-size: 13px; color: rgba(0,0,0,0.54);">{{ createTime }} 创建</span>
               </t-space>
             </t-space>
 
@@ -103,7 +110,7 @@ export default {
   data() {
     return {
       viewerVisible: false,
-      viewerOpen: null,
+      imageLoading: false,
       userInfo: {
         "id": 1,
         "nickName": "123",
@@ -155,11 +162,6 @@ export default {
     },
   },
   methods: {
-    handleListImageOnClick(i) {
-      console.log(i);
-      this.image = i;
-    },
-
     flattenObject(obj) {
       const result = {};
       const flatten = (current, property) => {
@@ -191,6 +193,8 @@ export default {
     },
 
     freshPage() {
+      this.imageLoading = true;
+
       const PARAMS = {
         id: this.imageDialogImageId,
       };
@@ -210,29 +214,25 @@ export default {
                 this.imageParams,
                 [
                   "prompt",
-                  "negativePrompt",
+                  "negative_prompt",
                   "steps",
                   "seed",
-                  "samplerName",
-                  "cfgScale",
+                  "sampler_name",
+                  "cfg_scale",
                   "width",
                   "height",
-                  "enableHr",
-                  "denoisingStrength",
-                  "hrScale",
-                  "hrUpscaler",
-                  "hrSecondPassSteps",
                 ]
             );
 
             console.log("this.imageParams", this.imageParams);
           }).catch(err => {
         this.$message.error("获取数据失败: " + err)
+      }).finally(() => {
+        this.imageLoading = false;
       });
     }
   },
   created() {
-    this.fresh();
   },
   watch: {
     displayMobile(newVal) {

@@ -129,7 +129,7 @@
             :span="displayWorkbenchSmall ? (workbenchCurrentTab == 'history' ? 12 : 0) : 7"
             class="right_container"
         >
-            <HistoryBox/>
+          <HistoryBox :generateSignal="generateSignal"/>
         </t-col>
       </t-row>
     </div>
@@ -190,6 +190,7 @@ export default {
       workbenchCurrentTab: 'launch',
       value: 'txt2img',
       generateBtnLoading: false,
+      generateSignal: false,
     }
   },
   computed: {
@@ -239,9 +240,18 @@ export default {
           .then((res) => {
             this.$message.success("任务ID " + res.data + " 已压入喵");
           }).catch((err) => {
-            this.$message.error(err);
-          }).finally(() => {
-            this.generateBtnLoading = false;
+        this.$message.error(err);
+      }).finally(() => {
+        this.generateBtnLoading = false;
+
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve();
+          }, 1000); // 1000 毫秒等于 1 秒
+        }).finally(() => {
+          this.generateSignal = !this.generateSignal;
+        });
+
       });
     },
 

@@ -1,46 +1,54 @@
 <template>
+  <div>
+    <t-tag
+        v-show="imageStatusIndicatorLight !== 'success'"
+        style="position: absolute; left: 12px; top: 8px; z-index: 6"
+        variant="light" :theme="imageStatusIndicatorLight"
+    >
+      {{ imageStatusIndicatorText }}
+    </t-tag>
+    <t-image
+        :src="imageContent.imageUrl"
+        fit="cover"
+        class="image_item"
+        shape="round"
+    >
 
-  <t-image
-      :src="imageContent.imageUrl"
-      fit="cover"
-      class="image_item"
-      shape="round"
-  >
-    <template #overlayContent>
-      <div
-          class="overlay"
-          :class="['overlay', isSelected ? 'overlay_on_trigger' : null]"
-          @click="handleOverlayClick(imageContent.id)"
-      >
-        <t-space
-            v-if="manageStatus"
-            size="8px"
-            style="position: absolute; right: 4px; top: 8px;"
+      <template #overlayContent>
+        <div
+            class="overlay"
+            :class="['overlay', isSelected ? 'overlay_on_trigger' : null]"
+            @click="handleOverlayClick(imageProfile.id)"
         >
-          <t-checkbox
-              v-model="isSelected"
+          <t-space
+              v-if="manageStatus"
+              size="8px"
+              style="position: absolute; right: 4px; top: 8px;"
           >
+            <t-checkbox
+                v-model="isSelected"
+            >
 
-          </t-checkbox>
-        </t-space>
+            </t-checkbox>
+          </t-space>
 
-        <t-space
-            v-else
-            size="8px"
-            style="position: absolute; right: 8px; top: 8px;"
-        >
-          <t-button
-              theme="primary"
-              size="small"
+          <t-space
+              v-else
+              size="8px"
+              style="position: absolute; right: 8px; top: 8px;"
           >
-            <ControlPlatformIcon slot="icon" shape="square"/>
-            运行
-          </t-button>
-        </t-space>
-      </div>
-    </template>
-  </t-image>
-
+            <t-button
+                theme="primary"
+                size="small"
+            >
+              <ControlPlatformIcon slot="icon" shape="square"/>
+              运行
+            </t-button>
+          </t-space>
+        </div>
+      </template>
+    </t-image>
+  </div>
 </template>
 
 <script>
@@ -52,6 +60,7 @@ import {
 } from 'tdesign-icons-vue';
 
 import api from '@/service'
+import {TASK_STATUS} from '@/config/ApiConfig'
 
 export default {
   name: 'componentImageCard',
@@ -64,7 +73,11 @@ export default {
   data() {
     return {
       isSelected: false,
-      imageContent: {},
+      imageId: null,
+      imageContent: {
+        imageUrl: null,
+      },
+      imageStatus: TASK_STATUS,
     }
   },
   props: [
@@ -72,8 +85,34 @@ export default {
     'manageStatus',
     'reFreshPageIndicator'
   ],
+  computed: {
+    imageStatusIndicatorText() {
+      for (let i = 0; i < this.imageStatus.length; i++) {
+        if (this.imageStatus[i].id === this.imageProfile.status) {
+          return this.imageStatus[i].name;
+        }
+      }
+      return '未知'
+    },
+    imageStatusIndicatorLight() {
+      for (let i = 0; i < this.imageStatus.length; i++) {
+        if (this.imageStatus[i].id === this.imageProfile.status) {
+          return this.imageStatus[i].indicator;
+        }
+      }
+      return 'danger'
+    },
+  },
   methods: {
     freshPage() {
+      this.imageContent = {};
+
+      // 图片无效
+      if (this.imageProfile.imageId === null) {
+        this.imageContent = {};
+        return;
+      }
+
       const PARAMS = {
         id: this.imageProfile.imageId,
       };
@@ -81,6 +120,7 @@ export default {
       api.sdimageApi.getSdImageDetail(PARAMS)
           .then(resp => {
             this.imageContent = resp.data;
+            this.imageId = this.imageProfile.imageId;
           })
           .catch(err => {
             this.$message.error("获取数据失败: " + err)
@@ -88,6 +128,11 @@ export default {
     },
 
     handleOverlayClick(id) {
+      if (this.imageStatusIndicatorLight !== 'success') {
+        this.$message.warning('现在打不开图片喵');
+        return;
+      }
+
       if (this.manageStatus) {//global select status
         this.isSelected = !this.isSelected;
         this.$emit('selectEvent', id);
