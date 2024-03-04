@@ -68,7 +68,7 @@ import {
 import componentImageCard from './Cards/imageCard.vue'
 
 import api from '@/service'
-
+import eventBus from "@/eventbus";
 
 export default {
   name: 'componentHistoryBox',
@@ -201,6 +201,10 @@ export default {
   },
   created() {
     this.freshPage();
+    eventBus.$on('taskUpdate', this.freshPage);
+  },
+  beforeDestroy() {
+    eventBus.$off('taskUpdate', this.freshPage);
   },
   watch: {
     generateSignal() {

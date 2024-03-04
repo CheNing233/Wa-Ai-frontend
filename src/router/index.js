@@ -16,11 +16,11 @@ export const asyncRouterList = [...UserRouter, ...ModelRouter];
 const defaultRouterList = [
     {
         path: '/login',
-        name: 'login',
         component: () => import('@/layout/index.vue'),
         children: [
             {
                 path: '',
+                name: 'login',
                 components: {
                     default: login,
                     componentWorkbench: workbench,
