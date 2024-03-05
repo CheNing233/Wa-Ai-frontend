@@ -57,8 +57,6 @@ import componentModelCard from './Cards/ModelCard-Base.vue';
 
 import {SdModelsTypes} from '@/config/SdModelsTypes.js';
 
-// import { SdListAPI } from '@/service/sd.js';
-
 import api from '@/service/index.js';
 
 export default {

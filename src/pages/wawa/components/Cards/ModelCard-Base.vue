@@ -1,94 +1,178 @@
 <template>
-  <t-image
-      src="https://tdesign.gtimg.com/demo/demo-image-1.png"
-      fit="cover"
-      class="image"
-      shape="round"
-  >
-    <template #overlayContent>
-      <div class="image_overlay" @click="handleImageOnClick">
-
-      </div>
-
-      <t-tag
-          style="position: absolute; left: 8px; top: 8px;"
-      >
+  <div>
+    <!--    常驻显示左上区-->
+    <t-space
+        size="small"
+        style="position: absolute; left: 20px; top: 12px; z-index: 6"
+    >
+      <t-tag>
         {{ props.type }}
       </t-tag>
+    </t-space>
 
-      <t-space
-          size="8px"
-          style="position: absolute; right: 8px; top: 8px;"
+    <!--    常驻显示右上区-->
+
+
+    <div
+        class="image_explain_content"
+        style="position: absolute; left: 20px; right: 20px; bottom: 16px; z-index: 6"
+        @mouseover="() => { isSelected = true }"
+        @mouseout="() => { isSelected = false }"
+    >
+      <t-space direction="vertical"
+               size="small"
+               style="width: 100%"
       >
-        <t-button
-            size="small"
-            theme="default"
-            variant="base"
-            shape="square"
-            @click="handleBtnEnlargeClick"
-        >
-          <ZoomInIcon slot="icon" shape="square"/>
-        </t-button>
+        <t-space align="center" direction="horizontal">
+          <t-avatar shape="round" size="large">
+            T
+          </t-avatar>
+          <t-space
+              size="1px"
+              direction="vertical"
+          >
+            <span class="image_text">
+              123
+            </span>
+            <span class="image_text">
+              {{ imageUpdateTime }} 更新
+            </span>
+          </t-space>
+        </t-space>
 
-        <t-button
-            theme="primary"
+        <t-space direction="horizontal" style="width: 100%">
+
+          <t-link hover="color" class="ellipsis_container">
+            <span class="ellipsis_text image_title">{{ props.title }}</span>
+          </t-link>
+
+        </t-space>
+
+        <t-space
             size="small"
-            @click="handleBtnRunClick"
         >
-          <ControlPlatformIcon slot="icon" shape="square"/>
-          运行
-        </t-button>
+          <t-tag
+              shape="round"
+              style="background: rgba(0,0,0,0.1); "
+          >
+            <template #icon>
+              <ControlPlatformIcon color="#E8E8E8"/>
+            </template>
+            <span style="color: #FFFFFF">
+              0
+            </span>
+          </t-tag>
+
+          <t-tag
+              shape="round"
+              style="background: rgba(0,0,0,0.1); "
+          >
+            <template #icon>
+              <t-rate
+                  :count="1"
+              >
+                <template #icon>
+                  <StarFilledIcon/>
+                </template>
+              </t-rate>
+            </template>
+            <span style="color: #FFFFFF">
+              0
+            </span>
+          </t-tag>
+
+          <t-tag
+              shape="round"
+              style="background: rgba(0,0,0,0.1); "
+          >
+            <template #icon>
+              <t-rate
+                  :count="1"
+                  :value="props.isLiked ? 1 : 0"
+                  color="var(--td-error-color-7)"
+              >
+                <template #icon>
+                  <HeartFilledIcon/>
+                </template>
+              </t-rate>
+            </template>
+            <span style="color: #FFFFFF">
+              {{ props.liked }}
+            </span>
+          </t-tag>
+
+          <t-tag
+              shape="round"
+              style="background: rgba(0,0,0,0.1); "
+          >
+            <template #icon>
+              <ChatBubble1Icon color="#E8E8E8"/>
+            </template>
+            <span style="color: #FFFFFF">
+              0
+            </span>
+          </t-tag>
+
+        </t-space>
+
       </t-space>
+    </div>
 
 
+    <t-image
+        src="https://tdesign.gtimg.com/demo/demo-image-1.png"
+        fit="cover"
+        class="image"
+        shape="round"
+    >
+      <!--      图片显示区-->
 
-      <div style="position: absolute; bottom: 6px; width: 100%;">
-        <t-card
-            :bordered="false"
-            style="background-color: rgba(0,0,0,0); backdrop-filter: blur(2px);">
-          <t-space :size="8" direction="vertical" style="width: 100%;">
-            <t-row>
-              <t-col :span="12">
-                <t-link hover="color" class="ellipsis_container">
-                  <span class="ellipsis_text image_title">{{ props.title }}</span>
-                </t-link>
-              </t-col>
-            </t-row>
 
-            <t-row :gutter="8" style="flex-wrap: nowrap;">
-              <t-col :span="8">
-                <t-link hover="color" variant="text" class="ellipsis_container">
-                  <UserIcon slot="prefix-icon" shape="square" style="color: #8A8A8A;"/>
-                  <span class="ellipsis_text" style="color: #8A8A8A;">{{ props.nickName }}</span>
-                </t-link>
-              </t-col>
-              <t-col :span="4">
-                <t-button
-                    size="small"
-                    theme="primary"
-                    :variant="(star) ? 'outline' : null"
-                    @click="() => { star = !star }"
-                    style="float: right;"
-                >
-                  <StarIcon slot="icon" shape="square" style="color: #8A8A8A;"/>
-                  <span style="color: #8A8A8A;">{{ props.like }}</span>
-                </t-button>
-              </t-col>
+      <template #overlayContent>
+        <div
+            class="overlay"
+            :class="['overlay', isSelected ? 'overlay_on_trigger' : null]"
+            @click="handleImageOnClick"
+        >
+          <!--          蒙版显示区-->
 
-            </t-row>
+          <t-space
+              size="small"
+              style="position: absolute; right: 12px; top: 12px; z-index: 6"
+          >
+            <t-button
+                size="small"
+                theme="default"
+                variant="base"
+                shape="square"
+                @click.stop="handleBtnEnlargeClick"
+            >
+              <ZoomInIcon slot="icon" shape="square"/>
+            </t-button>
+
+            <t-button
+                theme="primary"
+                size="small"
+                @click.stop="handleBtnRunClick"
+            >
+              <ControlPlatformIcon slot="icon" shape="square"/>
+              运行
+            </t-button>
           </t-space>
 
-        </t-card>
 
-      </div>
-    </template>
-  </t-image>
+        </div>
+      </template>
+    </t-image>
+  </div>
+
 </template>
 
 <script>
 import {
-  UserIcon,
-  StarIcon,
+  ChatBubble1Icon,
+  HeartFilledIcon,
+  StarFilledIcon,
   ControlPlatformIcon,
   ZoomInIcon
 } from 'tdesign-icons-vue';
@@ -98,8 +182,9 @@ import {
 export default {
   name: 'BaseCard',
   components: {
-    UserIcon,
-    StarIcon,
+    ChatBubble1Icon,
+    HeartFilledIcon,
+    StarFilledIcon,
     ControlPlatformIcon,
     ZoomInIcon
   },
@@ -111,6 +196,23 @@ export default {
       star: false,
       isSelected: false,
     }
+  },
+  computed: {
+    imageUpdateTime() {
+      const date = new Date(this.props.updateTime);
+
+      // 获取本地时间的年、月、日、小时和秒
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1; // 月份是从0开始的，所以要加1
+      const day = date.getDate();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const seconds = date.getSeconds();
+
+      const detail = `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
+
+      return `${year}年${month}月${day}日 ${detail}`;
+    },
   },
   methods: {
     fresh() {
@@ -147,6 +249,13 @@ export default {
       this.$store.commit('workbenchUpdateSelected', selected);
     },
     handleImageOnClick() {
+      // window.open(this.$router.resolve({
+      //   path: '/model',
+      //   query: {
+      //     id: this.props.id,
+      //   }
+      // }).href, '_blank');
+
       this.$router.push({
         path: '/model',
         query: {
@@ -163,23 +272,56 @@ export default {
 
 <style scoped>
 .image {
-  width: 100%;
   aspect-ratio: 0.75;
 }
 
-.image_overlay {
+
+.overlay {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  border-radius: 4px;
+  opacity: 0;
+  transition: 0.3s;
   cursor: pointer;
 }
 
+.overlay:hover {
+  background: rgba(0, 0, 0, 0.15);
+  opacity: 1;
+}
+
+.overlay_on_trigger {
+  background: rgba(0, 0, 0, 0.15);
+  opacity: 1;
+}
+
 .image_title {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 1000;
+  color: #FFFFFF;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
   padding-bottom: 4px;
+}
+
+.image_text {
+  font-weight: 1000;
+  font-size: 13px;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 1);
+}
+
+.image_explain_content {
+  margin: -12px;
+  padding: 12px;
+  border-radius: 0 0 4px 4px;
+  background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.15),
+      transparent
+  );
 }
 
 .ellipsis_container {
@@ -189,7 +331,6 @@ export default {
 }
 
 .ellipsis_text {
-  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis
