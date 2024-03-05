@@ -8,13 +8,19 @@ import Router from './router'
 import Store from './store'
 import App from './App.vue'
 
+import eventBus from './eventbus'
+
 Vue.config.productionTip = false
 Vue.use(TDesign)
 Vue.use(VueRouter)
 Vue.use(VueCookies)
 
-new Vue({
+Vue.prototype.$eventBus = eventBus
+
+const vueInstance = new Vue({
   router: Router,
   store: Store,
   render: h => h(App),
-}).$mount('#app')
+})
+
+vueInstance.$mount('#app')

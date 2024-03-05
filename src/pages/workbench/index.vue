@@ -160,6 +160,7 @@ import hiresbox from './components/HiresBox.vue';
 import HistoryBox from './components/HistoryBox.vue';
 
 import api from '@/service';
+// import ws from '@/websocket'
 
 export default {
   name: 'componentWorkdrawer',
@@ -261,6 +262,7 @@ export default {
       else
         this.$store.commit('setDisplayWorkbenchSmall', false);
     },
+
     switchShowOverlay() {
       this.workbenchShowOverlay = this.workbenchShowOverlay ? false : true;
     },
@@ -279,7 +281,8 @@ export default {
         else
           this.workbenchPlacement = 'left'
       }
-    }
+    },
+
   },
   mounted() {
     this.workbenchObserver = new ResizeObserver(entries => {
