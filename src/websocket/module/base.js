@@ -5,6 +5,7 @@ import VueCookies from "vue-cookies";
 const wsUrl = WS_BASE_URL + '/websocket'
 
 const defaultOnOpenHandler = () => {
+
     console.log('ws连接成功')
 }
 
@@ -31,7 +32,7 @@ const defaultSendHeartbeatHandler = (socketInstance) => {
     setInterval(() => {
         socketInstance.send('clientHeartBeat');
         console.log('ws心跳');
-    }, 30000);
+    }, 15000);
 }
 
 const initBaseWs = (
@@ -58,7 +59,9 @@ const initBaseWs = (
 }
 
 const closeBaseWs = (baseSocket) => {
-    baseSocket.close();
+    if (baseSocket) {
+        baseSocket.close();
+    }
 }
 
 export default {

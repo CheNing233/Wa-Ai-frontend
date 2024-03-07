@@ -1,6 +1,9 @@
 import axios from 'axios';
 import store from '@/store'
 import ws from '@/websocket'
+
+import CryptoJS from 'crypto-js';
+
 import {USER_API_URL, USER_API_LIST} from '@/config/ApiConfig';
 
 const request = (url, method, params, data) => {
@@ -35,11 +38,14 @@ const request = (url, method, params, data) => {
 
 
 const login = (data) => new Promise((resolve, reject) => {
+    data.password = CryptoJS.SHA256(data.password).toString(CryptoJS.enc.Hex)
+
     request(
         `${USER_API_URL}${USER_API_LIST.login}`, 'post',
         {}, data
     ).then((res) => {
-        me();
+        me().catch(() => {
+        });
         resolve(res);
     }).catch(err => {
         reject(err);
@@ -51,7 +57,8 @@ const logout = () => new Promise((resolve, reject) => {
         `${USER_API_URL}${USER_API_LIST.logout}`, 'post',
         {}, {}
     ).then((res) => {
-        me();
+        me().catch(() => {
+        });
         resolve(res);
     }).catch(err => {
         reject(err);
@@ -59,17 +66,23 @@ const logout = () => new Promise((resolve, reject) => {
 });
 
 
-const register = (data) => request(
-    `${USER_API_URL}${USER_API_LIST.register}`, 'post',
-    {}, data
-);
+const register = (data) => {
+    data.password = CryptoJS.SHA256(data.password).toString(CryptoJS.enc.Hex)
+    data.rePassword = CryptoJS.SHA256(data.rePassword).toString(CryptoJS.enc.Hex)
+
+    return request(
+        `${USER_API_URL}${USER_API_LIST.register}`, 'post',
+        {}, data
+    );
+}
 
 const isLogin = () => new Promise((resolve, reject) => {
     request(
         `${USER_API_URL}${USER_API_LIST.isLogin}`, 'get',
         {}, {}
     ).then((res) => {
-        me();
+        me().catch(() => {
+        });
         resolve(res);
     }).catch((err) => {
         reject(err);
@@ -101,6 +114,21 @@ const getUsernameById = (params) => request(
     params, {}
 );
 
+const sendMailCode = (params) => request(
+    `${USER_API_URL}${USER_API_LIST.sendMailCode}`, 'post',
+    params, {}
+);
+
+const resetPasswordByMailCode = (data) => {
+    data.password = CryptoJS.SHA256(data.password).toString(CryptoJS.enc.Hex)
+    data.rePassword = CryptoJS.SHA256(data.rePassword).toString(CryptoJS.enc.Hex)
+
+    return request(
+        `${USER_API_URL}${USER_API_LIST.restorePasswordByMailCode}`, 'post',
+        {}, data
+    );
+}
+
 export default {
     login,
     logout,
@@ -108,4 +136,6 @@ export default {
     isLogin,
     me,
     getUsernameById,
+    sendMailCode,
+    resetPasswordByMailCode
 };
