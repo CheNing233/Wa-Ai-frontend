@@ -115,7 +115,7 @@
                     :disabled="getMailCodeVerifyBtnState === 'disabled'"
                 >
                   <VerifyIcon slot="icon"/>
-                  {{ getMailCodeVerifyBtnState === 'disabled' ? '请等待 ' + getMailCodeBtnTimeout + 's' : null }}
+                  {{ getMailCodeVerifyBtnState === 'disabled' ? '请等待 ' + getMailCodeVerifyBtnTimeout + 's' : null }}
                   {{ getMailCodeVerifyBtnState === 'loading' ? '验证中...' : null }}
                   {{ getMailCodeVerifyBtnState === 'available' ? '验证您的身份并重置您的密码' : null }}
                 </t-button>
@@ -247,12 +247,12 @@ export default {
         this.getMailCodeBtnState = 'disabled';
         this.getMailCodeBtnTimeout = 60;
 
-        const timer = setInterval(() => {
+        let timerMailCode = setInterval(() => {
           if (this.getMailCodeBtnTimeout > 0) {
             this.getMailCodeBtnTimeout--;
           } else {
             this.getMailCodeBtnState = 'available';
-            clearInterval(timer);
+            clearInterval(timerMailCode);
           }
         }, 1000);
       });
@@ -287,12 +287,12 @@ export default {
         this.getMailCodeVerifyBtnState = 'disabled';
         this.getMailCodeVerifyBtnTimeout = 60;
 
-        const timer = setInterval(() => {
+        let timerVerify = setInterval(() => {
           if (this.getMailCodeVerifyBtnTimeout > 0) {
             this.getMailCodeVerifyBtnTimeout--;
           } else {
             this.getMailCodeVerifyBtnState = 'available';
-            clearInterval(timer);
+            clearInterval(timerVerify);
           }
         }, 1000);
       });
