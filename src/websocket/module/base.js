@@ -1,6 +1,7 @@
 import {WS_BASE_URL} from '@/config/WsConfig'
 import eventBus from "@/eventbus";
 import VueCookies from "vue-cookies";
+
 const wsUrl = WS_BASE_URL + '/websocket'
 
 const defaultOnOpenHandler = () => {
@@ -21,9 +22,16 @@ const defaultOnMessageHandler = (event) => {
     const data = JSON.parse(event.data);
 
     // 任务更新事件
-    if(data.taskId !== undefined){
+    if (data.taskId !== undefined) {
         eventBus.$emit('taskUpdate', data);
     }
+}
+
+const defaultSendHeartbeatHandler = (socketInstance) => {
+    setInterval(() => {
+        socketInstance.send('clientHeartBeat');
+        console.log('ws心跳');
+    }, 30000);
 }
 
 const initBaseWs = (
@@ -31,6 +39,7 @@ const initBaseWs = (
     onCloseHandler = defaultOnCloseHandler,
     onErrorHandler = defaultOnErrorHandler,
     onMessageHandler = defaultOnMessageHandler,
+    sendHeartbeatHandler = defaultSendHeartbeatHandler
 ) => {
     const userToken = VueCookies.get('token');
 
@@ -41,11 +50,18 @@ const initBaseWs = (
     baseSocket.onerror = onErrorHandler;
     baseSocket.onmessage = onMessageHandler;
 
-    console.log('ws连接', `${wsUrl}/${userToken}`)
+    console.log('ws连接', `${wsUrl}/${userToken}`);
+
+    sendHeartbeatHandler(baseSocket);
 
     return baseSocket;
 }
 
+const closeBaseWs = (baseSocket) => {
+    baseSocket.close();
+}
+
 export default {
     initBaseWs,
+    closeBaseWs,
 }

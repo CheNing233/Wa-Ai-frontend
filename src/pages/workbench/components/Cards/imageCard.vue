@@ -128,15 +128,19 @@ export default {
     },
 
     handleOverlayClick(id) {
-      if (this.imageStatusIndicatorLight !== 'success') {
-        this.$message.warning('现在打不开图片喵');
-        return;
-      }
-
-      if (this.manageStatus) {//global select status
+      if (this.manageStatus) {
+        // 选择模式
         this.isSelected = !this.isSelected;
         this.$emit('selectEvent', id);
+
       } else {
+        // 查看模式
+
+        if (this.imageStatusIndicatorLight !== 'success') {
+          this.$message.warning('现在打不开图片喵');
+          return;
+        }
+
         this.$store.commit(
             'imageDialogSetDisplay',
             {

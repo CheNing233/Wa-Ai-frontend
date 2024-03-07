@@ -34,20 +34,30 @@ const request = (url, method, params, data) => {
 }
 
 
-const login = (data) => request(
-    `${USER_API_URL}${USER_API_LIST.login}`, 'post',
-    {}, data
-).then(() => {
-    me();
+const login = (data) => new Promise((resolve, reject) => {
+    request(
+        `${USER_API_URL}${USER_API_LIST.login}`, 'post',
+        {}, data
+    ).then((res) => {
+        me();
+        resolve(res);
+    }).catch(err => {
+        reject(err);
+    });
 });
 
-
-const logout = () => request(
-    `${USER_API_URL}${USER_API_LIST.logout}`, 'post',
-    {}, {}
-).then(() => {
-    me();
+const logout = () => new Promise((resolve, reject) => {
+    request(
+        `${USER_API_URL}${USER_API_LIST.logout}`, 'post',
+        {}, {}
+    ).then((res) => {
+        me();
+        resolve(res);
+    }).catch(err => {
+        reject(err);
+    });
 });
+
 
 const register = (data) => request(
     `${USER_API_URL}${USER_API_LIST.register}`, 'post',
@@ -72,26 +82,19 @@ const me = () => new Promise((resolve, reject) => {
         {}, {}
     ).then((res) => {
         store.commit('userSetInfo', res.data);
-        ws.baseWs.initBaseWs();
+
+        if (store.getters.userGetWebsocket === null) {
+            store.commit('userSetWebsocket', ws.baseWs.initBaseWs());
+        }
 
         resolve(res);
     }).catch((err) => {
         store.commit('userSetInfo', null);
-
+        ws.baseWs.closeBaseWs(store.getters.userGetWebsocket);
+        store.commit('userSetWebsocket', null);
         reject(err);
     });
 });
-
-
-// const me = () => request(
-//     `${USER_API_URL}${USER_API_LIST.me}`, 'get',
-//     {}, {}
-// ).then((res) => {
-//     store.commit('userSetInfo', res.data);
-//     ws.baseWs.initBaseWs(res.data.id);
-// }).catch(() => {
-//     store.commit('userSetInfo', null);
-// });
 
 const getUsernameById = (params) => request(
     `${USER_API_URL}${USER_API_LIST.getUsernameById}`, 'get',
