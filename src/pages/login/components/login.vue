@@ -247,12 +247,12 @@ export default {
         this.getMailCodeBtnState = 'disabled';
         this.getMailCodeBtnTimeout = 60;
 
-        const timer = setInterval(() => {
+        const timerMailCode = setInterval(() => {
           if (this.getMailCodeBtnTimeout > 0) {
             this.getMailCodeBtnTimeout--;
           } else {
             this.getMailCodeBtnState = 'available';
-            clearInterval(timer);
+            clearInterval(timerMailCode);
           }
         }, 1000);
       });
@@ -287,12 +287,12 @@ export default {
         this.getMailCodeVerifyBtnState = 'disabled';
         this.getMailCodeVerifyBtnTimeout = 60;
 
-        const timer = setInterval(() => {
+        const timerVerify = setInterval(() => {
           if (this.getMailCodeVerifyBtnTimeout > 0) {
             this.getMailCodeVerifyBtnTimeout--;
           } else {
             this.getMailCodeVerifyBtnState = 'available';
-            clearInterval(timer);
+            clearInterval(timerVerify);
           }
         }, 1000);
       });
