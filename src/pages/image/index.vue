@@ -32,9 +32,10 @@
 
         <t-col
             :span="displayMobile ? 12 : 8"
+            ref="imageBody"
         >
           <t-image-viewer
-              :images="[imageUrl]"
+              :images="[viewRawImageBtnVisible ? imageThumbnailUrl : imageUrl]"
               :closeOnEscKeydown="true"
               :closeOnOverlay="true"
               :imageScale="{ max: 2000 }"
@@ -43,13 +44,78 @@
           >
             <template #trigger="{ open }">
               <t-image
-                  :src="imageUrl"
+                  :src="viewRawImageBtnVisible ? imageThumbnailUrl : imageUrl"
                   fit="contain"
                   class="image_container"
                   @click="open"
               />
             </template>
           </t-image-viewer>
+
+          <t-space
+              style="
+                position: absolute;
+                left: 50%;
+                bottom: 16px;
+                transform: translateX(-50%);
+                z-index: 6;
+              "
+              size="small"
+          >
+
+            <t-tag
+                v-show="viewRawImageBtnVisible"
+                shape="round"
+                style="background: rgba(0,0,0,0.1); cursor: pointer"
+                @click="() => viewRawImageBtnVisible = false"
+            >
+              <template #icon>
+                <Image1Icon color="#E8E8E8"/>
+              </template>
+              <span style="color: #FFFFFF">
+                查看原图
+              </span>
+            </t-tag>
+
+            <t-tag
+                shape="round"
+                style="background: rgba(0,0,0,0.1); "
+            >
+              <template #icon>
+                <t-rate
+                    :count="1"
+                >
+                  <template #icon>
+                    <StarFilledIcon/>
+                  </template>
+                </t-rate>
+              </template>
+              <span style="color: #FFFFFF">
+              0
+            </span>
+            </t-tag>
+
+            <t-tag
+                shape="round"
+                style="background: rgba(0,0,0,0.1); "
+            >
+              <template #icon>
+                <t-rate
+                    :count="1"
+                    color="var(--td-error-color-7)"
+                >
+                  <template #icon>
+                    <HeartFilledIcon/>
+                  </template>
+                </t-rate>
+              </template>
+              <span style="color: #FFFFFF">
+              0
+            </span>
+            </t-tag>
+
+          </t-space>
+
         </t-col>
 
         <t-col
@@ -97,15 +163,22 @@
 
 <script>
 import {
-  CloseIcon
+  CloseIcon,
+  Image1Icon,
+  StarFilledIcon,
+  HeartFilledIcon,
 } from 'tdesign-icons-vue';
 
 import api from '@/service'
+import utils from '@/utils'
 
 export default {
   name: 'componentImageDialog',
   components: {
-    CloseIcon
+    CloseIcon,
+    Image1Icon,
+    StarFilledIcon,
+    HeartFilledIcon,
   },
   data() {
     return {
@@ -117,6 +190,8 @@ export default {
         "avatar": null,
       },
       imageUrl: null,
+      imageThumbnailUrl: null,
+      viewRawImageBtnVisible: true,
       imageParams: {
         "prompt": "",
         "steps": "",
@@ -162,7 +237,7 @@ export default {
     },
   },
   methods: {
-    converTime(stringTime) {
+    convertTime(stringTime) {
       const date = new Date(stringTime);
 
       // 获取本地时间的年、月、日、小时和秒
@@ -210,6 +285,7 @@ export default {
 
     freshPage() {
       this.imageLoading = true;
+      this.viewRawImageBtnVisible = true;
 
       const PARAMS = {
         id: this.imageDialogImageId,
@@ -219,10 +295,14 @@ export default {
           .then(resp => {
             this.imageParams = JSON.parse(resp.data.params);
             this.userInfo = resp.data.user;
-            this.createTime = this.converTime(resp.data.createTime);
+            this.createTime = this.convertTime(resp.data.createTime);
             this.imageUrl = resp.data.imageUrl;
-
-            console.log("this.imageParams", this.imageParams);
+            this.imageThumbnailUrl = utils.images.getQiniuImageUrlWithParams(
+                this.imageUrl,
+                Math.round(this.$refs.imageBody.offsetWidth * 1.5),
+                Math.round(this.$refs.imageBody.offsetHeight * 1.5),
+                100
+            );
 
             // 将对象展开
             this.imageParams = this.flattenObject(this.imageParams);
@@ -240,7 +320,6 @@ export default {
                 ]
             );
 
-            console.log("this.imageParams", this.imageParams);
           }).catch(err => {
         this.$message.error("获取数据失败: " + err)
       }).finally(() => {

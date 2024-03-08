@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="imageBody">
     <t-tag
         v-show="imageStatusIndicatorLight !== 'success'"
         style="position: absolute; left: 12px; top: 8px; z-index: 6"
@@ -8,7 +8,7 @@
       {{ imageStatusIndicatorText }}
     </t-tag>
     <t-image
-        :src="imageContent.imageUrl"
+        :src="imageUrlAfterProcess"
         fit="cover"
         class="image_item"
         shape="round"
@@ -61,6 +61,7 @@ import {
 
 import api from '@/service'
 import {TASK_STATUS} from '@/config/ApiConfig'
+import utils from '@/utils'
 
 export default {
   name: 'componentImageCard',
@@ -78,6 +79,7 @@ export default {
         imageUrl: null,
       },
       imageStatus: TASK_STATUS,
+      imageUrlAfterProcess: ''
     }
   },
   props: [
@@ -121,6 +123,7 @@ export default {
           .then(resp => {
             this.imageContent = resp.data;
             this.imageId = this.imageProfile.imageId;
+            this.handleImageUrl();
           })
           .catch(err => {
             this.$message.error("获取数据失败: " + err)
@@ -150,6 +153,21 @@ export default {
         );
       }
     },
+
+    handleImageUrl() {
+      if (this.$refs.imageBody) {
+        this.imageUrlAfterProcess = utils.images.getQiniuImageUrlWithParams(
+            this.imageContent.imageUrl,
+            Math.round(this.$refs.imageBody.offsetWidth * 1.5),
+            Math.round(this.$refs.imageBody.offsetHeight * 1.5),
+            100
+        )
+        console.log(this.imageUrlAfterProcess)
+      } else {
+        console.log('no ref')
+        this.imageUrlAfterProcess = ''
+      }
+    }
   },
   created() {
     this.freshPage();
@@ -163,6 +181,11 @@ export default {
     reFreshPageIndicator() {
       this.freshPage();
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+
+    })
   }
 }
 </script>
