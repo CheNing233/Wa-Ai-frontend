@@ -17,7 +17,7 @@ export default {
   methods: {
     handleResize() {
       var oldDisplayMobile = this.$store.getters.getDisplayMobile;
-      if (window.innerWidth < 600)
+      if (window.innerWidth <= 768)
         this.$store.commit('setDisplayMobile', true);
       else
         this.$store.commit('setDisplayMobile', false);
