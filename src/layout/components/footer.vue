@@ -1,7 +1,7 @@
 <template>
 
   <t-row>
-    <t-col :span="6" :offset="3" class="col_container">
+    <t-col :offset="3" :span="6" class="col_container">
       <p class="footer_text">
         &copy; 2024 ChenNing. All Rights Reserved. Powered by Vue & TDesign
       </p>

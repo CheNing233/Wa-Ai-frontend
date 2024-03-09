@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {TASK_API_URL, TASK_API_LIST} from '@/config/ApiConfig';
+import {TASK_API_LIST, TASK_API_URL} from '@/config/ApiConfig';
 
 const request = (url, method, params, data) => {
     console.log("请求", url, method, params, data);

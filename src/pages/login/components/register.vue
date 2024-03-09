@@ -1,34 +1,34 @@
 <template>
   <t-form
-      :data="formData"
-      :rules="fromRules"
       ref="form"
+      :colon="true"
+      :data="formData"
+      :labelWidth="0"
+      :rules="fromRules"
+      class="container"
       @reset="onReset"
       @submit="onRegister"
-      :colon="true"
-      :labelWidth="0"
-      class="container"
   >
 
     <t-row :gutter="[16,24]" style="width: calc(100% + 16px); padding-bottom: 24px;">
 
       <t-col
-          :xs="{ span: 12}"
           :md="{ span: 6 }"
+          :xs="{ span: 12}"
       >
         <t-form-item name="username">
-          <t-input clearable v-model="formData.username" placeholder="请输入用户名">
+          <t-input v-model="formData.username" clearable placeholder="请输入用户名">
             <desktop-icon slot="prefix-icon"></desktop-icon>
           </t-input>
         </t-form-item>
       </t-col>
 
       <t-col
-          :xs="{ span: 12}"
           :md="{ span: 6 }"
+          :xs="{ span: 12}"
       >
         <t-form-item name="nickname">
-          <t-input clearable v-model="formData.nickname" placeholder="请输入昵称">
+          <t-input v-model="formData.nickname" clearable placeholder="请输入昵称">
             <UserIcon slot="prefix-icon"></UserIcon>
           </t-input>
         </t-form-item>
@@ -40,16 +40,16 @@
     <t-form-item name="email">
       <t-row :gutter="[16,24]" style="width: 100%">
         <t-col :flex="1">
-          <t-input clearable v-model="formData.email" placeholder="请输入邮箱">
+          <t-input v-model="formData.email" clearable placeholder="请输入邮箱">
             <MailIcon slot="prefix-icon"></MailIcon>
           </t-input>
         </t-col>
         <t-col flex="shrink">
           <t-button
-              @click="getMailCode"
-              style="margin-right: -16px"
-              :loading="getMailCodeBtnState === 'loading'"
               :disabled="getMailCodeBtnState === 'disabled'"
+              :loading="getMailCodeBtnState === 'loading'"
+              style="margin-right: -16px"
+              @click="getMailCode"
           >
             <SendIcon v-if="getMailCodeBtnState === 'available'" slot="icon"/>
             <CheckIcon v-if="getMailCodeBtnState === 'disabled'" slot="icon"/>
@@ -62,20 +62,20 @@
     </t-form-item>
 
     <t-form-item name="emailCode">
-      <t-input clearable v-model="formData.emailCode" placeholder="请输入邮箱验证码">
+      <t-input v-model="formData.emailCode" clearable placeholder="请输入邮箱验证码">
         <VerifyIcon slot="prefix-icon"/>
       </t-input>
     </t-form-item>
 
 
     <t-form-item name="password">
-      <t-input type="password" clearable v-model="formData.password" placeholder="请输入密码">
+      <t-input v-model="formData.password" clearable placeholder="请输入密码" type="password">
         <lock-on-icon slot="prefix-icon"></lock-on-icon>
       </t-input>
     </t-form-item>
 
     <t-form-item name="repassword">
-      <t-input type="password" clearable v-model="formData.repassword" placeholder="重复你的密码">
+      <t-input v-model="formData.repassword" clearable placeholder="重复你的密码" type="password">
         <lock-on-icon slot="prefix-icon"></lock-on-icon>
       </t-input>
     </t-form-item>
@@ -107,15 +107,7 @@
 
 <script>
 
-import {
-  DesktopIcon,
-  LockOnIcon,
-  UserIcon,
-  MailIcon,
-  VerifyIcon,
-  SendIcon,
-  CheckIcon,
-} from 'tdesign-icons-vue';
+import {CheckIcon, DesktopIcon, LockOnIcon, MailIcon, SendIcon, UserIcon, VerifyIcon,} from 'tdesign-icons-vue';
 
 import api from '@/service';
 

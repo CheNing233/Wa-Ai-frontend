@@ -69,7 +69,7 @@ const createRouter = () =>
         mode: 'history',
         routes: defaultRouterList,
         scrollBehavior(to, from, savedPosition) {
-            if (savedPosition){
+            if (savedPosition) {
                 eventBus.$emit('savedPositionEvent', savedPosition);
             } else {
                 return {x: 0, y: 0}

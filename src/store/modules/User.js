@@ -1,5 +1,3 @@
-
-
 const User = {
     namespace: true,
     state: {

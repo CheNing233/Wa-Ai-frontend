@@ -4,7 +4,7 @@ import ws from '@/websocket'
 
 import CryptoJS from 'crypto-js';
 
-import {USER_API_URL, USER_API_LIST} from '@/config/ApiConfig';
+import {USER_API_LIST, USER_API_URL} from '@/config/ApiConfig';
 
 const request = (url, method, params, data) => {
     console.log("请求", url, method, params, data);

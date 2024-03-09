@@ -5,31 +5,30 @@ const PromptsCollector = {
     },
     mutations: {
         // @params: { label: string, value: string, weight: int }
-        collectorAddTag (state, payload) {
+        collectorAddTag(state, payload) {
             state.selectTags.push(payload);
         },
         // @params: value: string
-        collectorDeleteTag (state, index) {
+        collectorDeleteTag(state, index) {
             state.selectTags.splice(index, 1);
         },
-        collectorClearTags (state) {
+        collectorClearTags(state) {
             state.selectTags = [];
         },
-        collectorIncreseTagWeight (state, index) {
+        collectorIncreseTagWeight(state, index) {
             var num = state.selectTags[index].weight + 0.1;
             num = parseFloat(num.toFixed(1));
             state.selectTags[index].weight = num;
         },
-        collectorDecreaseTagWeight (state, index) {
+        collectorDecreaseTagWeight(state, index) {
             var num = state.selectTags[index].weight - 0.1;
             num = parseFloat(num.toFixed(1));
             state.selectTags[index].weight = num;
         },
     },
-    actions: {
-    },
+    actions: {},
     getters: {
-        getCollector (state) {
+        getCollector(state) {
             return state.selectTags;
         },
     },

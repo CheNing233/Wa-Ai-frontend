@@ -1,20 +1,20 @@
 <template>
   <div style="margin: 16px 16px;">
-    <t-row style="width: 100%; padding-top: 16px; padding-bottom: 48px;" :gutter="[16, 16]">
+    <t-row :gutter="[16, 16]" style="width: 100%; padding-top: 16px; padding-bottom: 48px;">
       <t-col
           flex="1"
       >
         <t-breadcrumb :maxItemWidth="'150'">
           <t-breadcrumbItem :to="{ path: '/portal/' }">首页</t-breadcrumbItem>
-          <t-breadcrumbItem :maxWidth="'160'">{{modelDetail.title}}</t-breadcrumbItem>
+          <t-breadcrumbItem :maxWidth="'160'">{{ modelDetail.title }}</t-breadcrumbItem>
         </t-breadcrumb>
-        <h1 style="word-break: break-all; line-height: 1.2">{{modelDetail.title}}</h1>
-        <t-space breakLine :size="2">
+        <h1 style="word-break: break-all; line-height: 1.2">{{ modelDetail.title }}</h1>
+        <t-space :size="2" breakLine>
           <template #separator>
             <t-divider layout="vertical"/>
           </template>
           <t-tag>
-            {{modelDetail.type}}
+            {{ modelDetail.type }}
           </t-tag>
 
           <div style="display: flex; justify-content: center;">
@@ -27,7 +27,7 @@
           </div>
 
           <span>
-            {{modelDetail.updateTime}} 更新
+            {{ modelDetail.updateTime }} 更新
           </span>
         </t-space>
       </t-col>
@@ -39,13 +39,13 @@
           <t-button
               variant="outline"
           >
-            <ThumbUp1Icon slot="icon" shape="square" />
-            {{modelDetail.liked}} 点赞
+            <ThumbUp1Icon slot="icon" shape="square"/>
+            {{ modelDetail.liked }} 点赞
           </t-button>
           <t-button
               variant="outline"
           >
-            <StarIcon slot="icon" shape="square" />
+            <StarIcon slot="icon" shape="square"/>
             0 收藏
           </t-button>
         </t-space>
@@ -54,32 +54,32 @@
 
     <t-row :gutter="[16, 16]">
       <t-col
-          :xs="{ span: 12 }"
-          :sm="{ span: 12 }"
-          :md="{ span: 8 }"
           :lg="{ span: 8 }"
+          :md="{ span: 8 }"
+          :sm="{ span: 12 }"
           :xl="{ span: 8 }"
+          :xs="{ span: 12 }"
       >
         <t-image
             :src="images[image].src"
-            fit="contain"
-            shape="round"
             :style="displayMobile ? { aspectRatio: 0.75 } : { aspectRatio: 1.5 }"
             class="image_container"
+            fit="contain"
+            shape="round"
         />
 
         <t-card style="margin-top: 24px;">
           <t-row class="image_list">
             <t-col
-                flex="shrink"
                 v-for="(value, index) in images"
                 :key="index"
+                flex="shrink"
             >
               <t-image
                   :src="value.src"
+                  class="image_item"
                   fit="cover"
                   shape="round"
-                  class="image_item"
               >
                 <template #overlayContent>
                   <div class="image_overlay" @click="handleListImageOnClick(index)"></div>
@@ -92,45 +92,45 @@
 
       </t-col>
       <t-col
-          :span="4"
-          :xs="{ span: 12 }"
-          :sm="{ span: 12 }"
-          :md="{ span: 4 }"
           :lg="{ span: 4 }"
+          :md="{ span: 4 }"
+          :sm="{ span: 12 }"
+          :span="4"
           :xl="{ span: 4 }"
+          :xs="{ span: 12 }"
       >
 
         <t-space direction="vertical" style="width: 100%;">
 
           <t-descriptions
               :column="1"
-              :label-style="{ whiteSpace: 'nowrap', }"
               :content-style="{ wordBreak: 'break-all', whiteSpace: 'normal' }"
+              :label-style="{ whiteSpace: 'nowrap', }"
           >
             <t-descriptions-item label="运行">某后端又没写</t-descriptions-item>
             <t-descriptions-item label="下载">某后端又没写</t-descriptions-item>
-            <t-descriptions-item label="上传时间">{{modelDetail.createTime}}</t-descriptions-item>
-            <t-descriptions-item label="模型类型">{{modelDetail.type}}</t-descriptions-item>
+            <t-descriptions-item label="上传时间">{{ modelDetail.createTime }}</t-descriptions-item>
+            <t-descriptions-item label="模型类型">{{ modelDetail.type }}</t-descriptions-item>
             <t-descriptions-item label="具体类别">某后端又没写</t-descriptions-item>
-            <t-descriptions-item label="引用名称">{{modelDetail.filename}}</t-descriptions-item>
+            <t-descriptions-item label="引用名称">{{ modelDetail.filename }}</t-descriptions-item>
           </t-descriptions>
 
           <t-row :gutter="[16, 16]" style="padding: 16px;">
             <t-col flex="1">
-              <t-button style="width: 100%;" size="large">
+              <t-button size="large" style="width: 100%;">
                 <ControlPlatformIcon slot="icon"/>
                 在线运行
               </t-button>
             </t-col>
 
             <t-col flex="shrink">
-              <t-button variant="outline" style="width: 100%;" size="large">
+              <t-button size="large" style="width: 100%;" variant="outline">
                 分享
               </t-button>
             </t-col>
 
             <t-col flex="shrink">
-              <t-button variant="outline" style="width: 100%;" size="large">
+              <t-button size="large" style="width: 100%;" variant="outline">
                 ...
               </t-button>
             </t-col>
@@ -149,7 +149,7 @@
               </t-col>
 
               <t-col flex="shrink">
-                <t-button variant="outline" style="width: 100%;">
+                <t-button style="width: 100%;" variant="outline">
                   复制
                 </t-button>
               </t-col>
@@ -174,7 +174,7 @@
               </t-col>
 
               <t-col flex="shrink">
-                <t-button variant="outline" style="width: 100%;">
+                <t-button style="width: 100%;" variant="outline">
                   复制
                 </t-button>
               </t-col>
@@ -199,13 +199,7 @@
 
 
 <script>
-import {
-  ControlPlatformIcon,
-  DiscountIcon,
-
-  ThumbUp1Icon,
-  StarIcon
-} from 'tdesign-icons-vue';
+import {ControlPlatformIcon, DiscountIcon, StarIcon, ThumbUp1Icon} from 'tdesign-icons-vue';
 
 import api from '@/service'
 

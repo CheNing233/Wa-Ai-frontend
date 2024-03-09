@@ -1,27 +1,27 @@
 <template>
   <t-dialog
-      :visible.sync="imageDialogDisplay"
+      :closeBtn="false"
       :footer="false"
       :header="false"
-      :closeBtn="false"
+      :visible.sync="imageDialogDisplay"
       mode="full-screen"
   >
     <div
-        class="dialog_container"
         ref="scrollableDiv"
         :style="{ overflowY: displayMobile ? 'scroll' : 'hidden' }"
+        class="dialog_container"
     >
       <t-loading
-          style="position: absolute; top: 12px; right: 64px; z-index: 6666"
           :loading="imageLoading"
           size="32px"
+          style="position: absolute; top: 12px; right: 64px; z-index: 6666"
       >
       </t-loading>
 
       <t-button
-          variant="outline"
           shape="square"
           style="position: absolute; top: 12px; right: 16px; z-index: 6666"
+          variant="outline"
           @click="() => $store.commit('imageDialogSetDisplay', false)"
       >
         <CloseIcon slot="icon" shape="square"/>
@@ -31,28 +31,29 @@
       <t-row :gutter="[16, 16]">
 
         <t-col
-            :span="displayMobile ? 12 : 8"
             ref="imageBody"
+            :span="displayMobile ? 12 : 8"
         >
           <t-image-viewer
-              :images="[viewRawImageBtnVisible ? imageThumbnailUrl : imageUrl]"
+              v-model="viewerVisible"
               :closeOnEscKeydown="true"
               :closeOnOverlay="true"
               :imageScale="{ max: 2000 }"
-              v-model="viewerVisible"
+              :images="[viewRawImageBtnVisible ? imageThumbnailUrl : imageUrl]"
               class="image_container"
           >
             <template #trigger="{ open }">
               <t-image
                   :src="viewRawImageBtnVisible ? imageThumbnailUrl : imageUrl"
-                  fit="contain"
                   class="image_container"
+                  fit="contain"
                   @click="open"
               />
             </template>
           </t-image-viewer>
 
           <t-space
+              size="small"
               style="
                 position: absolute;
                 left: 50%;
@@ -60,7 +61,6 @@
                 transform: translateX(-50%);
                 z-index: 6;
               "
-              size="small"
           >
 
             <t-tag
@@ -123,24 +123,24 @@
         >
           <t-space direction="vertical" style="width: 100%">
 
-            <t-space direction="horizontal"
-                     align="center"
+            <t-space align="center"
+                     direction="horizontal"
                      style="padding-top: 8px; padding-left: 12px"
             >
               <t-avatar size="large">
                 T
               </t-avatar>
-              <t-space size="1px" direction="vertical">
+              <t-space direction="vertical" size="1px">
                 <span>{{ userInfo.nickName }}</span>
                 <span style="font-size: 13px; color: rgba(0,0,0,0.54);">{{ createTime }} 创建</span>
               </t-space>
             </t-space>
 
-            <t-descriptions itemLayout="horizontal"
-                            class="params_container"
-                            :column="1"
-                            :label-style="{ wordBreak: 'break-all', minWidth: '100px' }"
+            <t-descriptions :column="1"
                             :content-style="{ wordBreak: 'break-all', whiteSpace: 'normal' }"
+                            :label-style="{ wordBreak: 'break-all', minWidth: '100px' }"
+                            class="params_container"
+                            itemLayout="horizontal"
             >
               <t-descriptions-item
                   v-for="(value, key) in imageParams"
@@ -162,12 +162,7 @@
 </template>
 
 <script>
-import {
-  CloseIcon,
-  Image1Icon,
-  StarFilledIcon,
-  HeartFilledIcon,
-} from 'tdesign-icons-vue';
+import {CloseIcon, HeartFilledIcon, Image1Icon, StarFilledIcon,} from 'tdesign-icons-vue';
 
 import api from '@/service'
 import utils from '@/utils'

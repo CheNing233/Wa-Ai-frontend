@@ -1,14 +1,14 @@
 <template>
-  <t-head-menu 
-    theme="light" 
-    class="menu-container" 
-    v-model="headMenuValue"
-    @change="handleMenu"
+  <t-head-menu
+      v-model="headMenuValue"
+      class="menu-container"
+      theme="light"
+      @change="handleMenu"
   >
     <h2 class="logo">{{ displayMobile ? 'WA' : 'WA酱' }}</h2>
     <t-submenu v-show="displayMobile" value="mobile_sub">
       <template #title>
-        <ListIcon size="16" style="margin-top: 2px" />
+        <ListIcon size="16" style="margin-top: 2px"/>
       </template>
       <t-menu-item v-for="item in menu_items" :key="item.value" :value="item.value">
         {{ item.label }}
@@ -26,39 +26,38 @@
     <template #operations>
       <t-space :size="8">
 
-        <t-button v-show="!displayMobile" variant="text" shape="square">
-          <LogoGithubIcon slot="icon" shape="square" />
+        <t-button v-show="!displayMobile" shape="square" variant="text">
+          <LogoGithubIcon slot="icon" shape="square"/>
         </t-button>
 
-        <t-button variant="text" shape="square" @click="test">
-          <NotificationIcon slot="icon" shape="square" />
+        <t-button shape="square" variant="text">
+          <NotificationIcon slot="icon" shape="square"/>
         </t-button>
 
         <t-button theme="primary" @click="handleBtnWorkbenchClick">
-          <LoadingIcon v-if="workbenchLoading" slot="icon" shape="square" />
-          <ControlPlatformIcon v-else slot="icon" shape="square" />
-          {{ displayMobile ? '运行' : '在线运行' }}
+          <LoadingIcon v-if="workbenchLoading" slot="icon" shape="square"/>
+          <ControlPlatformIcon v-else slot="icon" shape="square"/>
+          {{ displayMobile ? (isLogin ? '运行' : '登录') : (isLogin ? '在线运行' : '登录后在线运行') }}
         </t-button>
 
 
-        
         <t-dropdown :min-column-width="188">
 
-          <t-button 
-            variant="outline" 
-            shape="square"
-            @click="fresh"
+          <t-button
+              shape="square"
+              variant="outline"
+              @click="fresh"
           >
-            <UserIcon slot="icon" shape="square" />
+            <UserIcon slot="icon" shape="square"/>
           </t-button>
-          
+
           <template #dropdown>
             <t-dropdown-menu>
 
-              <t-dropdown-item 
-                v-if="isLogin"
-                :value="1" 
-                @click="$router.push('/user')"
+              <t-dropdown-item
+                  v-if="isLogin"
+                  :value="1"
+                  @click="$router.push('/user')"
               >
                 个人中心
               </t-dropdown-item>
@@ -73,7 +72,7 @@
               <t-dropdown-item :value="7" @click="$router.push('/login')">
                 {{ isLogin ? '退出登录' : '登录' }}
               </t-dropdown-item>
-              
+
             </t-dropdown-menu>
           </template>
 
@@ -86,23 +85,18 @@
 
 <script>
 import {
-  LogoGithubIcon,
   ControlPlatformIcon,
-  UserIcon,
-  NotificationIcon,
-  LoadingIcon,
   ListIcon,
+  LoadingIcon,
+  LogoGithubIcon,
+  NotificationIcon,
+  UserIcon,
 } from 'tdesign-icons-vue';
 
-import {
-  // mapGetters,
-  mapState
-} from 'vuex';
+import {mapState} from 'vuex';
 
-import { NavItems } from '@/config/NavConfig.js';
-// import { getUserPromptPresets } from '@/api/get_sdmodels_list.js';
+import {NavItems} from '@/config/NavConfig.js';
 
-import api from '@/service';
 
 export default {
   name: 'componentHeader',
@@ -116,7 +110,6 @@ export default {
   },
   data() {
     return {
-      isLogin: false,
       headMenuValue: '',
       menu_items: NavItems,
     };
@@ -127,44 +120,35 @@ export default {
       displayMobile: state => state.FlexSize.displayMobile
     }),
     workbenchDisplay: {
-      get: function () {return this.$store.getters.workbenchGetDisplay},
-      set: function (newValue) {this.$store.commit('workbenchSetDisplay', newValue)}
+      get: function () {
+        return this.$store.getters.workbenchGetDisplay
+      },
+      set: function (newValue) {
+        this.$store.commit('workbenchSetDisplay', newValue)
+      }
+    },
+    isLogin() {
+      return this.$store.getters.userGetInfo !== null;
     }
   },
   methods: {
     fresh() {
       this.headMenuValue = this.$route.path;
-      api.userApi.isLogin().then(resp => {
-        if (resp) {
-          this.isLogin = resp.data;
-        }
-      })
     },
     handleMenu(value) {
       this.$router.push(value);
     },
     handleBtnWorkbenchClick() {
-      if (this.workbenchDisplay) 
-        this.workbenchDisplay = false;
-      else 
-        this.workbenchDisplay = true;
+      if (this.isLogin) {
+        this.workbenchDisplay = !this.workbenchDisplay;
+      } else {
+        this.$message.info('登录后可免费在线画图，快去登录喵~')
+        this.$router.push('/login');
+      }
     },
-    test(){
-      // const userinfo = this.$store.getters.userInfo;
-
-      // getUserPromptPresets(userinfo.username, userinfo.usertoken).then(resp => {
-      //   console.log(resp);
-      // }).catch(err => {
-      //   console.log(err);
-      // });
-
-    },
-    handleBtnUserClick(){
-      this.$router.push('/login');
-    }
   },
-  watch:{
-    $route(){
+  watch: {
+    $route() {
       this.fresh();
     }
   },

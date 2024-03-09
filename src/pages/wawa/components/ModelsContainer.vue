@@ -12,7 +12,7 @@
           </t-col>
 
           <t-col flex="auto">
-            <t-button variant="outline" style="float: right;">
+            <t-button style="float: right;" variant="outline">
               查看更多...
             </t-button>
           </t-col>
@@ -22,11 +22,11 @@
       <t-col
           v-for="(item, index) in pageContent"
           :key="index"
-          :xs="{ span: 12 }"
-          :sm="{ span: 6 }"
-          :md="{ span: 4 }"
           :lg="{ span: 3 }"
+          :md="{ span: 4 }"
+          :sm="{ span: 6 }"
           :xl="{ span: 3 }"
+          :xs="{ span: 12 }"
       >
         <componentModelCard :props="item"/>
       </t-col>
@@ -37,13 +37,13 @@
           style="overflow: hidden;"
       >
         <t-pagination
-            :total="itemsTotal"
-            :page-size.sync="pageSize"
             v-model="pageCurrent"
             :on-page-size-change="onPageSizeChange"
             :onCurrentChange="onCurrentChange"
-            :show-sizer="false"
             :page-size-options="pageSizeOptions"
+            :page-size.sync="pageSize"
+            :show-sizer="false"
+            :total="itemsTotal"
             style="flex-wrap: wrap; justify-content: space-evenly;"
         />
       </t-col>

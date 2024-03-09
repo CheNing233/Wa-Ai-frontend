@@ -5,20 +5,19 @@ const FlexSize = {
         displayWorkbenchSmall: false,
     },
     mutations: {
-        setDisplayMobile (state, payload) {
+        setDisplayMobile(state, payload) {
             state.displayMobile = payload;
         },
-        setDisplayWorkbenchSmall (state, payload) {
+        setDisplayWorkbenchSmall(state, payload) {
             state.displayWorkbenchSmall = payload;
         },
     },
-    actions: {
-    },
+    actions: {},
     getters: {
-        getDisplayMobile (state) {
+        getDisplayMobile(state) {
             return state.displayMobile;
         },
-        getDisplayWorkbenchSmall (state) {
+        getDisplayWorkbenchSmall(state) {
             return state.displayWorkbenchSmall;
         },
     },

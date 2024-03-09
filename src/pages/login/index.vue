@@ -2,19 +2,19 @@
   <div>
     <t-space direction="vertical" style="display: flex">
       <t-row>
-        <t-col :span="6" :offset="3" class="col_container">
+        <t-col :offset="3" :span="6" class="col_container">
           <h1 class="title">登录到 WA<br/>the AI Generation Platform</h1>
         </t-col>
       </t-row>
       <t-row>
-        <t-col :span="6" :offset="3" class="col_container">
+        <t-col :offset="3" :span="6" class="col_container">
           <t-card class="login_wrapper">
 
             <t-loading :loading="isLoading" showOverlay>
 
               <t-tabs v-model="selectedTab">
 
-                <t-tab-panel value="login" label="登录">
+                <t-tab-panel label="登录" value="login">
 
                   <component_login
                       @updateLoading="(loading) => (this.isLoading = loading)"
@@ -22,7 +22,7 @@
                   />
 
                 </t-tab-panel>
-                <t-tab-panel value="register" label="注册">
+                <t-tab-panel label="注册" value="register">
 
                   <component_register
                       @updateLoading="(loading) => (this.isLoading = loading)"
@@ -69,11 +69,9 @@ export default {
         onConfirm: () => {
           api.userApi.logout()
               .then((data) => {
-                this.$store.commit('userSetInfo',null);
                 this.$message.success(data.data);
               })
               .catch((error) => {
-
                 this.$message.error('登出失败：' + error);
               });
 
@@ -88,12 +86,9 @@ export default {
     }
   },
   created() {
-    api.userApi.me()
-        .then(() => {
-          this.logout();
-        })
-        .catch(() => {
-        });
+    if(this.$store.getters.userGetInfo !== null){
+      this.logout();
+    }
   }
 }
 </script>

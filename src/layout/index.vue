@@ -1,22 +1,22 @@
 <template>
-    <div>
-        <componentHeader></componentHeader>
-        <router-view :class="displayMobile ? null : 'container'" />
-        <componentFooter></componentFooter>
+  <div>
+    <componentHeader></componentHeader>
+    <router-view :class="displayMobile ? null : 'container'"/>
+    <componentFooter></componentFooter>
 
-        <router-view name="componentWorkbench" />
-       
-        <router-view name="componentImageDialog" />
+    <router-view v-if="isLogin" name="componentWorkbench"/>
 
-        <t-back-top 
-            style="position: sticky; left: calc(100% - 56px); bottom: 8px;" 
-            :visible-height="0" 
-            size="small" 
-            :offset="[0, 0]"
-        >
-        
-        </t-back-top>
-    </div>
+    <router-view name="componentImageDialog"/>
+
+    <t-back-top
+        :offset="[0, 0]"
+        :visible-height="0"
+        size="small"
+        style="position: sticky; left: calc(100% - 56px); bottom: 8px;"
+    >
+
+    </t-back-top>
+  </div>
 </template>
 
 <script>
@@ -24,19 +24,24 @@ import componentHeader from './components/header.vue';
 import componentFooter from './components/footer.vue';
 
 export default {
-    name: 'layout-index',
-    computed: {
-        displayMobile: function () {return this.$store.getters.getDisplayMobile},
+  name: 'layout-index',
+  computed: {
+    displayMobile: function () {
+      return this.$store.getters.getDisplayMobile
     },
-    components: {
-        componentHeader,
-        componentFooter,
+    isLogin() {
+      return this.$store.getters.userGetInfo !== null;
+    }
+  },
+  components: {
+    componentHeader,
+    componentFooter,
+  },
+  methods: {
+    handleMenu(value) {
+      this.$router.push(value);
     },
-    methods: {
-        handleMenu(value) {
-            this.$router.push(value);
-        },
-    },
+  },
 }
 </script>
 

@@ -2,22 +2,22 @@
   <div ref="imageBody">
     <t-tag
         v-show="imageStatusIndicatorLight !== 'success'"
-        style="position: absolute; left: 12px; top: 8px; z-index: 6"
-        variant="light" :theme="imageStatusIndicatorLight"
+        :theme="imageStatusIndicatorLight"
+        style="position: absolute; left: 12px; top: 8px; z-index: 6" variant="light"
     >
       {{ imageStatusIndicatorText }}
     </t-tag>
     <t-image
         :src="imageUrlAfterProcess"
-        fit="cover"
         class="image_item"
+        fit="cover"
         shape="round"
     >
 
       <template #overlayContent>
         <div
-            class="overlay"
             :class="['overlay', isSelected ? 'overlay_on_trigger' : null]"
+            class="overlay"
             @click="handleOverlayClick(imageProfile.id)"
         >
           <t-space
@@ -38,8 +38,8 @@
               style="position: absolute; right: 8px; top: 8px;"
           >
             <t-button
-                theme="primary"
                 size="small"
+                theme="primary"
             >
               <ControlPlatformIcon slot="icon" shape="square"/>
               运行
@@ -52,12 +52,7 @@
 </template>
 
 <script>
-import {
-  ControlPlatformIcon,
-  // Delete1Icon,
-  // DownloadIcon,
-  // ShareIcon
-} from 'tdesign-icons-vue';
+import {ControlPlatformIcon,} from 'tdesign-icons-vue';
 
 import api from '@/service'
 import {TASK_STATUS} from '@/config/ApiConfig'

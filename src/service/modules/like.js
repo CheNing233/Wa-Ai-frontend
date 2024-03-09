@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {LIKE_API_URL, LIKE_API_LIST} from '@/config/ApiConfig';
+import {LIKE_API_LIST, LIKE_API_URL} from '@/config/ApiConfig';
 
 const request = (url, method, params, data) => {
     console.log("请求", url, method, params, data);

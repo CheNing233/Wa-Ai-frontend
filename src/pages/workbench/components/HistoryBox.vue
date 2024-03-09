@@ -8,11 +8,11 @@
       <t-col flex="shrink">
 
         <t-space size="small" style="float: right; margin-right: -16px">
-          <t-button theme="danger" shape="square" :loading="delTaskLoading" @click="handleDeleteSelected"
-                    v-if="manageStatus">
+          <t-button v-if="manageStatus" :loading="delTaskLoading" shape="square" theme="danger"
+                    @click="handleDeleteSelected">
             <Delete1Icon slot="icon" shape="square"/>
           </t-button>
-          <t-button shape="square" v-if="manageStatus">
+          <t-button v-if="manageStatus" shape="square">
             <DownloadIcon slot="icon" shape="square"/>
           </t-button>
           <t-button v-if="manageStatus">
@@ -22,7 +22,7 @@
           <t-button variant="outline" @click="handleChangeManageStatus">
             {{ manageStatus ? '取消' : '选择' }}
           </t-button>
-          <t-button variant="outline" shape="square" :loading="reFreshPageLoading" @click="freshPage">
+          <t-button :loading="reFreshPageLoading" shape="square" variant="outline" @click="freshPage">
             <RefreshIcon slot="icon" shape="square"/>
           </t-button>
         </t-space>
@@ -34,11 +34,11 @@
     <t-card class="card_container">
       <t-row :gutter="[8,8]">
         <t-col v-for="(item, index) in imageList" :key="index"
-               :xs="{ span: 12 }"
-               :sm="{ span: 12 }"
-               :md="{ span: 6 }"
                :lg="{ span: 6 }"
+               :md="{ span: 6 }"
+               :sm="{ span: 12 }"
                :xl="{ span: 4 }"
+               :xs="{ span: 12 }"
         >
 
           <componentImageCard
@@ -57,13 +57,7 @@
 </template>
 
 <script>
-import {
-  // ControlPlatformIcon,
-  Delete1Icon,
-  DownloadIcon,
-  ShareIcon,
-  RefreshIcon,
-} from 'tdesign-icons-vue';
+import {Delete1Icon, DownloadIcon, RefreshIcon, ShareIcon,} from 'tdesign-icons-vue';
 
 import componentImageCard from './Cards/imageCard.vue'
 

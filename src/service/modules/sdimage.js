@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {IMAGE_API_URL, IMAGE_API_LIST} from '@/config/ApiConfig';
+import {IMAGE_API_LIST, IMAGE_API_URL} from '@/config/ApiConfig';
 
 const request = (url, method, params, data) => {
     console.log("请求", url, method, params, data);

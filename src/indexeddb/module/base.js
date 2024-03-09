@@ -14,8 +14,8 @@ const defaultOnUpgradeneededHandler = (event) => {
 
     let objectStore;
     if (!db.objectStoreNames.contains('base')) {
-        objectStore = db.createObjectStore('base', { keyPath: 'key' });
-        objectStore.createIndex('key', 'key', { unique: true });
+        objectStore = db.createObjectStore('base', {keyPath: 'key'});
+        objectStore.createIndex('key', 'key', {unique: true});
     }
 
     store.commit('userSetIDB', db);

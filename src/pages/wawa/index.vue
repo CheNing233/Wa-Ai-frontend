@@ -57,9 +57,9 @@ export default {
     // 历史滚动高度处理
     new Promise(resolve => {
       // 间隔查询内容是否就绪
-      this.timer = setInterval(() => {
+      const timer = setInterval(() => {
         if (this.scrollPosition.y === 0) {
-          clearInterval(this.timer);
+          clearInterval(timer);
           resolve();
           return;
         }
@@ -69,14 +69,14 @@ export default {
             this.scrollPosition.y + (window.innerHeight / 2)
         ) {
           window.scrollTo(0, this.scrollPosition.y);
-          clearInterval(this.timer);
+          clearInterval(timer);
           resolve();
         }
       }, 100);
 
       // 超时取消
       setTimeout(() => {
-        clearInterval(this.timer);
+        clearInterval(timer);
       }, 5000);
     })
   }

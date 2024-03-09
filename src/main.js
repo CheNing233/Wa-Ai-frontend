@@ -18,9 +18,9 @@ Vue.use(VueCookies)
 Vue.prototype.$eventBus = eventBus
 
 const vueInstance = new Vue({
-  router: Router,
-  store: Store,
-  render: h => h(App),
+    router: Router,
+    store: Store,
+    render: h => h(App),
 })
 
 vueInstance.$mount('#app')

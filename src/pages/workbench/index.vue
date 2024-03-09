@@ -1,13 +1,13 @@
 <template>
   <t-drawer id="workbench"
-            :visible.sync="workbenchDisplay"
-            :placement="workbenchPlacement"
-            :size="workbenchSize"
-            :showOverlay="workbenchShowOverlay"
-            :preventScrollThrough="false"
-            :header="false"
-            :footer="false"
             :closeBtn="false"
+            :footer="false"
+            :header="false"
+            :placement="workbenchPlacement"
+            :preventScrollThrough="false"
+            :showOverlay="workbenchShowOverlay"
+            :size="workbenchSize"
+            :visible.sync="workbenchDisplay"
             sizeDraggable
   >
 
@@ -38,48 +38,48 @@
           <t-space :size="8" style="float: right;">
 
             <t-tooltip content="允许点击外面关闭" placement="bottom">
-              <t-button variant="outline" shape="square" @click="switchShowOverlay">
+              <t-button shape="square" variant="outline" @click="switchShowOverlay">
                 <HighlightIcon slot="icon" shape="square"/>
               </t-button>
             </t-tooltip>
 
             <t-button
-                variant="outline"
-                shape="square"
                 v-if="displayMobile"
+                shape="square"
+                variant="outline"
                 @click="switchPlacement"
             >
               <ArrowUpDown1Icon slot="icon" shape="square"/>
             </t-button>
 
             <t-button
-                variant="outline"
-                shape="square"
                 v-if="!displayMobile"
+                shape="square"
+                variant="outline"
                 @click="switchPlacement"
             >
               <ArrowLeftRight1Icon slot="icon" shape="square"/>
             </t-button>
 
             <t-button
-                variant="outline"
-                shape="square"
                 v-if="displayMobile && (workbenchSize == '80%')"
+                shape="square"
+                variant="outline"
                 @click="switchSize"
             >
               <FullscreenIcon slot="icon" shape="square"/>
             </t-button>
 
             <t-button
-                variant="outline"
-                shape="square"
                 v-if="displayMobile && (workbenchSize == '100%')"
+                shape="square"
+                variant="outline"
                 @click="switchSize"
             >
               <FullscreenExitIcon slot="icon" shape="square"/>
             </t-button>
 
-            <t-button theme="primary" shape="square" @click="workbenchDisplay = false">
+            <t-button shape="square" theme="primary" @click="workbenchDisplay = false">
               <CloseIcon slot="icon" shape="square"/>
             </t-button>
 
@@ -94,7 +94,7 @@
         >
 
           <t-tabs v-model="value">
-            <t-tab-panel value="txt2img" label="文生图" style="padding-top: 16px;">
+            <t-tab-panel label="文生图" style="padding-top: 16px;" value="txt2img">
               <t-space direction="vertical" style="width: 100%;">
                 <ModelsBox/>
                 <promptBox/>
@@ -104,21 +104,21 @@
 
               </t-space>
             </t-tab-panel>
-            <t-tab-panel value="img2img" label="图生图">
+            <t-tab-panel label="图生图" value="img2img">
 
             </t-tab-panel>
-            <t-tab-panel value="extra" label="图像放大">
+            <t-tab-panel label="图像放大" value="extra">
 
             </t-tab-panel>
-            <t-tab-panel value="tag" label="反推">
+            <t-tab-panel label="反推" value="tag">
 
             </t-tab-panel>
           </t-tabs>
           <t-button
+              :loading="generateBtnLoading"
               block
               style="position: sticky; padding: 8px; left: 0; bottom: 8px; margin-top: 24px; float: right; z-index: 100;"
               @click="handleBtnGeneratedClick"
-              :loading="generateBtnLoading"
           >
             在线生成
           </t-button>
@@ -138,19 +138,14 @@
 
 <script>
 import {
-  CloseIcon,
-  FullscreenIcon,
-  FullscreenExitIcon,
-  ArrowUpDown1Icon,
   ArrowLeftRight1Icon,
+  ArrowUpDown1Icon,
+  CloseIcon,
+  ControlPlatformIcon,
+  FullscreenExitIcon,
+  FullscreenIcon,
   HighlightIcon,
-
-  // VisualRecognitionIcon,
-  // ImageAddIcon,
-  // ImageSearchIcon,
-  HistoryIcon,
-  ControlPlatformIcon
-  // ImageOffIcon,
+  HistoryIcon
 } from 'tdesign-icons-vue';
 
 import ModelsBox from './components/ModelsBox.vue';

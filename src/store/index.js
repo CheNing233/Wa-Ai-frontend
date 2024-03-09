@@ -11,14 +11,14 @@ import User from './modules/User.js'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
-  modules: {
-    Workbench,
-    FlexSize,
-    PromptsCollector,
-    ImageDialog,
+    modules: {
+        Workbench,
+        FlexSize,
+        PromptsCollector,
+        ImageDialog,
 
-    User
-  }
+        User
+    }
 })
 
 export default store

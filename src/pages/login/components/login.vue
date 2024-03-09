@@ -1,25 +1,25 @@
 <template>
   <t-form
-      :data="formData"
-      :rules="fromRules"
       ref="form"
+      :colon="true"
+      :data="formData"
+      :labelWidth="0"
+      :rules="fromRules"
+      class="container"
       @reset="onReset"
       @submit="onLogin"
-      :colon="true"
-      :labelWidth="0"
-      class="container"
   >
-    <t-form-item name="user" :help="currentLoginHelp">
+    <t-form-item :help="currentLoginHelp" name="user">
       <t-input
-          clearable
           v-model="formData.user"
+          clearable
           placeholder="请输入用户名、邮箱、手机号码">
         <desktop-icon slot="prefix-icon"></desktop-icon>
       </t-input>
     </t-form-item>
 
     <t-form-item name="password">
-      <t-input type="password" clearable v-model="formData.password" placeholder="请输入密码">
+      <t-input v-model="formData.password" clearable placeholder="请输入密码" type="password">
         <lock-on-icon slot="prefix-icon"></lock-on-icon>
       </t-input>
     </t-form-item>
@@ -32,7 +32,7 @@
 
                 <span>
                   <t-link
-                      theme="primary" style="float: right;"
+                      style="float: right;" theme="primary"
                       @click="$router.push('/portal/wawa')"
                   >
                     游客进入
@@ -55,33 +55,33 @@
     <t-row style="margin-top: 20px;">
 
       <t-col :span="6">
-        <t-button @click="() => forgetDialogVisible = true" variant="outline">忘记一些东西？</t-button>
-        <t-dialog header="通过邮箱找回密码"
-                  :footer="false"
+        <t-button variant="outline" @click="() => forgetDialogVisible = true">忘记一些东西？</t-button>
+        <t-dialog :footer="false"
                   :visible.sync="forgetDialogVisible"
+                  header="通过邮箱找回密码"
         >
           <div slot="body" style="padding: 0 12px 0 3px">
 
             <t-space v-if="forgetDialogResultInput === null" direction="vertical" style="width: 100%">
               <t-input
-                  clearable
                   v-model="formData.user"
+                  clearable
                   placeholder="请输入邮箱">
                 <MailIcon slot="prefix-icon"/>
               </t-input>
 
               <t-row :gutter="[16,24]" style="width: 100%;">
                 <t-col :flex="1">
-                  <t-input clearable v-model="forgetDialogEmailCodeInput" placeholder="请输入验证码">
+                  <t-input v-model="forgetDialogEmailCodeInput" clearable placeholder="请输入验证码">
                   </t-input>
                 </t-col>
 
                 <t-col flex="shrink">
                   <t-button
-                      @click="getMailCode"
-                      style="margin-right: -16px"
-                      :loading="getMailCodeBtnState === 'loading'"
                       :disabled="getMailCodeBtnState === 'disabled'"
+                      :loading="getMailCodeBtnState === 'loading'"
+                      style="margin-right: -16px"
+                      @click="getMailCode"
                   >
                     <SendIcon v-if="getMailCodeBtnState === 'available'" slot="icon"/>
                     <CheckIcon v-if="getMailCodeBtnState === 'disabled'" slot="icon"/>
@@ -93,11 +93,11 @@
 
               </t-row>
 
-              <t-input type="password" clearable v-model="forgetDialogPassword" placeholder="新的密码">
+              <t-input v-model="forgetDialogPassword" clearable placeholder="新的密码" type="password">
                 <lock-on-icon slot="prefix-icon"></lock-on-icon>
               </t-input>
 
-              <t-input type="password" clearable v-model="forgetDialogRePassword" placeholder="再次输入密码">
+              <t-input v-model="forgetDialogRePassword" clearable placeholder="再次输入密码" type="password">
                 <lock-on-icon slot="prefix-icon"></lock-on-icon>
               </t-input>
 
@@ -110,9 +110,9 @@
                   取消
                 </t-button>
                 <t-button
-                    @click="resetPassword"
-                    :loading="getMailCodeVerifyBtnState === 'loading'"
                     :disabled="getMailCodeVerifyBtnState === 'disabled'"
+                    :loading="getMailCodeVerifyBtnState === 'loading'"
+                    @click="resetPassword"
                 >
                   <VerifyIcon slot="icon"/>
                   {{ getMailCodeVerifyBtnState === 'disabled' ? '请等待 ' + getMailCodeVerifyBtnTimeout + 's' : null }}
@@ -129,7 +129,7 @@
                 妥善保管您的密码
               </span>
 
-              <t-input type="password" readonly v-model="forgetDialogResultInput">
+              <t-input v-model="forgetDialogResultInput" readonly type="password">
                 <lock-on-icon slot="prefix-icon"></lock-on-icon>
               </t-input>
 
@@ -171,14 +171,7 @@
 
 
 <script>
-import {
-  DesktopIcon,
-  LockOnIcon,
-  SendIcon,
-  CheckIcon,
-  MailIcon,
-  VerifyIcon,
-} from 'tdesign-icons-vue';
+import {CheckIcon, DesktopIcon, LockOnIcon, MailIcon, SendIcon, VerifyIcon,} from 'tdesign-icons-vue';
 
 import api from '@/service';
 
@@ -264,7 +257,7 @@ export default {
         return;
       }
 
-      if (this.forgetDialogPassword !== this.forgetDialogRePassword){
+      if (this.forgetDialogPassword !== this.forgetDialogRePassword) {
         this.$message.warning('两次密码对不上喵');
         return;
       }
@@ -332,16 +325,12 @@ export default {
           this.$message.success(data.data);
           this.$router.push('/portal');
         }).catch(error => {
-
           this.$message.error('登录失败：' + error);
         }).finally(() => {
-
           this.$emit('updateLoading', false);
-
         });
 
       } else {
-
         this.$message.warning(firstError);
       }
     },

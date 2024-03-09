@@ -16,8 +16,8 @@
     <div
         class="image_explain_content"
         style="position: absolute; left: 20px; right: 20px; bottom: 16px; z-index: 6"
-        @mouseover="() => { isSelected = true }"
         @mouseout="() => { isSelected = false }"
+        @mouseover="() => { isSelected = true }"
     >
       <t-space direction="vertical"
                size="small"
@@ -28,8 +28,8 @@
             T
           </t-avatar>
           <t-space
-              size="1px"
               direction="vertical"
+              size="1px"
           >
             <span class="image_text">
               123
@@ -42,7 +42,7 @@
 
         <t-space direction="horizontal" style="width: 100%">
 
-          <t-link hover="color" class="ellipsis_container">
+          <t-link class="ellipsis_container" hover="color">
             <span class="ellipsis_text image_title">{{ props.title }}</span>
           </t-link>
 
@@ -120,18 +120,18 @@
 
 
     <t-image
-        src="https://tdesign.gtimg.com/demo/demo-image-1.png"
-        fit="cover"
         class="image"
+        fit="cover"
         shape="round"
+        src="https://tdesign.gtimg.com/demo/demo-image-1.png"
     >
       <!--      图片显示区-->
 
 
       <template #overlayContent>
         <div
-            class="overlay"
             :class="['overlay', isSelected ? 'overlay_on_trigger' : null]"
+            class="overlay"
             @click="handleImageOnClick"
         >
           <!--          蒙版显示区-->
@@ -141,18 +141,18 @@
               style="position: absolute; right: 12px; top: 12px; z-index: 6"
           >
             <t-button
+                shape="square"
                 size="small"
                 theme="default"
                 variant="base"
-                shape="square"
                 @click.stop="handleBtnEnlargeClick"
             >
               <ZoomInIcon slot="icon" shape="square"/>
             </t-button>
 
             <t-button
-                theme="primary"
                 size="small"
+                theme="primary"
                 @click.stop="handleBtnRunClick"
             >
               <ControlPlatformIcon slot="icon" shape="square"/>
@@ -169,13 +169,7 @@
 </template>
 
 <script>
-import {
-  ChatBubble1Icon,
-  HeartFilledIcon,
-  StarFilledIcon,
-  ControlPlatformIcon,
-  ZoomInIcon
-} from 'tdesign-icons-vue';
+import {ChatBubble1Icon, ControlPlatformIcon, HeartFilledIcon, StarFilledIcon, ZoomInIcon} from 'tdesign-icons-vue';
 
 // import api from '@/service';
 

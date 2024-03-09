@@ -5,4 +5,4 @@
 ## CICD 状态
 
 - 内网 Drone CI
-    [![Build Status](http://10.180.193.10:88/api/badges/CheNing233/websese/status.svg)](http://10.180.193.10:88/CheNing233/websese)
+  [![Build Status](http://10.180.193.10:88/api/badges/CheNing233/websese/status.svg)](http://10.180.193.10:88/CheNing233/websese)
