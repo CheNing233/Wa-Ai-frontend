@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div class="background"></div>
+    <div :class="[isDarkMode ? 'background_dark' : 'background']"></div>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-
-// 设置暗色模式
-// document.documentElement.setAttribute('theme-mode', 'dark');
-
-
 export default {
   name: 'App',
   components: {},
+  computed: {
+    isDarkMode() {
+      return this.$store.getters.userGetDarkMode;
+    }
+  },
   methods: {
     handleResize() {
       var oldDisplayMobile = this.$store.getters.getDisplayMobile;
@@ -54,15 +54,27 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+
   background-color: rgb(44, 44, 44);
   background: -webkit-linear-gradient(top, transparent 19px, #e7e7e7 20px),
   -webkit-linear-gradient(left, transparent 19px, #e7e7e7 20px);
   background-size: 20px 20px;
-  /* background:
-    -webkit-linear-gradient(top, transparent 19px,  rgb(63, 63, 63) 20px),
-    -webkit-linear-gradient(left, transparent 19px, rgb(63, 63, 63) 20px);
+
+  z-index: -1;
+}
+
+.background_dark {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: -webkit-linear-gradient(top, transparent 19px, rgb(63, 63, 63) 20px),
+  -webkit-linear-gradient(left, transparent 19px, rgb(63, 63, 63) 20px);
   background-size: 20px 20px;
-  background-color: #323232; */
+  background-color: #323232;
+
   z-index: -1;
 }
 
@@ -71,5 +83,24 @@ body {
   padding-bottom: 10px;
   padding-left: 16px;
   padding-right: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  border-radius: 5px;
+  //background: rgba(69, 130, 230, 0.7);
+  background: rgba(100, 100, 100, 0.7);
+  transition: color 0.2s ease;
 }
 </style>

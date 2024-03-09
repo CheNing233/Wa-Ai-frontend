@@ -2,6 +2,7 @@
   <t-head-menu
       v-model="headMenuValue"
       class="menu-container"
+      :class="[darkMode ? 'menu-container-dark' : null]"
       theme="light"
       @change="handleMenu"
   >
@@ -45,10 +46,12 @@
 
           <t-button
               shape="square"
-              variant="outline"
+              variant="text"
               @click="fresh"
           >
-            <UserIcon slot="icon" shape="square"/>
+            <t-avatar slot="icon" shape="round">
+              WA
+            </t-avatar>
           </t-button>
 
           <template #dropdown>
@@ -59,17 +62,25 @@
                   :value="1"
                   @click="$router.push('/user')"
               >
+                <UserIcon slot="prefix-icon"/>
                 个人中心
               </t-dropdown-item>
 
-              <t-dropdown-item :value="5">
+              <t-dropdown-item :value="5" @click="() => darkMode = !darkMode">
+                <SunnyIcon v-if="!darkMode" slot="prefix-icon"/>
+                <MoonIcon v-else slot="prefix-icon"/>
                 深色模式
-                <t-switch style="float: right;"></t-switch>
+                <t-switch :value="darkMode" style="float: right;"></t-switch>
               </t-dropdown-item>
 
-              <t-dropdown-item :value="6">设置</t-dropdown-item>
+              <t-dropdown-item :value="6">
+                <SettingIcon slot="prefix-icon"/>
+                设置
+              </t-dropdown-item>
 
               <t-dropdown-item :value="7" @click="$router.push('/login')">
+                <LoginIcon v-if="!isLogin" slot="prefix-icon"/>
+                <LogoutIcon v-else slot="prefix-icon"/>
                 {{ isLogin ? '退出登录' : '登录' }}
               </t-dropdown-item>
 
@@ -88,8 +99,13 @@ import {
   ControlPlatformIcon,
   ListIcon,
   LoadingIcon,
+  LoginIcon,
   LogoGithubIcon,
+  LogoutIcon,
+  MoonIcon,
   NotificationIcon,
+  SettingIcon,
+  SunnyIcon,
   UserIcon,
 } from 'tdesign-icons-vue';
 
@@ -107,6 +123,11 @@ export default {
     NotificationIcon,
     LoadingIcon,
     ListIcon,
+    SunnyIcon,
+    MoonIcon,
+    SettingIcon,
+    LoginIcon,
+    LogoutIcon,
   },
   data() {
     return {
@@ -129,7 +150,15 @@ export default {
     },
     isLogin() {
       return this.$store.getters.userGetInfo !== null;
-    }
+    },
+    darkMode: {
+      get: function () {
+        return this.$store.getters.userGetDarkMode;
+      },
+      set: function (newValue) {
+        this.$store.commit('userSetDarkMode', newValue)
+      }
+    },
   },
   methods: {
     fresh() {
@@ -170,5 +199,9 @@ export default {
   left: 0;
   z-index: 10;
   box-shadow: 0px 8px 8px rgba(204, 204, 204, 0.2);
+}
+
+.menu-container-dark {
+  box-shadow: 0px 8px 8px rgba(16, 10, 0, 0.2);
 }
 </style>                

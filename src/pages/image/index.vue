@@ -10,6 +10,7 @@
         ref="scrollableDiv"
         :style="{ overflowY: displayMobile ? 'scroll' : 'hidden' }"
         class="dialog_container"
+        :class="[ isDarkMode ? 'dialog_container_dark' : null ]"
     >
       <t-loading
           :loading="imageLoading"
@@ -132,7 +133,7 @@
               </t-avatar>
               <t-space direction="vertical" size="1px">
                 <span>{{ userInfo.nickName }}</span>
-                <span style="font-size: 13px; color: rgba(0,0,0,0.54);">{{ createTime }} 创建</span>
+                <span style="font-size: 13px;">{{ createTime }} 创建</span>
               </t-space>
             </t-space>
 
@@ -229,6 +230,9 @@ export default {
     },
     displayMobile: function () {
       return this.$store.getters.getDisplayMobile
+    },
+    isDarkMode() {
+      return this.$store.getters.userGetDarkMode;
     },
   },
   methods: {
@@ -349,6 +353,10 @@ export default {
   overflow-x: hidden;
   z-index: 6666;
   background-color: white;
+}
+
+.dialog_container_dark {
+  background-color: #242424
 }
 
 .image_container {

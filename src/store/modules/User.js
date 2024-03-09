@@ -4,6 +4,7 @@ const User = {
         user: null,
         userWebsocket: null,
         userIDB: null,
+        userDarkMode: false,
     },
     mutations: {
         userSetInfo(state, user) {
@@ -15,6 +16,13 @@ const User = {
         userSetIDB(state, userIDB) {
             state.userIDB = userIDB;
         },
+        userSetDarkMode(state, darkMode) {
+            if (darkMode)
+                document.documentElement.setAttribute('theme-mode', 'dark');
+            else
+                document.documentElement.removeAttribute('theme-mode');
+            state.userDarkMode = darkMode;
+        },
     },
     getters: {
         userGetInfo(state) {
@@ -25,6 +33,9 @@ const User = {
         },
         userGetIDB(state) {
             return state.userIDB;
+        },
+        userGetDarkMode(state) {
+            return state.userDarkMode;
         },
     }
 }
