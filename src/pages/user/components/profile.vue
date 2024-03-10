@@ -9,13 +9,12 @@
           :xs="{ span: 12, offset: 0 }"
       >
 
-
         <t-form>
           <t-form-item initialData="" label="账号" name="name">
-            <t-input v-model="formData.username" :readonly="true" placeholder="请输入内容"/>
+            <t-input v-model="formData.userName" :readonly="true" placeholder="请输入内容"/>
           </t-form-item>
           <t-form-item initialData="" label="昵称" name="name">
-            <t-input v-model="formData.nickname" :readonly="true" placeholder="请输入内容"/>
+            <t-input v-model="formData.nickName" :readonly="true" placeholder="请输入内容"/>
           </t-form-item>
           <t-form-item initialData="" label="性别" name="name">
             <t-select v-model="formData.gender" :readonly="true">
@@ -26,7 +25,7 @@
             <t-input v-model="formData.email" :readonly="true" placeholder="请输入内容"/>
           </t-form-item>
           <t-form-item initialData="" label="描述" name="describe">
-            <t-textarea v-model="formData.describe" :readonly="true" placeholder="请输入内容"/>
+            <t-textarea v-model="formData.description" :readonly="true" placeholder="请输入内容"/>
           </t-form-item>
         </t-form>
       </t-col>
@@ -37,7 +36,7 @@
 </template>
 
 <script>
-import api from '@/service';
+// import api from '@/service';
 
 
 export default {
@@ -50,11 +49,11 @@ export default {
   data() {
     return {
       formData: {
-        username: '正在请求...',
-        nickname: '正在请求...',
+        userName: '正在请求...',
+        nickName: '正在请求...',
         email: '正在请求...',
         gender: '正在请求...',
-        describe: '正在请求...',
+        description: '正在请求...',
       },
     }
   },
@@ -69,21 +68,23 @@ export default {
       this.freshPage();
     },
     freshPage() {
-      api.userApi.me().then(resp => {
-        if (resp.data == null) {
-          return;
-        }
-        this.formData = {
-          username: resp.data.userName || '',
-          nickname: resp.data.nickName || '',
-          email: resp.data.email || '',
-          gender: '武装直升机',
-          describe: resp.data.description || ''
-        };
-      })
-          .catch(err => {
-            this.$message.error("获取数据失败: " + err)
-          });
+      this.formData = this.$store.getters.userGetInfo;
+
+      // api.userApi.me().then(resp => {
+      //   if (resp.data == null) {
+      //     return;
+      //   }
+      //   this.formData = {
+      //     username: resp.data.userName || '',
+      //     nickname: resp.data.nickName || '',
+      //     email: resp.data.email || '',
+      //     gender: '武装直升机',
+      //     describe: resp.data.description || ''
+      //   };
+      // })
+      //     .catch(err => {
+      //       this.$message.error("获取数据失败: " + err)
+      //     });
     }
   },
   created() {

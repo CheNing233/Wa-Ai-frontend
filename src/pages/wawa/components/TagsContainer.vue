@@ -10,9 +10,32 @@
       </t-col>
 
       <t-col flex="auto">
-        <t-button shape="square" style="float: right;" variant="outline">
-          <CopyIcon slot="icon" shape="square"/>
-        </t-button>
+        <t-space size="small" style="float: right;">
+          <t-button shape="square" variant="outline"
+                    @click="ClearTags"
+          >
+            <Delete1Icon slot="icon" shape="square"/>
+          </t-button>
+
+          <t-button shape="square" variant="outline"
+                    @click="mergeTags"
+          >
+            <GitMergeIcon slot="icon" shape="square"/>
+          </t-button>
+
+          <t-button shape="square" variant="outline"
+                    @click="replaceTags"
+          >
+            <GitCommitIcon slot="icon" shape="square"/>
+          </t-button>
+
+          <t-button shape="square" variant="outline"
+                    @click="copyTags"
+          >
+            <CopyIcon slot="icon" shape="square"/>
+          </t-button>
+        </t-space>
+
       </t-col>
 
       <t-col :span="12">
@@ -24,11 +47,11 @@
               :key="index"
               size="large"
           >
-                        <span style="padding-right: 6px;">
-                            {{ value.weight != 1 ? '(' : null }}{{
-                            value.value
-                          }}{{ value.weight != 1 ? ':' + value.weight + ')' : null }}
-                        </span>
+            <span style="padding-right: 6px;">
+                {{ value.weight != 1 ? '(' : null }}{{
+                value.value
+              }}{{ value.weight != 1 ? ':' + value.weight + ')' : null }}
+            </span>
             <t-button shape="square" variant="text"
                       @click="IncTag(index)"
             >
@@ -90,13 +113,13 @@
 </template>
 
 <script>
-import {AddIcon, CloseIcon, CopyIcon, RemoveIcon,} from 'tdesign-icons-vue';
+import {AddIcon, CloseIcon, CopyIcon, Delete1Icon, GitCommitIcon, GitMergeIcon, RemoveIcon} from 'tdesign-icons-vue';
 
 import {SdModelsTypes} from '@/config/SdModelsTypes.js';
 
-// import { getPromptTagsList } from '@/api/get_sdmodels_list.js';
-// import { SdListAPI } from '@/service/sd.js';
 import api from '@/service/index.js';
+import utils from '@/utils'
+import eventbus from "@/eventbus";
 
 export default {
   name: 'componentPromptsCloud',
@@ -105,6 +128,9 @@ export default {
     AddIcon,
     RemoveIcon,
     CloseIcon,
+    Delete1Icon,
+    GitMergeIcon,
+    GitCommitIcon
   },
   props: [
     'props'
@@ -138,6 +164,26 @@ export default {
     },
   },
   methods: {
+    mergeTags() {
+      eventbus.$emit("mergePrompts", this.$store.getters.getTags);
+    },
+
+    replaceTags() {
+      eventbus.$emit("replacePrompts", this.$store.getters.getTags);
+    },
+
+    copyTags() {
+      const prompts = this.$store.getters.getTags
+
+      utils.copy.copyToClipboard(prompts)
+          .then(() => {
+            this.$message.success('复制成功：' + prompts);
+          })
+          .catch(() => {
+            this.$message.error('复制失败');
+          });
+    },
+
     addTag(label, value) {
       this.$store.commit('collectorAddTag',
           {label: label, value: value, weight: 1.0}
@@ -151,6 +197,9 @@ export default {
     },
     DecTag(index) {
       this.$store.commit('collectorDecreaseTagWeight', index);
+    },
+    ClearTags() {
+      this.$store.commit('collectorClearTags');
     },
     onPageSizeChange(pageSize) {
       const {query} = this.$router.currentRoute;
@@ -192,7 +241,6 @@ export default {
         };
 
         api.tagApi.getSdTagsList(PARAMS)
-            // SdListAPI.getSdtagsList(PARAMS)
             .then(resp => {
               this.pageContent = resp.data.imageTags;
               this.itemsTotal = resp.data.selectCount;

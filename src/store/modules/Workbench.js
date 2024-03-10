@@ -43,7 +43,7 @@ const workbench = {
             "cfg_scale": 7.0,
             "width": 512,
             "height": 768,
-            "negative_prompt": "",
+            "negative_prompt": "(worst quality:2), (low quality:2), (normal quality:2),",
             "enable_hr": true,
             "denoising_strength": 0.58,
             "n_iter": 1,

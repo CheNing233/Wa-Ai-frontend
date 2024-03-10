@@ -290,7 +290,7 @@ export default {
         id: this.imageDialogImageId,
       };
 
-      api.sdimageApi.getSdImageDetail(PARAMS)
+      api.sdImageApi.getSdImageDetail(PARAMS)
           .then(resp => {
             this.imageParams = JSON.parse(resp.data.params);
             this.userInfo = resp.data.user;

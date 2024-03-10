@@ -70,6 +70,7 @@
             <template #icon>
               <t-rate
                   :count="1"
+                  :value="isFavoured ? 1 : 0"
               >
                 <template #icon>
                   <StarFilledIcon/>
@@ -84,12 +85,14 @@
           <t-tag
               shape="round"
               style="background: rgba(0,0,0,0.1); "
+              @click="handleBtnLike"
           >
             <template #icon>
               <t-rate
                   :count="1"
-                  :value="props.isLiked ? 1 : 0"
+                  :value="isLiked ? 1 : 0"
                   color="var(--td-error-color-7)"
+                  disabled
               >
                 <template #icon>
                   <HeartFilledIcon/>
@@ -97,7 +100,7 @@
               </t-rate>
             </template>
             <span style="color: #FFFFFF">
-              {{ props.liked }}
+              {{ isLiked ? props.liked + 1 : props.liked }}
             </span>
           </t-tag>
 
@@ -171,7 +174,7 @@
 <script>
 import {ChatBubble1Icon, ControlPlatformIcon, HeartFilledIcon, StarFilledIcon, ZoomInIcon} from 'tdesign-icons-vue';
 
-// import api from '@/service';
+import api from '@/service';
 
 export default {
   name: 'BaseCard',
@@ -187,7 +190,8 @@ export default {
   ],
   data() {
     return {
-      star: false,
+      isLiked: false,
+      isFavoured: false,
       isSelected: false,
     }
   },
@@ -242,14 +246,21 @@ export default {
       }
       this.$store.commit('workbenchUpdateSelected', selected);
     },
-    handleImageOnClick() {
-      // window.open(this.$router.resolve({
-      //   path: '/model',
-      //   query: {
-      //     id: this.props.id,
-      //   }
-      // }).href, '_blank');
 
+    handleBtnLike() {
+      const PARAMS = {
+        sdmodelId: this.props.id,
+      };
+      api.sdModelApi.likeSdModel(PARAMS)
+          .then(resp => {
+            this.isLiked = resp.data.isLike;
+          })
+          .catch(err => {
+            this.$message.error("操作失败: " + err)
+          });
+    },
+
+    handleImageOnClick() {
       this.$router.push({
         path: '/model',
         query: {

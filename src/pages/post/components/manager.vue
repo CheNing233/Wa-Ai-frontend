@@ -7,7 +7,7 @@
       <t-col :span="12">
         <t-row :gutter="[16, 16]" align="center">
           <t-col flex="auto">
-            <h2 style="margin-top: -4px; margin-bottom: -4px;">{{ props.name }}</h2>
+            <h2 style="margin-top: -4px; margin-bottom: -4px;">我的图片</h2>
           </t-col>
 
           <t-col flex="shrink" style="float: right;">
@@ -78,6 +78,14 @@
             </t-button>
           </t-col>
 
+          <t-col
+              flex="shrink"
+              style="float: right;"
+          >
+            <t-button>
+              刷新
+            </t-button>
+          </t-col>
 
         </t-row>
       </t-col>
@@ -115,14 +123,11 @@
 </template>
 
 <script>
-import componentImageCard from './Cards/imageCard.vue';
 import {SearchIcon} from 'tdesign-icons-vue';
-// import { UserDataAPI } from "@/service/user.js"
 
 export default {
-  name: 'ModelsCloud',
+  name: 'postManager',
   components: {
-    componentImageCard,
     SearchIcon,
   },
   props: [
@@ -168,22 +173,6 @@ export default {
       this.freshPage();
     },
     freshPage() {
-
-      // const PARAMS = {
-      //     search: null,
-      //     page: this.pageCurrent,
-      //     itemsPerPage: this.pageSize,
-      // };
-
-
-      // UserDataAPI.getSdimagesList(PARAMS)
-      //     .then(resp => {
-      //         this.pageContent = resp.data;
-      //         this.itemsTotal = resp.count;
-      //     })
-      //     .catch(err => {
-      //         this.$message.error("获取数据失败: " + err.message)
-      // });
 
     }
   },

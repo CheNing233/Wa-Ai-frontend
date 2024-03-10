@@ -54,15 +54,10 @@
 
     <t-row :gutter="[16, 16]">
       <t-col
-          :lg="{ span: 8 }"
-          :md="{ span: 8 }"
-          :sm="{ span: 12 }"
-          :xl="{ span: 8 }"
-          :xs="{ span: 12 }"
+          :span="12"
       >
         <t-image
             :src="images[image].src"
-            :style="displayMobile ? { aspectRatio: 0.75 } : { aspectRatio: 1.5 }"
             class="image_container"
             fit="contain"
             shape="round"
@@ -91,124 +86,19 @@
         </t-card>
 
       </t-col>
-      <t-col
-          :lg="{ span: 4 }"
-          :md="{ span: 4 }"
-          :sm="{ span: 12 }"
-          :span="4"
-          :xl="{ span: 4 }"
-          :xs="{ span: 12 }"
-      >
-
-        <t-space direction="vertical" style="width: 100%;">
-
-          <t-descriptions
-              :column="1"
-              :content-style="{ wordBreak: 'break-all', whiteSpace: 'normal' }"
-              :label-style="{ whiteSpace: 'nowrap', }"
-          >
-            <t-descriptions-item label="运行">某后端又没写</t-descriptions-item>
-            <t-descriptions-item label="下载">某后端又没写</t-descriptions-item>
-            <t-descriptions-item label="上传时间">{{ modelDetail.createTime }}</t-descriptions-item>
-            <t-descriptions-item label="模型类型">{{ modelDetail.type }}</t-descriptions-item>
-            <t-descriptions-item label="具体类别">某后端又没写</t-descriptions-item>
-            <t-descriptions-item label="引用名称">{{ modelDetail.filename }}</t-descriptions-item>
-          </t-descriptions>
-
-          <t-row :gutter="[16, 16]" style="padding: 16px;">
-            <t-col flex="1">
-              <t-button size="large" style="width: 100%;">
-                <ControlPlatformIcon slot="icon"/>
-                在线运行
-              </t-button>
-            </t-col>
-
-            <t-col flex="shrink">
-              <t-button size="large" style="width: 100%;" variant="outline">
-                分享
-              </t-button>
-            </t-col>
-
-            <t-col flex="shrink">
-              <t-button size="large" style="width: 100%;" variant="outline">
-                ...
-              </t-button>
-            </t-col>
-          </t-row>
-
-
-          <t-space direction="vertical" style="padding: 16px 16px 16px 16px;">
-            <t-row :gutter="[16, 16]">
-              <t-col flex="1" style="display: flex; align-items: center;">
-                <t-tag size="large" variant="outline">
-                  <template #icon>
-                    <DiscountIcon/>
-                  </template>
-                  正向提示词（触发词）
-                </t-tag>
-              </t-col>
-
-              <t-col flex="shrink">
-                <t-button style="width: 100%;" variant="outline">
-                  复制
-                </t-button>
-              </t-col>
-
-              <t-col :span="12">
-                <t-space breakLine>
-                  <t-tag v-for="(value, index) in tags" :key="index" size="large">
-                    {{ value }}
-                  </t-tag>
-                </t-space>
-              </t-col>
-            </t-row>
-
-            <t-row :gutter="[16, 16]">
-              <t-col flex="1" style="display: flex; align-items: center;">
-                <t-tag size="large" variant="outline">
-                  <template #icon>
-                    <DiscountIcon/>
-                  </template>
-                  反向提示词
-                </t-tag>
-              </t-col>
-
-              <t-col flex="shrink">
-                <t-button style="width: 100%;" variant="outline">
-                  复制
-                </t-button>
-              </t-col>
-
-              <t-col :span="12">
-                <t-space breakLine>
-                  <t-tag v-for="(value, index) in tags" :key="index" size="large">
-                    {{ value }}
-                  </t-tag>
-                </t-space>
-              </t-col>
-            </t-row>
-          </t-space>
-
-        </t-space>
-
-
-      </t-col>
     </t-row>
   </div>
 </template>
 
 
 <script>
-import {ControlPlatformIcon, DiscountIcon, StarIcon, ThumbUp1Icon} from 'tdesign-icons-vue';
+import {StarIcon, ThumbUp1Icon} from 'tdesign-icons-vue';
 
 import api from '@/service'
 
 export default {
-  name: 'ModelDetail',
+  name: 'PostDetail',
   components: {
-    ControlPlatformIcon,
-    DiscountIcon,
-
     ThumbUp1Icon,
     StarIcon
   },
@@ -292,6 +182,7 @@ export default {
 
 .image_container {
   width: 100%;
+  height: 100vh;
 }
 
 .image_overlay {

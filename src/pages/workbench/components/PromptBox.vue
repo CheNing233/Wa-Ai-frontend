@@ -6,12 +6,12 @@
 
       <template #actions>
         <t-space>
-          <t-button
-              size="small"
-              variant="outline"
-          >
-            随机
-          </t-button>
+          <!--          <t-button-->
+          <!--              size="small"-->
+          <!--              variant="outline"-->
+          <!--          >-->
+          <!--            随机-->
+          <!--          </t-button>-->
           <t-button
               shape="square"
               size="small"
@@ -36,16 +36,27 @@
           <t-col flex="1">
             <t-select
                 :options="wordsCloud"
-                placeholder="按Tab快速修正"
-                size="small"/>
+                placeholder="自动补全即将上线"
+                size="small"
+                disabled
+            />
           </t-col>
           <t-col flex="shrink">
-            <t-button
+            <t-space
                 size="small"
-                theme="primary"
             >
-              修正
-            </t-button>
+
+              <t-button
+                  size="small"
+                  theme="danger"
+                  shape="square"
+                  @click="() => workbenchParams.prompt = ''"
+              >
+                <Delete1Icon slot="icon"/>
+              </t-button>
+
+            </t-space>
+
           </t-col>
         </t-row>
         <t-textarea
@@ -58,14 +69,16 @@
             <strong>反向提示词(Negative Prompt)：</strong>
           </t-col>
           <t-col flex="1">
-            <t-switch id="defaultNegativeBt" :label="['默认', '自定义']"/>
+            <!--            <t-switch id="defaultNegativeBt" :label="['默认', '自定义']"/>-->
           </t-col>
           <t-col flex="shrink">
             <t-button
                 size="small"
-                theme="primary"
+                variant="outline"
+                shape="square"
+                @click="() => workbenchParams.negative_prompt = '(worst quality:2), (low quality:2), (normal quality:2),'"
             >
-              修正
+              <RollbackIcon slot="icon"/>
             </t-button>
           </t-col>
         </t-row>
@@ -81,14 +94,16 @@
 </template>
 
 <script>
-import {BrowseIcon, BrowseOffIcon} from 'tdesign-icons-vue';
-
+import {BrowseIcon, BrowseOffIcon, Delete1Icon, RollbackIcon} from 'tdesign-icons-vue';
+import eventbus from "@/eventbus";
 
 export default {
   name: 'componentPromptBox',
   components: {
     BrowseIcon,
-    BrowseOffIcon
+    BrowseOffIcon,
+    Delete1Icon,
+    RollbackIcon
   },
   props: {},
   data() {
@@ -121,7 +136,20 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    mergeTags(prompts) {
+      this.workbenchParams.prompt += prompts;
+      this.$message.success("工作台 Prompt 成功合并：" + prompts);
+    },
+    replaceTags(prompts) {
+      this.workbenchParams.prompt = prompts;
+      this.$message.success("工作台 Prompt 成功替换为：" + prompts);
+    },
+  },
+  created() {
+    eventbus.$on('mergePrompts', this.mergeTags);
+    eventbus.$on('replacePrompts', this.replaceTags);
+  },
 }
 
 </script>

@@ -114,7 +114,7 @@ export default {
         id: this.imageProfile.imageId,
       };
 
-      api.sdimageApi.getSdImageDetail(PARAMS)
+      api.sdImageApi.getSdImageDetail(PARAMS)
           .then(resp => {
             this.imageContent = resp.data;
             this.imageId = this.imageProfile.imageId;

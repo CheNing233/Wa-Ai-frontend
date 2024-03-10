@@ -6,12 +6,12 @@
 
       <template #actions>
         <t-space>
-          <t-button
-              size="small"
-              variant="outline"
-          >
-            默认值
-          </t-button>
+<!--          <t-button-->
+<!--              size="small"-->
+<!--              variant="outline"-->
+<!--          >-->
+<!--            默认值-->
+<!--          </t-button>-->
           <t-button
               shape="square"
               size="small"

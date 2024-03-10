@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import api from '@/service'
+
 export default {
   name: 'App',
   components: {},
@@ -33,11 +35,17 @@ export default {
   mounted() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize(); // 初始加载时触发一次
+
+    api.userApi.isLogin().then(resp => {
+      console.log('应用创建登录检查', resp)
+    }).catch(err => {
+      console.error('应用创建登录检查', err)
+    });
+
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.handleResize);
   },
-
 }
 </script>
 
@@ -78,12 +86,6 @@ body {
   z-index: -1;
 }
 
-.t-card__body {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 16px;
-  padding-right: 16px;
-}
 
 ::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0);
@@ -99,8 +101,6 @@ body {
 ::-webkit-scrollbar-thumb {
   cursor: pointer;
   border-radius: 5px;
-  //background: rgba(69, 130, 230, 0.7);
-  background: rgba(100, 100, 100, 0.7);
-  transition: color 0.2s ease;
+//background: rgba(69, 130, 230, 0.7); background: rgba(100, 100, 100, 0.7); transition: color 0.2s ease;
 }
 </style>

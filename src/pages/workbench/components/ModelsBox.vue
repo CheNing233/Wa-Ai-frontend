@@ -7,12 +7,6 @@
       <template #actions>
         <t-space>
           <t-button
-              size="small"
-              variant="text"
-          >
-            推荐
-          </t-button>
-          <t-button
               shape="square"
               size="small"
               variant="outline"
@@ -36,10 +30,10 @@
             <strong>基础模型：</strong>
           </t-col>
           <t-col flex="shrink">
-            <t-button size="small" variant="text"
-            >
-              选择
-            </t-button>
+<!--            <t-button size="small" variant="text"-->
+<!--            >-->
+<!--              选择-->
+<!--            </t-button>-->
           </t-col>
         </t-row>
 
@@ -49,19 +43,19 @@
           </t-col>
         </t-row>
 
-        <t-row :gutter="[8, 8]">
+        <t-row v-if="workbenchSelected.LORA.length !== 0" :gutter="[8, 8]">
           <t-col flex="1">
             <strong>LoRa 模型：</strong>
           </t-col>
           <t-col flex="shrink">
-            <t-button size="small" variant="text"
-            >
-              添加
-            </t-button>
+<!--            <t-button size="small" variant="text"-->
+<!--            >-->
+<!--              添加-->
+<!--            </t-button>-->
           </t-col>
         </t-row>
 
-        <t-row :gutter="[8, 8]">
+        <t-row v-if="workbenchSelected.LORA.length !== 0" :gutter="[8, 8]">
           <t-col
               v-for="(item, index) in workbenchSelected.LORA"
               :key="index"
@@ -71,19 +65,19 @@
           </t-col>
         </t-row>
 
-        <t-row :gutter="[8, 8]">
+        <t-row v-if="workbenchSelected.EMBEDDING.length !== 0" :gutter="[8, 8]">
           <t-col flex="1">
             <strong>Embedding 模型：</strong>
           </t-col>
           <t-col flex="shrink">
-            <t-button size="small" variant="text"
-            >
-              添加
-            </t-button>
+<!--            <t-button size="small" variant="text"-->
+<!--            >-->
+<!--              添加-->
+<!--            </t-button>-->
           </t-col>
         </t-row>
 
-        <t-row :gutter="[8, 8]">
+        <t-row v-if="workbenchSelected.EMBEDDING.length !== 0" :gutter="[8, 8]">
           <t-col
               v-for="(item, index) in workbenchSelected.EMBEDDING"
               :key="index"
@@ -98,10 +92,10 @@
             <strong>VAE 模型：</strong>
           </t-col>
           <t-col flex="shrink">
-            <t-button size="small" variant="text"
-            >
-              选择
-            </t-button>
+<!--            <t-button size="small" variant="text"-->
+<!--            >-->
+<!--              选择-->
+<!--            </t-button>-->
           </t-col>
         </t-row>
 
