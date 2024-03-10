@@ -31,6 +31,23 @@ const PromptsCollector = {
         getCollector(state) {
             return state.selectTags;
         },
+
+        getTags(state) {
+            let prompts = '';
+            let tag = ''
+
+            for (let i = 0; i < state.selectTags.length; i++) {
+                tag = state.selectTags[i].value;
+
+                if (state.selectTags[i].weight !== 1){
+                    tag = '(' + tag + `:${state.selectTags[i].weight})`
+                }
+
+                prompts += tag + ', ';
+            }
+
+            return prompts;
+        },
     },
 }
 

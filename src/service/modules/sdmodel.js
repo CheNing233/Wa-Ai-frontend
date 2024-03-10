@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {MODEL_API_LIST, MODEL_API_URL} from '@/config/ApiConfig';
+import {API_BASE_URL, MODEL_API_LIST, MODEL_API_URL} from '@/config/ApiConfig';
 
 const request = (url, method, params, data) => {
     console.log("请求", url, method, params, data);
@@ -41,7 +41,13 @@ const getSdModelDetail = (params) => request(
     params, {}
 );
 
+const likeSdModel = (params) => request(
+    `${API_BASE_URL}${MODEL_API_LIST.likeSdModel}`, 'post',
+    params, {}
+);
+
 export default {
     getSdModelsList,
     getSdModelDetail,
+    likeSdModel
 };

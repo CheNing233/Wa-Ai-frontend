@@ -27,11 +27,11 @@
     <template #operations>
       <t-space :size="8">
 
-        <t-button v-show="!displayMobile" shape="square" variant="text">
+        <t-button disabled v-show="!displayMobile" shape="square" variant="text">
           <LogoGithubIcon slot="icon" shape="square"/>
         </t-button>
 
-        <t-button shape="square" variant="text">
+        <t-button disabled shape="square" variant="text">
           <NotificationIcon slot="icon" shape="square"/>
         </t-button>
 
@@ -73,7 +73,7 @@
                 <t-switch :value="darkMode" style="float: right;"></t-switch>
               </t-dropdown-item>
 
-              <t-dropdown-item :value="6">
+              <t-dropdown-item v-if="false" :value="6">
                 <SettingIcon slot="prefix-icon"/>
                 设置
               </t-dropdown-item>

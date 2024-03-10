@@ -9,7 +9,7 @@
       />
     </t-col>
     <t-col :span="12" align="center">
-      <span> {{ userInfo.username }} </span>
+      <span> {{ nickName }} </span>
     </t-col>
     <t-col :span="12" align="center">
 
@@ -20,24 +20,16 @@
             <UserProfile/>
           </t-tab-panel>
 
-          <t-tab-panel label="我的收藏" value="likes">
+          <t-tab-panel disabled label="我的收藏" value="likes">
             12345
           </t-tab-panel>
 
-          <t-tab-panel :value="filterType.Image" label="我的生成">
-            <UserGenerate :props="{ name: filterType.Image }"/>
+          <t-tab-panel :value="filterType.Image" label="我的图片">
+            <UserImages :props="{ name: filterType.Image }"/>
           </t-tab-panel>
 
-          <t-tab-panel label="我的预设" value="presets">
-            12345
-          </t-tab-panel>
-
-          <t-tab-panel label="我的帖子" value="imgposts">
-            12345
-          </t-tab-panel>
-
-          <t-tab-panel label="我的模型" value="sdmodels">
-            12345
+          <t-tab-panel :value="filterType.Post" label="我的帖子">
+            <UserPosts />
           </t-tab-panel>
 
         </t-tabs>
@@ -49,30 +41,28 @@
 
 <script>
 import UserProfile from './components/profile.vue'
-import UserGenerate from './components/generate.vue';
+import UserImages from './components/images.vue';
+import UserPosts from './components/posts.vue'
 
 import {UserModelsTypes} from '@/config/UserModelsTypes.js';
 
-import api from '@/service';
 
 export default {
   name: 'page-portal',
   components: {
     UserProfile,
-    UserGenerate
+    UserImages,
+    UserPosts,
   },
   data() {
     return {
       filterType: UserModelsTypes,
       userTab: 'profile',
-
-      userInfo: {
-        username: '正在请求...',
-        nickname: '正在请求...',
-        email: '正在请求...',
-        gender: '正在请求...',
-        describe: '正在请求...',
-      },
+    }
+  },
+  computed: {
+    nickName() {
+      return this.$store.getters.userGetInfo.nickName;
     }
   },
   methods: {
@@ -84,26 +74,8 @@ export default {
         }
       });
     },
-    getUserInfo() {
-      api.userApi.me().then(resp => {
-        if (resp.data == null) {
-          return;
-        }
-        this.userInfo = {
-          username: resp.data.userName || '',
-          nickname: resp.data.nickName || '',
-          email: resp.data.email || '',
-          gender: '武装直升机',
-          describe: resp.data.description || ''
-        };
-      })
-          .catch(err => {
-            this.$message.error("获取数据失败: " + err)
-          });
-    },
   },
   created() {
-    this.getUserInfo()
   }
 }
 </script>

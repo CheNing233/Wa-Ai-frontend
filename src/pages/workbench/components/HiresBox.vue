@@ -8,12 +8,12 @@
         <t-space>
           <t-switch v-model="workbenchParams.enable_hr" :label="['On', 'Off']"/>
 
-          <t-button
-              size="small"
-              variant="outline"
-          >
-            默认值
-          </t-button>
+<!--          <t-button-->
+<!--              size="small"-->
+<!--              variant="outline"-->
+<!--          >-->
+<!--            默认值-->
+<!--          </t-button>-->
           <t-button
               shape="square"
               size="small"

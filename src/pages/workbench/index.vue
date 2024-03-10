@@ -104,13 +104,13 @@
 
               </t-space>
             </t-tab-panel>
-            <t-tab-panel label="图生图" value="img2img">
+            <t-tab-panel disabled label="图生图" value="img2img">
 
             </t-tab-panel>
-            <t-tab-panel label="图像放大" value="extra">
+            <t-tab-panel disabled label="图像放大" value="extra">
 
             </t-tab-panel>
-            <t-tab-panel label="反推" value="tag">
+            <t-tab-panel disabled label="反推" value="tag">
 
             </t-tab-panel>
           </t-tabs>

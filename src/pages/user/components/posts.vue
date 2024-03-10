@@ -5,9 +5,9 @@
     <t-row :gutter="[16, 16]" class="portal_baserow">
 
       <t-col :span="12">
-        <t-row :gutter="[16, 16]" align="center">
+        <t-row :gutter="[8, 8]" align="center">
           <t-col flex="auto">
-            <h2 style="margin-top: -4px; margin-bottom: -4px;">{{ props.name }}</h2>
+            <h2 style="margin-top: -4px; margin-bottom: -4px;">我的帖子</h2>
           </t-col>
 
           <t-col flex="shrink" style="float: right;">
@@ -26,60 +26,71 @@
           </t-col>
 
           <t-col
-              v-if="manageState == false"
+              v-if="manageStatus == true"
               flex="shrink"
               style="float: right;"
           >
-            <t-button variant="outline">
-              上传...
-            </t-button>
-          </t-col>
-
-          <t-col
-              v-if="manageState == false"
-              flex="shrink"
-              style="float: right;"
-          >
-            <t-button @click="() => manageState = true">
-              管理
-            </t-button>
-          </t-col>
-
-          <t-col
-              v-if="manageState == true"
-              flex="shrink"
-              style="float: right;"
-          >
-            <t-dropdown :min-column-width="108">
-              <t-button>
-                操作...
+            <t-space breakLine size="small">
+              <t-button v-if="manageStatus"
+                        :loading="delTaskLoading"
+                        shape="square"
+                        theme="danger"
+              >
+                <Delete1Icon slot="icon" shape="square"/>
               </t-button>
-              <template #dropdown>
-
-                <t-dropdown-menu>
-                  <t-dropdown-item :value="2"> 改为 "私有" 状态</t-dropdown-item>
-                  <t-dropdown-item :value="3"> 改为 "公开" 状态</t-dropdown-item>
-                  <t-dropdown-item :value="4"> 删除</t-dropdown-item>
-                </t-dropdown-menu>
-
-              </template>
-
-            </t-dropdown>
+              <t-button variant="outline" @click="() => manageStatus = false">
+                取消
+              </t-button>
+            </t-space>
 
           </t-col>
 
           <t-col
-              v-if="manageState == true"
+              v-if="manageStatus == false"
               flex="shrink"
               style="float: right;"
           >
-            <t-button variant="outline" @click="() => manageState = false">
-              返回
+            <t-button>
+              创建新帖
             </t-button>
           </t-col>
 
+          <t-col
+              v-if="manageStatus == false"
+              flex="shrink"
+              style="float: right;"
+          >
+            <t-button variant="outline" @click="() => manageStatus = true">
+              选择
+            </t-button>
+          </t-col>
+
+          <t-col
+              flex="shrink"
+              style="float: right;"
+          >
+            <t-button shape="square" variant="outline" @click="freshPage">
+              <refresh-icon slot="icon" shape="square"/>
+            </t-button>
+          </t-col>
 
         </t-row>
+      </t-col>
+
+      <t-col
+          :span="12"
+          style="overflow: hidden;"
+      >
+        <t-pagination
+            v-model="pageCurrent"
+            :on-page-size-change="onPageSizeChange"
+            :onCurrentChange="onCurrentChange"
+            :page-size-options="pageSizeOptions"
+            :page-size.sync="pageSize"
+            :show-sizer="false"
+            :total="itemsTotal"
+            style="flex-wrap: wrap; justify-content: space-evenly;"
+        />
       </t-col>
 
       <t-col
@@ -91,7 +102,7 @@
           :xl="{ span: 3 }"
           :xs="{ span: 12 }"
       >
-        <componentImageCard :isManage="manageState" :props="item"/>
+        <componentImageCard :imageProfile="item"/>
       </t-col>
 
       <t-col
@@ -116,14 +127,20 @@
 
 <script>
 import componentImageCard from './Cards/imageCard.vue';
-import {SearchIcon} from 'tdesign-icons-vue';
-// import { UserDataAPI } from "@/service/user.js"
+import {Delete1Icon, RefreshIcon, SearchIcon} from 'tdesign-icons-vue';
+
+import api from '@/service';
 
 export default {
   name: 'ModelsCloud',
   components: {
     componentImageCard,
     SearchIcon,
+    // FilterIcon,
+    Delete1Icon,
+    // DownloadIcon,
+    // ShareIcon,
+    RefreshIcon,
   },
   props: [
     'props'
@@ -131,7 +148,13 @@ export default {
   computed: {},
   data() {
     return {
-      manageState: false,
+
+      manageSelected: [],
+      manageStatus: false,
+
+      reFreshPageLoading: false,
+      delTaskLoading: false,
+      reFreshPageIndicator: true,
 
       search: '',
 
@@ -169,21 +192,19 @@ export default {
     },
     freshPage() {
 
-      // const PARAMS = {
-      //     search: null,
-      //     page: this.pageCurrent,
-      //     itemsPerPage: this.pageSize,
-      // };
+      const PARAMS = {
+        // page: this.pageCurrent,
+        // pageSize: this.pageSize,
+      };
 
-
-      // UserDataAPI.getSdimagesList(PARAMS)
-      //     .then(resp => {
-      //         this.pageContent = resp.data;
-      //         this.itemsTotal = resp.count;
-      //     })
-      //     .catch(err => {
-      //         this.$message.error("获取数据失败: " + err.message)
-      // });
+      api.sdPostApi.getSdPostsList(PARAMS)
+          .then(resp => {
+            this.pageContent = resp.data;
+            this.itemsTotal = 0;
+          })
+          .catch(err => {
+            this.$message.error("获取数据失败: " + err)
+          });
 
     }
   },

@@ -132,10 +132,10 @@ export default {
           pageSize: this.pageSize,
         };
 
-        api.modelApi.getSdModelsList(PARAMS)
+        api.sdModelApi.getSdModelsList(PARAMS)
             .then(resp => {
               this.pageContent = resp.data.models;
-              this.itemsTotal = resp.data.count;
+              this.itemsTotal = resp.data.selectCount;
 
             })
             .catch(err => {

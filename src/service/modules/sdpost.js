@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {LIKE_API_LIST, LIKE_API_URL} from '@/config/ApiConfig';
+import {API_BASE_URL, POST_API_LIST, POST_API_URL} from '@/config/ApiConfig';
 
 const request = (url, method, params, data) => {
     console.log("请求", url, method, params, data);
@@ -31,29 +31,23 @@ const request = (url, method, params, data) => {
     });
 }
 
-const likeSdModel = (params) => request(
-    `${LIKE_API_URL}${LIKE_API_LIST.likeSdModel}`, 'post',
+const getSdPostsList = (params) => request(
+    `${POST_API_URL}${POST_API_LIST.getPostListByUserId}`, 'get',
     params, {}
 );
 
-const likeSdImage = (params) => request(
-    `${LIKE_API_URL}${LIKE_API_LIST.likeSdImage}`, 'post',
+const getSdPostDetail = (params) => request(
+    `${POST_API_URL}${POST_API_LIST.getPostDetailByPostId}`, 'get',
     params, {}
 );
 
-const checkSdModelLike = (params) => request(
-    `${LIKE_API_URL}${LIKE_API_LIST.checkSdModelLike}`, 'get',
-    params, {}
-);
-
-const checkSdImageLike = (params) => request(
-    `${LIKE_API_URL}${LIKE_API_LIST.checkSdImageLike}`, 'get',
+const likeSdPost = (params) => request(
+    `${API_BASE_URL}${POST_API_LIST.likePost}`, 'post',
     params, {}
 );
 
 export default {
-    likeSdModel,
-    likeSdImage,
-    checkSdModelLike,
-    checkSdImageLike
+    getSdPostsList,
+    getSdPostDetail,
+    likeSdPost
 };

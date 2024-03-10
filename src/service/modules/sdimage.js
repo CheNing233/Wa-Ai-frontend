@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {IMAGE_API_LIST, IMAGE_API_URL} from '@/config/ApiConfig';
+import {API_BASE_URL, IMAGE_API_LIST, IMAGE_API_URL} from '@/config/ApiConfig';
 
 const request = (url, method, params, data) => {
     console.log("请求", url, method, params, data);
@@ -36,6 +36,12 @@ const getSdImageDetail = (params) => request(
     params, {}
 );
 
+const likeSdImage = (params) => request(
+    `${API_BASE_URL}${IMAGE_API_LIST.likeSdImage}/${params.id}`, 'post',
+    params, {}
+);
+
 export default {
     getSdImageDetail,
+    likeSdImage
 };

@@ -4,14 +4,18 @@ import wawa from '@/pages/wawa/index.vue'
 import workbench from '@/pages/workbench/index.vue'
 import imagedialog from '@/pages/image/index.vue'
 import login from '@/pages/login/index.vue'
+import about from '@/pages/about/index.vue'
 
 import {UserRouter} from './modules/user.js';
 import {ModelRouter} from './modules/model.js';
+import {PostRouter} from './modules/post.js';
+import {CreateRouter} from './modules/create.js'
+
 
 import eventBus from '@/eventbus'
 
 // 动态路由
-export const asyncRouterList = [...UserRouter, ...ModelRouter];
+export const asyncRouterList = [...UserRouter, ...ModelRouter, ...PostRouter, ...CreateRouter];
 
 // 固定路由
 const defaultRouterList = [
@@ -47,7 +51,7 @@ const defaultRouterList = [
             {
                 path: 'about',
                 components: {
-                    default: wawa,
+                    default: about,
                     componentWorkbench: workbench,
                     componentImageDialog: imagedialog
                 },
