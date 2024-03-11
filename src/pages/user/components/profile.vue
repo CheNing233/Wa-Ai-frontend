@@ -45,17 +45,25 @@ export default {
   props: [
     'props'
   ],
-  computed: {},
-  data() {
-    return {
-      formData: {
-        userName: '正在请求...',
-        nickName: '正在请求...',
-        email: '正在请求...',
-        gender: '正在请求...',
-        description: '正在请求...',
-      },
+  computed: {
+    formData() {
+      let data = this.$store.getters.userGetInfo;
+
+      if (data === null) {
+        data = {
+          userName: '正在请求...',
+          nickName: '正在请求...',
+          email: '正在请求...',
+          gender: '正在请求...',
+          description: '正在请求...',
+        }
+      }
+
+      return data;
     }
+  },
+  data() {
+    return {}
   },
   methods: {
     onPageSizeChange(pageSize) {
@@ -69,22 +77,6 @@ export default {
     },
     freshPage() {
       this.formData = this.$store.getters.userGetInfo;
-
-      // api.userApi.me().then(resp => {
-      //   if (resp.data == null) {
-      //     return;
-      //   }
-      //   this.formData = {
-      //     username: resp.data.userName || '',
-      //     nickname: resp.data.nickName || '',
-      //     email: resp.data.email || '',
-      //     gender: '武装直升机',
-      //     describe: resp.data.description || ''
-      //   };
-      // })
-      //     .catch(err => {
-      //       this.$message.error("获取数据失败: " + err)
-      //     });
     }
   },
   created() {

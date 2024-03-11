@@ -1,9 +1,7 @@
 const User = {
     namespace: true,
     state: {
-        user: {
-            nickName: ''
-        },
+        user: null,
         userWebsocket: null,
         userIDB: null,
         userDarkMode: false,

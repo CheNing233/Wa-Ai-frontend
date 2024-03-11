@@ -226,6 +226,11 @@ export default {
       this.freshPage();
     },
     freshPage() {
+      if(this.$store.getters.userGetInfo === null){
+        console.log('未登录');
+        return;
+      }
+
       this.pageContent = []
 
       const PARAMS = {

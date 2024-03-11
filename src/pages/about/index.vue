@@ -83,7 +83,7 @@
 
               <template #action>
                 <t-space size="small">
-                  <t-popup :visible="item.qrVisible">
+                  <t-popup v-if="item.qrLink !== null" :visible="item.qrVisible">
                     <t-button
                         variant="text"
                         shape="square"
@@ -116,7 +116,6 @@
           </t-list>
 
         </t-card>
-
 
       </t-card>
     </t-col>
@@ -172,6 +171,13 @@ export default {
           qrLink: require('@/assets/about/group-wc-1.png'),
           qrVisible: false,
           jumpLink: ''
+        },
+        {
+          title: '用户意见反馈服务平台',
+          desc: '便捷推荐，无需加群',
+          qrLink: null,
+          qrVisible: false,
+          jumpLink: 'https://support.qq.com/product/639813'
         }
       ]
     }
