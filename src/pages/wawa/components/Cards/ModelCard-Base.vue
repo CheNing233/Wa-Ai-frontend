@@ -126,7 +126,7 @@
         class="image"
         fit="cover"
         shape="round"
-        src="https://tdesign.gtimg.com/demo/demo-image-1.png"
+        :src="require('@/assets/placeHolder/card-no-preview.png')"
     >
       <!--      图片显示区-->
 

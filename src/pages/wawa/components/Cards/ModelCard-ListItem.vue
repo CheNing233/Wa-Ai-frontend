@@ -7,7 +7,7 @@
             :style="{ width: '64px', height: '64px' }"
             fit="cover"
             shape="round"
-            src="https://tdesign.gtimg.com/demo/demo-image-1.png"
+            :src="require('@/assets/placeHolder/card-no-preview.png')"
         />
       </t-col>
 

@@ -9,6 +9,8 @@
     </t-tag>
     <t-image
         :src="imageUrlAfterProcess"
+        :placeholder="renderNoPreview"
+        :error="renderNoPreview"
         class="image_item"
         fit="cover"
         shape="round"
@@ -101,6 +103,15 @@ export default {
     },
   },
   methods: {
+    renderNoPreview() {
+      return (
+          <t-image style={{position: 'absolute', left: '0', top: '0', right: '0', bottom: '6px'}}
+                   src={require('@/assets/placeHolder/card-no-preview.png')}
+                   fit="contain"
+          />
+      )
+    },
+
     freshPage() {
       this.imageContent = {};
 
@@ -151,11 +162,8 @@ export default {
 
     handleImageUrl() {
       if (this.$refs.imageBody) {
-        this.imageUrlAfterProcess = utils.images.getQiniuImageUrlWithParams(
+        this.imageUrlAfterProcess = utils.images.getThumbnailUrl(
             this.imageContent.imageUrl,
-            Math.round(this.$refs.imageBody.offsetWidth * 1.5),
-            Math.round(this.$refs.imageBody.offsetHeight * 1.5),
-            100
         )
         console.log(this.imageUrlAfterProcess)
       } else {

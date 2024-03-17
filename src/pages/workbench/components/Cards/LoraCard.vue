@@ -10,7 +10,7 @@
           <t-image
               fit="cover"
               shape="round"
-              src="https://tdesign.gtimg.com/demo/demo-image-1.png"
+              :src="require('@/assets/placeHolder/card-no-preview.png')"
               style="left: -18px; top: -11px; width: 72px; height: 72px"
           />
         </div>

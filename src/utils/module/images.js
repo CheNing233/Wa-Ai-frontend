@@ -25,7 +25,16 @@ const getQiniuImageUrlWithParams = (
     return `${imageUrl}?${baseParam}${size}${formatParam}/blur/1x0${qualityParam}`
 };
 
+const getThumbnailUrl = (imageUrl) => {
+    return getQiniuImageUrlWithParams(
+        imageUrl,
+        Math.round(window.innerWidth * 0.7),
+        Math.round(window.innerHeight * 0.7),
+        100,
+    );
+};
 
 export default {
-    getQiniuImageUrlWithParams
+    getQiniuImageUrlWithParams,
+    getThumbnailUrl
 };

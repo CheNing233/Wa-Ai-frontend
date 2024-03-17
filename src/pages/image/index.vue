@@ -46,6 +46,8 @@
             <template #trigger="{ open }">
               <t-image
                   :src="viewRawImageBtnVisible ? imageThumbnailUrl : imageUrl"
+                  :placeholder="renderNoPreview"
+                  :error="renderNoPreview"
                   class="image_container"
                   fit="contain"
                   @click="open"
@@ -236,6 +238,15 @@ export default {
     },
   },
   methods: {
+    renderNoPreview() {
+      return (
+          <t-image style={{position: 'absolute', width: '100%', height: '100%', left: '0', top: '0'}}
+                   src={require('@/assets/placeHolder/card-no-preview.png')}
+                   fit="contain"
+          />
+      )
+    },
+
     convertTime(stringTime) {
       const date = new Date(stringTime);
 
@@ -325,15 +336,18 @@ export default {
         this.imageLoading = false;
       });
     }
-  },
+  }
+  ,
   created() {
-  },
+  }
+  ,
   watch: {
     displayMobile(newVal) {
       if (!newVal) {
         this.$refs.scrollableDiv.scrollTop = 0;
       }
-    },
+    }
+    ,
     imageDialogDisplay(newVal) {
       if (newVal) {
         this.freshPage();

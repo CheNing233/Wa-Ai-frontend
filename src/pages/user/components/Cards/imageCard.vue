@@ -151,11 +151,8 @@ export default {
 
     handleImageUrl() {
       if (this.$refs.imageBody) {
-        this.imageUrlAfterProcess = utils.images.getQiniuImageUrlWithParams(
+        this.imageUrlAfterProcess = utils.images.getThumbnailUrl(
             this.imageContent.imageUrl,
-            Math.round(this.$refs.imageBody.offsetWidth * 1.5),
-            Math.round(this.$refs.imageBody.offsetHeight * 1.5),
-            100
         )
         console.log(this.imageUrlAfterProcess)
       } else {
