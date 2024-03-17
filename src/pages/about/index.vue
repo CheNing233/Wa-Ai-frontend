@@ -177,14 +177,6 @@ export default {
           jumpMethod: null
         },
         {
-          title: 'WA-微信-交流1群',
-          desc: 'WeChat',
-          qrLink: require('@/assets/about/group-wc-1.png'),
-          qrVisible: false,
-          jumpLink: '',
-          jumpMethod: null
-        },
-        {
           title: '用户意见反馈服务平台',
           desc: '无需加群、扫码、换号，使用WA账号一键反馈',
           qrLink: null,

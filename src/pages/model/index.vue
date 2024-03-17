@@ -5,10 +5,11 @@
           flex="1"
       >
         <t-breadcrumb :maxItemWidth="'150'">
-          <t-breadcrumbItem :to="{ path: '/portal/' }">首页</t-breadcrumbItem>
+          <t-breadcrumbItem @click="() => router().back()">上一级</t-breadcrumbItem>
           <t-breadcrumbItem :maxWidth="'160'">{{ modelDetail.title }}</t-breadcrumbItem>
         </t-breadcrumb>
         <h1 style="word-break: break-all; line-height: 1.2">{{ modelDetail.title }}</h1>
+
         <t-space :size="2" breakLine>
           <template #separator>
             <t-divider layout="vertical"/>
@@ -27,7 +28,7 @@
           </div>
 
           <span>
-            {{ modelDetail.updateTime }} 更新
+            {{ updateTime }} 更新
           </span>
         </t-space>
       </t-col>
@@ -36,15 +37,11 @@
           style="padding-top: 16px;"
       >
         <t-space breakLine>
-          <t-button
-              variant="outline"
-          >
+          <t-button variant="outline">
             <ThumbUp1Icon slot="icon" shape="square"/>
             {{ modelDetail.liked }} 点赞
           </t-button>
-          <t-button
-              variant="outline"
-          >
+          <t-button variant="outline">
             <StarIcon slot="icon" shape="square"/>
             0 收藏
           </t-button>
@@ -109,7 +106,7 @@
           >
             <t-descriptions-item label="运行">某后端又没写</t-descriptions-item>
             <t-descriptions-item label="下载">某后端又没写</t-descriptions-item>
-            <t-descriptions-item label="上传时间">{{ modelDetail.createTime }}</t-descriptions-item>
+            <t-descriptions-item label="上传时间">{{ createTime }}</t-descriptions-item>
             <t-descriptions-item label="模型类型">{{ modelDetail.type }}</t-descriptions-item>
             <t-descriptions-item label="具体类别">某后端又没写</t-descriptions-item>
             <t-descriptions-item label="引用名称">{{ modelDetail.filename }}</t-descriptions-item>
@@ -123,17 +120,6 @@
               </t-button>
             </t-col>
 
-            <t-col flex="shrink">
-              <t-button size="large" style="width: 100%;" variant="outline">
-                分享
-              </t-button>
-            </t-col>
-
-            <t-col flex="shrink">
-              <t-button size="large" style="width: 100%;" variant="outline">
-                ...
-              </t-button>
-            </t-col>
           </t-row>
 
 
@@ -202,6 +188,8 @@
 import {ControlPlatformIcon, DiscountIcon, StarIcon, ThumbUp1Icon} from 'tdesign-icons-vue';
 
 import api from '@/service'
+import utils from '@/utils'
+import router from "@/router";
 
 export default {
   name: 'ModelDetail',
@@ -255,11 +243,20 @@ export default {
         this.$store.commit('imageDialogSetDisplay', newValue)
       }
     },
+    updateTime() {
+      return utils.time.convertUTCTime(this.modelDetail.updateTime);
+    },
+    createTime() {
+      return utils.time.convertUTCTime(this.modelDetail.createTime);
+    },
     displayMobile: function () {
       return this.$store.getters.getDisplayMobile
     },
   },
   methods: {
+    router() {
+      return router
+    },
     freshPage() {
       const PARAMS = {
         id: this.modelId,
@@ -276,7 +273,6 @@ export default {
     },
 
     handleListImageOnClick(i) {
-      console.log(i);
       this.image = i;
     }
   },

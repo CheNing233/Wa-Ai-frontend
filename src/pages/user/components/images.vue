@@ -39,14 +39,6 @@
           </t-col>
 
           <t-col flex="shrink" style="float: right;">
-            <t-input placeholder="搜索...">
-              <template #suffixIcon>
-                <SearchIcon :style="{ cursor: 'pointer' }"/>
-              </template>
-            </t-input>
-          </t-col>
-
-          <t-col flex="shrink" style="float: right;">
             <t-date-range-picker
                 v-model="timeRange"
                 :presets="timePresets"
@@ -162,7 +154,7 @@
 
 <script>
 import componentImageCard from './Cards/imageCard.vue';
-import {Delete1Icon, DownloadIcon, FilterIcon, RefreshIcon, SearchIcon, ShareIcon} from 'tdesign-icons-vue';
+import {Delete1Icon, DownloadIcon, FilterIcon, RefreshIcon, ShareIcon} from 'tdesign-icons-vue';
 
 import api from '@/service';
 
@@ -170,7 +162,6 @@ export default {
   name: 'ModelsCloud',
   components: {
     componentImageCard,
-    SearchIcon,
     FilterIcon,
     Delete1Icon,
     DownloadIcon,
@@ -226,8 +217,7 @@ export default {
       this.freshPage();
     },
     freshPage() {
-      if(this.$store.getters.userGetInfo === null){
-        console.log('未登录');
+      if (this.$store.getters.userGetInfo === null) {
         return;
       }
 
