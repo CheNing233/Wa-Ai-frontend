@@ -3,7 +3,7 @@
     <t-tag
         v-show="imageStatusIndicatorLight !== 'success'"
         :theme="imageStatusIndicatorLight"
-        style="position: absolute; left: 12px; top: 8px; z-index: 6" variant="light"
+        style="position: absolute; left: 16px; top: 8px; z-index: 6" variant="light"
     >
       {{ imageStatusIndicatorText }}
     </t-tag>
@@ -105,19 +105,19 @@ export default {
       this.imageContent = {};
 
       // 图片无效
-      if (this.imageProfile.imageId === null) {
+      if (this.imageProfile.staticImageId === null) {
         this.imageContent = {};
         return;
       }
 
       const PARAMS = {
-        id: this.imageProfile.imageId,
+        id: this.imageProfile.staticImageId,
       };
 
       api.sdImageApi.getSdImageDetail(PARAMS)
           .then(resp => {
             this.imageContent = resp.data;
-            this.imageId = this.imageProfile.imageId;
+            this.imageId = this.imageProfile.staticImageId;
             this.handleImageUrl();
           })
           .catch(err => {

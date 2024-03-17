@@ -12,7 +12,7 @@
         <div style="height: 150px">
           <t-image
               style="position: absolute; left: 0; right: 0; top: 0; height: 150px"
-              src="https://obj.glcn.top/wa-assets/page-about/about_banner.png"
+              :src="require('@/assets/about/banner.png')"
               fit="cover"
               shape="round"
           >

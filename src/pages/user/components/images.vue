@@ -21,16 +21,28 @@
 
               <template #dropdown>
                 <t-dropdown-menu>
-                  <t-dropdown-item :value="1">
-                    <t-checkbox>
-                      我生成的图片
-                    </t-checkbox>
+                  <t-dropdown-item
+                      :value="1"
+                      @click="()=>searchWithMyGenerated=!searchWithMyGenerated"
+                  >
+                    我生成的图片
+                    <t-switch :value="searchWithMyGenerated" style="float: right;"></t-switch>
                   </t-dropdown-item>
 
-                  <t-dropdown-item :value="2">
-                    <t-checkbox>
-                      我上传的图片
-                    </t-checkbox>
+                  <t-dropdown-item
+                      :value="2"
+                      @click="()=>searchWithMyUpload=!searchWithMyUpload"
+                  >
+                    我上传的图片
+                    <t-switch :value="searchWithMyUpload" style="float: right;"></t-switch>
+                  </t-dropdown-item>
+
+                  <t-dropdown-item
+                      :value="3"
+                      @click="()=>searchWithTime=!searchWithTime"
+                  >
+                    按时间段筛选
+                    <t-switch :value="searchWithTime" style="float: right;"></t-switch>
                   </t-dropdown-item>
                 </t-dropdown-menu>
               </template>
@@ -38,7 +50,7 @@
 
           </t-col>
 
-          <t-col flex="shrink" style="float: right;">
+          <t-col v-show="searchWithTime" flex="shrink" style="float: right;">
             <t-date-range-picker
                 v-model="timeRange"
                 :presets="timePresets"
@@ -77,8 +89,9 @@
               flex="shrink"
               style="float: right;"
           >
-            <t-button>
-              上传图片
+            <t-button :loading="uploadBtnLoading" @click="handleBtnUploadClick">
+              {{ !uploadBtnLoading ? '上传图片' : null }}
+              {{ uploadBtnLoading ? '上传中...' + `${uploadBtnProgress}%` : null }}
             </t-button>
           </t-col>
 
@@ -149,6 +162,9 @@
       </t-col>
     </t-row>
 
+    <!-- 非显示区 -->
+    <input v-show="false" ref="fileRef" type="file" @change="onFileChange">
+
   </div>
 </template>
 
@@ -178,11 +194,16 @@ export default {
       manageSelected: [],
       manageStatus: false,
 
+      uploadBtnLoading: false,
+      uploadBtnProgress: 0,
+
       reFreshPageLoading: false,
       delTaskLoading: false,
       reFreshPageIndicator: true,
 
-      search: '',
+      searchWithTime: false,
+      searchWithMyGenerated: true,
+      searchWithMyUpload: true,
 
       timeRange: [new Date(), new Date()],
       timePresets: {
@@ -207,6 +228,40 @@ export default {
     }
   },
   methods: {
+    handleBtnUploadClick() {
+      this.$refs.fileRef.dispatchEvent(new MouseEvent('click'))  //弹出选择本地文件
+    },
+
+    onFileChange(event) {
+      if (event.target.files.length === 0) {
+        return;
+      }
+
+      this.uploadBtnLoading = true;
+      this.uploadBtnProgress = 0;
+
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append('img', file);
+
+      let handleUploadProgress = (progressEvent) => {
+        this.uploadBtnProgress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+      }
+
+      api.sdImageApi.upLoadSdImage(formData, handleUploadProgress)
+          .then(resp => {
+            this.$message.success("上传成功");
+            console.log(resp.data)
+          })
+          .catch(err => {
+            this.$message.error("获取数据失败: " + err)
+          })
+          .finally(() => {
+            this.freshPage();
+            this.uploadBtnLoading = false;
+          });
+    },
+
     onPageSizeChange(pageSize) {
       this.pageSize = pageSize;
       this.freshPage();
@@ -216,6 +271,7 @@ export default {
       this.pageCurrent = pageCurrent;
       this.freshPage();
     },
+
     freshPage() {
       if (this.$store.getters.userGetInfo === null) {
         return;
@@ -223,15 +279,31 @@ export default {
 
       this.pageContent = []
 
+      if (typeof this.timeRange[0] === 'string') {
+        this.timeRange[0] = new Date(this.timeRange[0]);
+      }
+      if (typeof this.timeRange[1] === 'string') {
+        this.timeRange[1] = new Date(this.timeRange[1]);
+      }
+
       const PARAMS = {
+        startTimeStamp: this.searchWithTime ? Math.round(
+            (this.timeRange[0].getTime() - 12 * 60 * 60 * 1000) / 1000
+        ) : 0,
+        endTimeStamp: this.searchWithTime ? Math.round(
+            (this.timeRange[1].getTime() + 12 * 60 * 60 * 1000) / 1000
+        ) : 0,
+        myGenerate: this.searchWithMyGenerated,
+        myUpload: this.searchWithMyUpload,
         page: this.pageCurrent,
         pageSize: this.pageSize,
       };
 
-      api.taskApi.getTaskByUser(PARAMS)
+      api.sdImageApi.getMySdImageList(PARAMS)
           .then(resp => {
             this.pageContent = resp.data.list;
             this.itemsTotal = resp.data.selectTotal;
+            console.log(resp.data.list)
           })
           .catch(err => {
             this.$message.error("获取数据失败: " + err)

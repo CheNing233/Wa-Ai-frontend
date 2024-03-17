@@ -1,15 +1,17 @@
 import axios from 'axios';
 import {API_BASE_URL, IMAGE_API_LIST, IMAGE_API_URL} from '@/config/ApiConfig';
 
-const request = (url, method, params, data) => {
-    console.log("请求", url, method, params, data);
+const request = (url, method, params, data, headers = null, onUploadProgress = null) => {
+    console.log("请求", url, method, params, data, headers, onUploadProgress);
     return new Promise((resolve, reject) => {
         axios({
             url: url,
             method: method,
             params: params,
             data: data,
+            headers: headers ? headers : {},
             withCredentials: true,
+            onUploadProgress: onUploadProgress,
         })
             .then((res) => {
                 if (res.status === 200) {
@@ -36,12 +38,24 @@ const getSdImageDetail = (params) => request(
     params, {}
 );
 
+const getMySdImageList = (params) => request(
+    `${IMAGE_API_URL}${IMAGE_API_LIST.getMySdImagesList}`, 'get',
+    params, {}
+);
+
 const likeSdImage = (params) => request(
     `${API_BASE_URL}${IMAGE_API_LIST.likeSdImage}/${params.id}`, 'post',
     params, {}
 );
 
+const upLoadSdImage = (data, onProgressFunc = null) => request(
+    `${API_BASE_URL}${IMAGE_API_LIST.upLoadSdImage}`, 'post',
+    {}, data, {'Content-Type': 'multipart/form-data'}, onProgressFunc
+);
+
 export default {
+    getMySdImageList,
     getSdImageDetail,
-    likeSdImage
+    likeSdImage,
+    upLoadSdImage
 };
