@@ -129,6 +129,12 @@ const resetPasswordByMailCode = (data) => {
     );
 }
 
+const uploadAvatar = (data) => request(
+    `${USER_API_URL}${USER_API_LIST.uploadAvatar}`, 'post',
+    {}, data
+);
+
+
 export default {
     login,
     logout,
@@ -137,5 +143,6 @@ export default {
     me,
     getUsernameById,
     sendMailCode,
-    resetPasswordByMailCode
+    resetPasswordByMailCode,
+    uploadAvatar,
 };

@@ -10,6 +10,14 @@
       >
 
         <t-form>
+          <t-form-item initialData="" label="头像" name="avatar">
+            <t-button
+                :loading="uploadBtnLoading"
+                @click="handleBtnAvatarChange"
+            >
+              {{ uploadBtnLoading ? '上传中...' + `${uploadBtnProgress}%` : '选择图片...' }}
+            </t-button>
+          </t-form-item>
           <t-form-item initialData="" label="账号" name="name">
             <t-input v-model="formData.userName" :readonly="true" placeholder="请输入内容"/>
           </t-form-item>
@@ -31,12 +39,14 @@
       </t-col>
     </t-row>
 
+    <!-- 非显示区 -->
+    <input v-show="false" ref="fileRef" type="file" @change="onFileChange">
 
   </div>
 </template>
 
 <script>
-// import api from '@/service';
+import api from '@/service';
 
 
 export default {
@@ -63,9 +73,46 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      uploadBtnLoading: false,
+      uploadBtnProgress: 0,
+
+    }
   },
   methods: {
+    handleBtnAvatarChange() {
+      this.$refs.fileRef.dispatchEvent(new MouseEvent('click'))  //弹出选择本地文件
+    },
+
+    onFileChange(event) {
+      if (event.target.files.length === 0) {
+        return;
+      }
+
+      this.uploadBtnLoading = true;
+      this.uploadBtnProgress = 0;
+
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append('img', file);
+
+      let handleUploadProgress = (progressEvent) => {
+        this.uploadBtnProgress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+      }
+
+      api.userApi.uploadAvatar(formData, handleUploadProgress)
+          .then(() => {
+            this.$message.success("上传成功");
+          })
+          .catch(err => {
+            this.$message.error("获取数据失败: " + err)
+          })
+          .finally(() => {
+            this.freshPage();
+            this.uploadBtnLoading = false;
+          });
+    },
+
     onPageSizeChange(pageSize) {
       this.pageSize = pageSize;
       this.freshPage();
@@ -76,7 +123,7 @@ export default {
       this.freshPage();
     },
     freshPage() {
-      this.formData = this.$store.getters.userGetInfo;
+      // this.formData = this.$store.getters.userGetInfo;
     }
   },
   created() {
