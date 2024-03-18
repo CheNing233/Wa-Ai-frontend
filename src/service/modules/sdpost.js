@@ -31,9 +31,9 @@ const request = (url, method, params, data) => {
     });
 }
 
-const getSdPostsList = (params) => request(
-    `${POST_API_URL}${POST_API_LIST.getPostListByUserId}`, 'get',
-    params, {}
+const getSdPostsList = (data) => request(
+    `${POST_API_URL}${POST_API_LIST.getPostListByUserId}`, 'post',
+    {}, data
 );
 
 const getSdPostDetail = (params) => request(

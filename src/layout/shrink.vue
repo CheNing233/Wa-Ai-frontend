@@ -2,7 +2,7 @@
   <div>
     <componentHeader></componentHeader>
 
-    <t-row style="width: 100%; padding-left: 16px; padding-right: 16px; padding-top: 32px">
+    <t-row style="width: 100%; padding-left: 16px; padding-right: 16px; padding-top: 48px">
       <t-col
           :xs="{ offset: 0, span: 12 }"
           :sm="{ offset: 1, span: 10 }"

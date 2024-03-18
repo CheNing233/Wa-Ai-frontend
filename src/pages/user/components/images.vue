@@ -75,7 +75,9 @@
               <t-button v-if="manageStatus" shape="square">
                 <DownloadIcon slot="icon" shape="square"/>
               </t-button>
-              <t-button v-if="manageStatus">
+              <t-button v-if="manageStatus"
+                        @click="handleBtnCreatePost"
+              >
                 <ShareIcon slot="icon" shape="square"/>
                 发帖
               </t-button>
@@ -288,6 +290,10 @@ export default {
         this.handleChangeManageStatus();
         this.freshPage();
       });
+    },
+
+    handleBtnCreatePost() {
+      this.$router.push({ path: '/create/post', query: { selectedImages: this.manageSelected } });
     },
 
     onFileChange(event) {

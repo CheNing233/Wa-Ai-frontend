@@ -20,20 +20,22 @@
         </t-form-item>
 
         <t-form-item label="帖子图片" prop="images">
-          <t-button @click="() => managerVisible = !managerVisible">
-            选择图片...
-          </t-button>
+          <t-list :split="true" style="width: 100%; height: 300px; overflow-y: scroll; overflow-x: hidden">
 
-          <t-dialog
-            :visible.sync="managerVisible"
-            mode="full-screen"
-            header="选择图片对话框"
-          >
-            <post-manager />
-          </t-dialog>
+            <t-list-item
+                v-for="(item, index) in formData.images"
+                :key="index"
+            >
+              {{ item }}
+              <!--            <template #action>-->
+              <!--              <t-link theme="primary" hover="color" style="margin-left: 16px"> 操作1 </t-link>-->
+              <!--            </template>-->
+            </t-list-item>
+          </t-list>
         </t-form-item>
 
         <t-space size="small" style="float: right;">
+          <t-button variant="text" @click="handleCancel">取消</t-button>
           <t-button theme="default" variant="base" type="reset">重置</t-button>
           <t-button theme="primary" type="submit">发布帖子</t-button>
         </t-space>
@@ -46,12 +48,17 @@
 </template>
 
 <script>
-import postManager from './components/manager.vue'
+// import postManager from './components/manager.vue'
 
 export default {
   name: 'createPost',
+  methods: {
+    handleCancel() {
+      this.$router.back();
+    }
+  },
   components: {
-    postManager,
+    // postManager,
   },
   computed: {},
   data() {
@@ -74,5 +81,9 @@ export default {
       managerData: [],
     }
   },
+  created() {
+    this.formData.images = this.$route.query.selectedImages;
+    console.info("im", this.formData.images)
+  }
 }
 </script>
