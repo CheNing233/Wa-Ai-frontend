@@ -1,12 +1,23 @@
 <template>
   <div ref="imageBody">
-    <t-tag
-        v-show="imageStatusIndicatorLight !== 'success'"
-        :theme="imageStatusIndicatorLight"
-        style="position: absolute; left: 16px; top: 8px; z-index: 6" variant="light"
+    <t-space
+        size="8px"
+        style="position: absolute; left: 16px; top: 8px; z-index: 6"
     >
-      {{ imageStatusIndicatorText }}
-    </t-tag>
+      <t-tag
+          theme="primary"
+          variant="light"
+      >
+        {{ imageProfile.type }}
+      </t-tag>
+      <t-tag
+          v-show="tagDisplay"
+          :theme="tagIndicator"
+          variant="light"
+      >
+        {{ tagName }}
+      </t-tag>
+    </t-space>
     <t-image
         :src="imageUrlAfterProcess"
         class="image_item"
@@ -83,21 +94,14 @@ export default {
     'reFreshPageIndicator'
   ],
   computed: {
-    imageStatusIndicatorText() {
-      for (let i = 0; i < this.imageStatus.length; i++) {
-        if (this.imageStatus[i].id === this.imageProfile.status) {
-          return this.imageStatus[i].name;
-        }
-      }
-      return '未知'
+    tagDisplay() {
+      return this.imageStatus[this.imageProfile.status.toString()].display;
     },
-    imageStatusIndicatorLight() {
-      for (let i = 0; i < this.imageStatus.length; i++) {
-        if (this.imageStatus[i].id === this.imageProfile.status) {
-          return this.imageStatus[i].indicator;
-        }
-      }
-      return 'danger'
+    tagIndicator() {
+      return this.imageStatus[this.imageProfile.status.toString()].indicator;
+    },
+    tagName() {
+      return this.imageStatus[this.imageProfile.status.toString()].name;
     },
   },
   methods: {
@@ -119,6 +123,7 @@ export default {
             this.imageContent = resp.data;
             this.imageId = this.imageProfile.staticImageId;
             this.handleImageUrl();
+
           })
           .catch(err => {
             this.$message.error("获取数据失败: " + err)
@@ -134,7 +139,7 @@ export default {
       } else {
         // 查看模式
 
-        if (this.imageStatusIndicatorLight !== 'success') {
+        if (!this.imageStatus[this.imageProfile.status.toString()].available) {
           this.$message.warning('现在打不开图片喵');
           return;
         }

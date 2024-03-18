@@ -23,7 +23,7 @@
                 <t-dropdown-menu>
                   <t-dropdown-item
                       :value="1"
-                      @click="()=>searchWithMyGenerated=!searchWithMyGenerated"
+                      @click="()=>{searchWithMyGenerated=!searchWithMyGenerated;freshPage()}"
                   >
                     我生成的图片
                     <t-switch :value="searchWithMyGenerated" style="float: right;"></t-switch>
@@ -31,7 +31,7 @@
 
                   <t-dropdown-item
                       :value="2"
-                      @click="()=>searchWithMyUpload=!searchWithMyUpload"
+                      @click="()=>{searchWithMyUpload=!searchWithMyUpload;freshPage()}"
                   >
                     我上传的图片
                     <t-switch :value="searchWithMyUpload" style="float: right;"></t-switch>
@@ -39,7 +39,7 @@
 
                   <t-dropdown-item
                       :value="3"
-                      @click="()=>searchWithTime=!searchWithTime"
+                      @click="()=>{searchWithTime=!searchWithTime;if (!searchWithTime) freshPage()}"
                   >
                     按时间段筛选
                     <t-switch :value="searchWithTime" style="float: right;"></t-switch>
@@ -54,6 +54,7 @@
             <t-date-range-picker
                 v-model="timeRange"
                 :presets="timePresets"
+                @change="freshPage"
             />
           </t-col>
 
@@ -67,6 +68,7 @@
                         :loading="delTaskLoading"
                         shape="square"
                         theme="danger"
+                        @click="handleDeleteSelected"
               >
                 <Delete1Icon slot="icon" shape="square"/>
               </t-button>
@@ -109,7 +111,11 @@
               flex="shrink"
               style="float: right;"
           >
-            <t-button shape="square" variant="outline" @click="freshPage">
+            <t-button
+                shape="square"
+                variant="outline"
+                :loading="reFreshPageLoading"
+                @click="freshPage">
               <refresh-icon slot="icon" shape="square"/>
             </t-button>
           </t-col>
@@ -142,7 +148,12 @@
           :xl="{ span: 3 }"
           :xs="{ span: 12 }"
       >
-        <componentImageCard :imageProfile="item"/>
+        <componentImageCard
+            :imageProfile="item"
+            :manageStatus="manageStatus"
+            :reFreshPageIndicator="reFreshPageIndicator"
+            @selectEvent="handleOverlayClick"
+        />
       </t-col>
 
       <t-col
@@ -173,6 +184,7 @@ import componentImageCard from './Cards/imageCard.vue';
 import {Delete1Icon, DownloadIcon, FilterIcon, RefreshIcon, ShareIcon} from 'tdesign-icons-vue';
 
 import api from '@/service';
+import utils from "@/utils";
 
 export default {
   name: 'ModelsCloud',
@@ -232,6 +244,52 @@ export default {
       this.$refs.fileRef.dispatchEvent(new MouseEvent('click'))  //弹出选择本地文件
     },
 
+    handleOverlayClick(id) {
+      if (this.manageStatus) {//global select status
+
+        if (utils.array.checkIdExists(this.manageSelected, id)) {
+          utils.array.deleteItem(this.manageSelected, id);
+        } else {
+          utils.array.insertItem(this.manageSelected, id);
+        }
+
+      }
+    },
+
+    handleDeleteSelected() {
+
+      if (this.manageSelected.length === 0) {
+        this.$message.warning('请先选择要删除的项');
+        return;
+      }
+
+      this.delTaskLoading = true;
+
+      let reqs = []
+
+      for (let i in this.manageSelected) {
+        console.info(this.manageSelected[i])
+        reqs.push(
+            api.sdImageApi.deleteSdImage(
+                {id: this.manageSelected[i]}
+            )
+        )
+      }
+
+      Promise.all(reqs)
+          .then(resp => {
+            this.$message.success(`删除成功（共 ${resp.length} 个）`);
+            this.freshPage();
+          })
+          .catch(err => {
+            this.$message.error("删除失败: " + err)
+          }).finally(() => {
+        this.delTaskLoading = false;
+        this.handleChangeManageStatus();
+        this.freshPage();
+      });
+    },
+
     onFileChange(event) {
       if (event.target.files.length === 0) {
         return;
@@ -267,15 +325,23 @@ export default {
       this.freshPage();
 
     },
+
     onCurrentChange(pageCurrent) {
       this.pageCurrent = pageCurrent;
       this.freshPage();
+    },
+
+    handleChangeManageStatus() {
+      this.manageStatus = !this.manageStatus;
+      this.manageSelected = [];
     },
 
     freshPage() {
       if (this.$store.getters.userGetInfo === null) {
         return;
       }
+      this.reFreshPageLoading = true;
+      this.reFreshPageIndicator = !this.reFreshPageIndicator;
 
       this.pageContent = []
 
@@ -303,10 +369,13 @@ export default {
           .then(resp => {
             this.pageContent = resp.data.list;
             this.itemsTotal = resp.data.selectTotal;
-            console.log(resp.data.list)
+
           })
           .catch(err => {
             this.$message.error("获取数据失败: " + err)
+          })
+          .finally(() => {
+            this.reFreshPageLoading = false;
           });
 
     }

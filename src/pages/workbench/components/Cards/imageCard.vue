@@ -1,15 +1,20 @@
 <template>
   <div ref="imageBody">
-    <t-tag
-        v-show="imageStatusIndicatorLight !== 'success'"
-        :theme="imageStatusIndicatorLight"
-        style="position: absolute; left: 12px; top: 8px; z-index: 6" variant="light"
+    <t-space
+        size="8px"
+        style="position: absolute; left: 12px; top: 8px; z-index: 6"
     >
-      {{ imageStatusIndicatorText }}
-    </t-tag>
+      <t-tag
+          v-show="tagDisplay"
+          :theme="tagIndicator"
+          variant="light"
+      >
+        {{ tagName }}
+      </t-tag>
+    </t-space>
+
     <t-image
         :src="imageUrlAfterProcess"
-        :placeholder="renderNoPreview"
         :error="renderNoPreview"
         class="image_item"
         fit="cover"
@@ -85,29 +90,22 @@ export default {
     'reFreshPageIndicator'
   ],
   computed: {
-    imageStatusIndicatorText() {
-      for (let i = 0; i < this.imageStatus.length; i++) {
-        if (this.imageStatus[i].id === this.imageProfile.status) {
-          return this.imageStatus[i].name;
-        }
-      }
-      return '未知'
+    tagDisplay() {
+      return this.imageStatus[this.imageProfile.status.toString()].display;
     },
-    imageStatusIndicatorLight() {
-      for (let i = 0; i < this.imageStatus.length; i++) {
-        if (this.imageStatus[i].id === this.imageProfile.status) {
-          return this.imageStatus[i].indicator;
-        }
-      }
-      return 'danger'
+    tagIndicator() {
+      return this.imageStatus[this.imageProfile.status.toString()].indicator;
+    },
+    tagName() {
+      return this.imageStatus[this.imageProfile.status.toString()].name;
     },
   },
   methods: {
     renderNoPreview() {
       return (
-          <t-image style={{position: 'absolute', left: '0', top: '0', right: '0', bottom: '6px'}}
+          <t-image style={{position: 'absolute', left: '0', top: '0', right: '0', bottom: '0px', borderRadius: '4px'}}
                    src={require('@/assets/placeHolder/card-no-preview.png')}
-                   fit="contain"
+                   fit="cover"
           />
       )
     },
@@ -145,7 +143,7 @@ export default {
       } else {
         // 查看模式
 
-        if (this.imageStatusIndicatorLight !== 'success') {
+        if (!this.imageStatus[this.imageProfile.status.toString()].available) {
           this.$message.warning('现在打不开图片喵');
           return;
         }

@@ -53,9 +53,15 @@ const upLoadSdImage = (data, onProgressFunc = null) => request(
     {}, data, {'Content-Type': 'multipart/form-data'}, onProgressFunc
 );
 
+const deleteSdImage = (params) => request(
+    `${API_BASE_URL}${IMAGE_API_LIST.deleteSdImage}/${params.id}`, 'delete',
+    params, {}
+)
+
 export default {
     getMySdImageList,
     getSdImageDetail,
     likeSdImage,
-    upLoadSdImage
+    upLoadSdImage,
+    deleteSdImage
 };

@@ -46,7 +46,6 @@
             <template #trigger="{ open }">
               <t-image
                   :src="viewRawImageBtnVisible ? imageThumbnailUrl : imageUrl"
-                  :placeholder="renderNoPreview"
                   :error="renderNoPreview"
                   class="image_container"
                   fit="contain"

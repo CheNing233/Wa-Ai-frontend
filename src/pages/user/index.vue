@@ -62,6 +62,9 @@ export default {
   },
   computed: {
     nickName() {
+      if (this.$store.getters.userGetInfo === null) {
+        return '正在请求...';
+      }
       return this.$store.getters.userGetInfo.nickName;
     }
   },

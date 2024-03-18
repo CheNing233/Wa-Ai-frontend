@@ -63,6 +63,7 @@ import componentImageCard from './Cards/imageCard.vue'
 
 import api from '@/service'
 import eventBus from "@/eventbus";
+import utils from "@/utils";
 
 export default {
   name: 'componentHistoryBox',
@@ -166,27 +167,15 @@ export default {
     handleOverlayClick(id) {
       if (this.manageStatus) {//global select status
 
-        if (this.checkIdExists(id)) {
-          this.deleteItem(id);
+        if (utils.array.checkIdExists(this.manageSelected, id)) {
+          utils.array.deleteItem(this.manageSelected, id);
         } else {
-          this.insertItem(id);
+          utils.array.insertItem(this.manageSelected, id);
         }
 
       }
     },
 
-    insertItem(id) {
-      this.manageSelected.push(id); // 向数组中插入新元素
-    },
-    deleteItem(id) {
-      const index = this.manageSelected.findIndex(item => item === id);
-      if (index !== -1) {
-        this.manageSelected.splice(index, 1); // 删除指定 ID 的元素
-      }
-    },
-    checkIdExists(id) {
-      return this.manageSelected.some(item => item === id);
-    }
   },
   computed: {
     displayWorkbenchSmall: function () {
