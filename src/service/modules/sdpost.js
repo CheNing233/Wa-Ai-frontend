@@ -46,8 +46,14 @@ const likeSdPost = (params) => request(
     params, {}
 );
 
+const createSdPost = (data) => request(
+    `${POST_API_URL}${POST_API_LIST.createPost}`, 'post',
+    {}, data
+);
+
 export default {
     getSdPostsList,
     getSdPostDetail,
-    likeSdPost
+    likeSdPost,
+    createSdPost
 };

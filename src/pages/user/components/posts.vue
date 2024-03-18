@@ -10,22 +10,57 @@
             <h2 style="margin-top: -4px; margin-bottom: -4px;">我的帖子</h2>
           </t-col>
 
-          <t-col flex="shrink" style="float: right;">
-            <t-input placeholder="搜索...">
-              <template #suffixIcon>
-                <SearchIcon :style="{ cursor: 'pointer' }"/>
+          <t-col
+              flex="shrink"
+              style="float: right;"
+          >
+            <t-dropdown :min-column-width="150">
+              <t-button shape="square" variant="outline">
+                <FilterIcon slot="icon" shape="square"/>
+              </t-button>
+
+              <template #dropdown>
+                <t-dropdown-menu>
+                  <t-dropdown-item
+                      :value="1"
+                      @click="()=>{searchWithQuery=!searchWithQuery;if(!searchWithQuery) freshPage()}"
+                  >
+                    按标题搜索
+                    <t-switch :value="searchWithQuery" style="float: right;"></t-switch>
+                  </t-dropdown-item>
+
+                  <t-dropdown-item
+                      :value="2"
+                      @click="()=>{searchWithTime=!searchWithTime;if (!searchWithTime) freshPage()}"
+                  >
+                    按时间段筛选
+                    <t-switch :value="searchWithTime" style="float: right;"></t-switch>
+                  </t-dropdown-item>
+                </t-dropdown-menu>
               </template>
-            </t-input>
+            </t-dropdown>
+
           </t-col>
 
-          <t-col flex="shrink" style="float: right;">
+          <t-col v-show="searchWithQuery" flex="shrink" style="float: right;">
+            <t-input
+                placeholder="键入标题"
+                v-show="searchWithQuery"
+                v-model="search"
+            />
+          </t-col>
+
+          <t-col v-show="searchWithTime" flex="shrink" style="float: right;">
             <t-date-range-picker
+                v-show="searchWithTime"
                 v-model="timeRange"
                 :presets="timePresets"
+                @change="freshPage"
             />
           </t-col>
 
           <t-col
+
               v-if="manageStatus == true"
               flex="shrink"
               style="float: right;"
@@ -35,6 +70,7 @@
                         :loading="delTaskLoading"
                         shape="square"
                         theme="danger"
+                        @click="handleDeleteSelected"
               >
                 <Delete1Icon slot="icon" shape="square"/>
               </t-button>
@@ -50,7 +86,7 @@
               flex="shrink"
               style="float: right;"
           >
-            <t-button>
+            <t-button @click="handleBtnCreatePost">
               创建新帖
             </t-button>
           </t-col>
@@ -69,7 +105,11 @@
               flex="shrink"
               style="float: right;"
           >
-            <t-button shape="square" variant="outline" @click="freshPage">
+            <t-button
+                shape="square"
+                variant="outline"
+                :loading="reFreshPageLoading"
+                @click="freshPage">
               <refresh-icon slot="icon" shape="square"/>
             </t-button>
           </t-col>
@@ -102,7 +142,12 @@
           :xl="{ span: 3 }"
           :xs="{ span: 12 }"
       >
-        <componentImageCard :imageProfile="item"/>
+        <componentPostCard
+            :listItem="item"
+            :manageStatus="manageStatus"
+            :reFreshPageIndicator="reFreshPageIndicator"
+            @selectEvent="handleOverlayClick"
+        />
       </t-col>
 
       <t-col
@@ -126,17 +171,17 @@
 </template>
 
 <script>
-import componentImageCard from './Cards/imageCard.vue';
-import {Delete1Icon, RefreshIcon, SearchIcon} from 'tdesign-icons-vue';
+import componentPostCard from './Cards/postCard.vue';
+import {Delete1Icon, FilterIcon, RefreshIcon,} from 'tdesign-icons-vue';
 
 import api from '@/service';
+import utils from "@/utils";
 
 export default {
   name: 'ModelsCloud',
   components: {
-    componentImageCard,
-    SearchIcon,
-    // FilterIcon,
+    componentPostCard,
+    FilterIcon,
     Delete1Icon,
     // DownloadIcon,
     // ShareIcon,
@@ -156,6 +201,8 @@ export default {
       delTaskLoading: false,
       reFreshPageIndicator: true,
 
+      searchWithTime: false,
+      searchWithQuery: false,
       search: '',
 
       timeRange: [new Date(), new Date()],
@@ -181,29 +228,112 @@ export default {
     }
   },
   methods: {
+    handleOverlayClick(id) {
+      if (this.manageStatus) {//global select status
+
+        if (utils.array.checkIdExists(this.manageSelected, id)) {
+          utils.array.deleteItem(this.manageSelected, id);
+        } else {
+          utils.array.insertItem(this.manageSelected, id);
+        }
+
+      }
+    },
+
+    handleDeleteSelected() {
+
+      if (this.manageSelected.length === 0) {
+        this.$message.warning('请先选择要删除的项');
+        return;
+      }
+
+      this.delTaskLoading = true;
+
+      let reqs = []
+
+      for (let i in this.manageSelected) {
+        console.info(this.manageSelected[i])
+        reqs.push(
+            api.sdImageApi.deleteSdImage(
+                {id: this.manageSelected[i]}
+            )
+        )
+      }
+
+      Promise.all(reqs)
+          .then(resp => {
+            this.$message.success(`删除成功（共 ${resp.length} 个）`);
+            this.freshPage();
+          })
+          .catch(err => {
+            this.$message.error("删除失败: " + err)
+          }).finally(() => {
+        this.delTaskLoading = false;
+        this.handleChangeManageStatus();
+        this.freshPage();
+      });
+    },
+
+    handleBtnCreatePost() {
+      // this.$router.push({path: '/create/post', query: {selectedImages: this.manageSelected}});
+    },
+
+
     onPageSizeChange(pageSize) {
       this.pageSize = pageSize;
       this.freshPage();
 
     },
+
     onCurrentChange(pageCurrent) {
       this.pageCurrent = pageCurrent;
       this.freshPage();
     },
-    freshPage() {
 
-      const PARAMS = {
-        // page: this.pageCurrent,
-        // pageSize: this.pageSize,
+    handleChangeManageStatus() {
+      this.manageStatus = !this.manageStatus;
+      this.manageSelected = [];
+    },
+
+    freshPage() {
+      if (this.$store.getters.userGetInfo === null) {
+        return;
+      }
+      this.reFreshPageLoading = true;
+      this.reFreshPageIndicator = !this.reFreshPageIndicator;
+
+      this.pageContent = []
+
+      if (typeof this.timeRange[0] === 'string') {
+        this.timeRange[0] = new Date(this.timeRange[0]);
+      }
+      if (typeof this.timeRange[1] === 'string') {
+        this.timeRange[1] = new Date(this.timeRange[1]);
+      }
+
+      let PARAMS = {
+        startTimestamp: this.searchWithTime ? Math.round(
+            (this.timeRange[0].getTime() - 12 * 60 * 60 * 1000)
+        ) : "",
+        endTimestamp: this.searchWithTime ? Math.round(
+            (this.timeRange[1].getTime() + 12 * 60 * 60 * 1000)
+        ) : "",
+        searchQuery: this.searchWithQuery ? this.search : "",
+        page: this.pageCurrent,
+        pageSize: this.pageSize,
       };
+
 
       api.sdPostApi.getSdPostsList(PARAMS)
           .then(resp => {
-            this.pageContent = resp.data;
-            this.itemsTotal = 0;
+            this.pageContent = resp.data.list;
+            this.itemsTotal = resp.data.selectTotal;
           })
           .catch(err => {
             this.$message.error("获取数据失败: " + err)
+          })
+          .finally(() => {
+            this.reFreshPageLoading = false;
           });
 
     }
