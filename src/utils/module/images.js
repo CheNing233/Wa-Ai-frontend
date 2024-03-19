@@ -28,13 +28,27 @@ const getQiniuImageUrlWithParams = (
 const getThumbnailUrl = (imageUrl) => {
     return getQiniuImageUrlWithParams(
         imageUrl,
-        Math.round(window.innerWidth * 0.7),
-        Math.round(window.innerHeight * 0.7),
+        // Math.round(window.innerWidth * 0.7),
+        // Math.round(window.innerHeight * 0.7),
+        768,
+        768,
+        85,
+    );
+};
+
+const getMediumImageUrl = (imageUrl) => {
+    return getQiniuImageUrlWithParams(
+        imageUrl,
+        // Math.round(window.innerWidth * 1.5),
+        // Math.round(window.innerHeight * 1.5),
+        1536,
+        1536,
         100,
     );
 };
 
 export default {
     getQiniuImageUrlWithParams,
-    getThumbnailUrl
+    getThumbnailUrl,
+    getMediumImageUrl,
 };

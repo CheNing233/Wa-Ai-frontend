@@ -306,12 +306,7 @@ export default {
             this.userInfo = resp.data.user;
             this.createTime = this.convertTime(resp.data.createTime);
             this.imageUrl = resp.data.imageUrl;
-            this.imageThumbnailUrl = utils.images.getQiniuImageUrlWithParams(
-                this.imageUrl,
-                Math.round(this.$refs.imageBody.offsetWidth * 1.5),
-                Math.round(this.$refs.imageBody.offsetHeight * 1.5),
-                100
-            );
+            this.imageThumbnailUrl = utils.images.getMediumImageUrl(this.imageUrl);
 
             // 将对象展开
             this.imageParams = this.flattenObject(this.imageParams);

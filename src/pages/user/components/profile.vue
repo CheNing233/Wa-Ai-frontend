@@ -133,7 +133,10 @@ export default {
   },
   created() {
     this.freshPage();
-  }
+  },
+  mounted() {
+    this.freshPage();
+  },
 }
 
 </script>

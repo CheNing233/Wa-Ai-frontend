@@ -5,29 +5,30 @@
           flex="1"
       >
         <t-breadcrumb :maxItemWidth="'150'">
-          <t-breadcrumbItem :to="{ path: '/portal/' }">首页</t-breadcrumbItem>
-          <t-breadcrumbItem :maxWidth="'160'">{{ modelDetail.title }}</t-breadcrumbItem>
+          <t-breadcrumbItem @click="handleBtnBack">上一级</t-breadcrumbItem>
+          <t-breadcrumbItem :maxWidth="'160'">{{ objDetail.title }}</t-breadcrumbItem>
         </t-breadcrumb>
-        <h1 style="word-break: break-all; line-height: 1.2">{{ modelDetail.title }}</h1>
+        <h1 style="word-break: break-all; line-height: 1.2">{{ objDetail.title }}</h1>
         <t-space :size="2" breakLine>
           <template #separator>
             <t-divider layout="vertical"/>
           </template>
           <t-tag>
-            {{ modelDetail.type }}
+            共 {{ objDetail.sdimageIdList ? objDetail.sdimageIdList.length : 0 }} 张
           </t-tag>
 
           <div style="display: flex; justify-content: center;">
-            <t-avatar size="small">
-
-            </t-avatar>
+            <t-avatar
+                size="small"
+                :image="objUserAvatarUrl"
+            />
             <span style="padding-left: 8px;">
-              123
+              {{ objDetail.userNickName }}
             </span>
           </div>
 
           <span>
-            {{ modelDetail.updateTime }} 更新
+            {{ updateTime }} 更新
           </span>
         </t-space>
       </t-col>
@@ -40,13 +41,13 @@
               variant="outline"
           >
             <ThumbUp1Icon slot="icon" shape="square"/>
-            {{ modelDetail.liked }} 点赞
+            {{ objDetail.numLiked }} 点赞
           </t-button>
           <t-button
               variant="outline"
           >
             <StarIcon slot="icon" shape="square"/>
-            0 收藏
+            {{ objDetail.numFavours }} 收藏
           </t-button>
         </t-space>
       </t-col>
@@ -57,16 +58,17 @@
           :span="12"
       >
         <t-image
-            :src="images[image].src"
+            :src="imagesUrlList[imageIndex].src"
             class="image_container"
             fit="contain"
             shape="round"
+            @click="handleImageOnClick(imagesUrlList[imageIndex].id)"
         />
 
         <t-card style="margin-top: 24px;">
           <t-row class="image_list">
             <t-col
-                v-for="(value, index) in images"
+                v-for="(value, index) in imagesUrlList"
                 :key="index"
                 flex="shrink"
             >
@@ -87,6 +89,18 @@
 
       </t-col>
     </t-row>
+
+    <t-row :gutter="[16, 16]" style="padding-top: 24px">
+      <t-col
+          :span="12"
+      >
+        <t-card>
+          {{ objDetail.body }}
+        </t-card>
+
+
+      </t-col>
+    </t-row>
   </div>
 </template>
 
@@ -95,6 +109,8 @@
 import {StarIcon, ThumbUp1Icon} from 'tdesign-icons-vue';
 
 import api from '@/service'
+import util from '@/utils'
+import utils from '@/utils'
 
 export default {
   name: 'PostDetail',
@@ -104,46 +120,18 @@ export default {
   },
   data() {
     return {
-      image: 0,
-      images: [
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-1.png', title: '图片1标题', desc: '图片1描述'},
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-2.png', title: '图片2标题', desc: '图片2描述'},
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-3.png', title: '图片3标题', desc: '图片3描述'},
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-3.png', title: '图片3标题', desc: '图片3描述'},
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-3.png', title: '图片3标题', desc: '图片3描述'},
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-3.png', title: '图片3标题', desc: '图片3描述'},
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-3.png', title: '图片3标题', desc: '图片3描述'},
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-3.png', title: '图片3标题', desc: '图片3描述'},
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-3.png', title: '图片3标题', desc: '图片3描述'},
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-3.png', title: '图片3标题', desc: '图片3描述'},
-        {src: 'https://tdesign.gtimg.com/demo/demo-image-3.png', title: '图片3标题', desc: '图片3描述'},
-      ],
+      imageIndex: 0,
+      imagesUrlList: [],
+      objDetail: {},
+      objUser: {},
+      objUserAvatarUrl: require('@/assets/placeHolder/card-no-preview.png'),
 
-      tags: [
-        'tag1',
-        'tag2',
-        'tag3',
-        'tag4',
-        'tag5',
-        'tag6',
-        'tag7',
-        'tag8',
-        'tag9',
-        'tag10',
-      ],
-
-      modelId: null,
-      modelDetail: {},
+      id: null,
     }
   },
   computed: {
-    imageDialogDisplay: {
-      get: function () {
-        return this.$store.getters.imageDialogGetDisplay
-      },
-      set: function (newValue) {
-        this.$store.commit('imageDialogSetDisplay', newValue)
-      }
+    updateTime() {
+      return util.time.convertUTCTime(this.objDetail.updateTime)
     },
     displayMobile: function () {
       return this.$store.getters.getDisplayMobile
@@ -151,27 +139,84 @@ export default {
   },
   methods: {
     freshPage() {
-      const PARAMS = {
-        id: this.modelId,
-      };
-
-      api.sdModelApi.getSdModelDetail(PARAMS)
+      // 获取obj数据
+      api.sdPostApi.getSdPostDetail({
+        postId: this.id,
+      })
           .then(resp => {
-            this.modelDetail = resp.data;
+            this.objDetail = resp.data;
+
+            // 获取图片URL列表
+            if (this.objDetail.sdimageIdList.length !== 0) {
+              let reqs = []
+
+              for (let i in this.objDetail.sdimageIdList) {
+                reqs.push(
+                    api.sdImageApi.getStaticImageUrl(
+                        {id: this.objDetail.sdimageIdList[i]}
+                    ).then((resp) => {
+                      util.array.insertItem(this.imagesUrlList, {
+                        id: this.objDetail.sdimageIdList[i],
+                        src: utils.images.getMediumImageUrl(resp.data.url)
+                      })
+                    })
+                )
+              }
+
+              Promise.all(reqs)
+                  .catch(err => {
+                    this.$message.error("获取数据失败: " + err)
+                  })
+            }
+            // 获取用户信息
+            api.userApi.getUserInfoById({
+              id: this.objDetail.userId,
+            })
+                .then((resp) => {
+                  this.objUser = resp.data;
+
+                  // 获取用户头像
+                  api.sdImageApi.getStaticImageUrl({
+                    id: this.objUser.avatar
+                  })
+                      .then((resp) => {
+                        this.objUserAvatarUrl = resp.data.url;
+                      })
+                      .catch(err => {
+                        this.$message.error("获取数据失败: " + err)
+                      });
+                })
+                .catch(err => {
+                  this.$message.error("获取数据失败: " + err)
+                });
           })
           .catch(err => {
             this.$message.error("获取数据失败: " + err)
           });
 
+
+    },
+
+    handleBtnBack() {
+      this.$router.back();
+    },
+
+    handleImageOnClick(id) {
+      this.$store.commit(
+          'imageDialogSetDisplay',
+          {
+            display: true,
+            imageId: id,
+          }
+      );
     },
 
     handleListImageOnClick(i) {
-      console.log(i);
-      this.image = i;
+      this.imageIndex = i;
     }
   },
   created() {
-    this.modelId = this.$router.currentRoute.query.id;
+    this.id = this.$router.currentRoute.query.id;
     this.freshPage();
   }
 }
@@ -182,7 +227,7 @@ export default {
 
 .image_container {
   width: 100%;
-  height: 100vh;
+  height: 70vh;
 }
 
 .image_overlay {

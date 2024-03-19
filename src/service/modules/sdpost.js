@@ -37,7 +37,7 @@ const getSdPostsList = (data) => request(
 );
 
 const getSdPostDetail = (params) => request(
-    `${POST_API_URL}${POST_API_LIST.getPostDetailByPostId}`, 'get',
+    `${POST_API_URL}${POST_API_LIST.getPostDetailByPostId}/${params.postId}`, 'get',
     params, {}
 );
 
@@ -51,9 +51,15 @@ const createSdPost = (data) => request(
     {}, data
 );
 
+const deletePost = (data) => request(
+    `${POST_API_URL}${POST_API_LIST.deletePost}`, 'post',
+    {}, data
+);
+
 export default {
     getSdPostsList,
     getSdPostDetail,
     likeSdPost,
-    createSdPost
+    createSdPost,
+    deletePost
 };

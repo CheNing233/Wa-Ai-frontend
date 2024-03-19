@@ -49,8 +49,12 @@
               variant="text"
               @click="fresh"
           >
-            <t-avatar slot="icon" shape="round">
-              WA
+            <t-avatar
+                slot="icon"
+                shape="round"
+                :image="avatarUrl ? avatarUrl : null"
+            >
+              {{ avatarUrl ? null : 'WA' }}
             </t-avatar>
           </t-button>
 
@@ -147,6 +151,12 @@ export default {
       set: function (newValue) {
         this.$store.commit('workbenchSetDisplay', newValue)
       }
+    },
+    avatarUrl(){
+      if (this.$store.getters.userGetInfo === null) {
+        return null;
+      }
+      return this.$store.getters.userGetAvatar;
     },
     isLogin() {
       return this.$store.getters.userGetInfo !== null;

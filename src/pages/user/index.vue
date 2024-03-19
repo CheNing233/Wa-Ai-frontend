@@ -16,20 +16,20 @@
       <t-card>
         <t-tabs v-model="userTab" align="left" @change="tabChange">
 
-          <t-tab-panel class="detail_container" label="个人中心" value="profile">
+          <t-tab-panel class="detail_container" value="profile" label="个人中心">
             <UserProfile/>
           </t-tab-panel>
 
-          <t-tab-panel disabled label="我的收藏" value="likes">
+          <t-tab-panel disabled value="favourites" label="收藏">
             12345
           </t-tab-panel>
 
-          <t-tab-panel :value="filterType.Image" label="我的图片">
-            <UserImages :props="{ name: filterType.Image }"/>
+          <t-tab-panel value="images" label="图片">
+            <UserImages/>
           </t-tab-panel>
 
-          <t-tab-panel :value="filterType.Post" label="我的帖子">
-            <UserPosts />
+          <t-tab-panel value="posts" label="帖子">
+            <UserPosts/>
           </t-tab-panel>
 
         </t-tabs>
@@ -45,7 +45,6 @@ import UserProfile from './components/profile.vue'
 import UserImages from './components/images.vue';
 import UserPosts from './components/posts.vue'
 
-import {UserModelsTypes} from '@/config/UserModelsTypes.js';
 // import api from "@/service";
 
 
@@ -58,8 +57,7 @@ export default {
   },
   data() {
     return {
-      filterType: UserModelsTypes,
-      userTab: 'profile',
+      userTab: this.$route.query.filter_name,
     }
   },
   computed: {
@@ -69,7 +67,7 @@ export default {
       }
       return this.$store.getters.userGetInfo.nickName;
     },
-    avatarUrl(){
+    avatarUrl() {
       if (this.$store.getters.userGetInfo === null) {
         return require('@/assets/placeHolder/card-no-preview.png');
       }
@@ -87,6 +85,14 @@ export default {
     },
   },
   created() {
+    if (!this.$route.query.filter_name) {
+      this.$router.push({path: '/user/center', query: {filter_name: 'profile'}});
+    }
+  },
+  watch: {
+    $route() {
+      this.userTab = this.$route.query.filter_name;
+    }
   }
 }
 </script>

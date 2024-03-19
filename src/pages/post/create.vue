@@ -21,18 +21,27 @@
         </t-form-item>
 
         <t-form-item label="帖子图片" prop="images">
-          <t-list :split="true" style="width: 100%; height: 300px; overflow-y: scroll; overflow-x: hidden">
 
-            <t-list-item
-                v-for="(item, index) in formData.images"
+          <t-row class="image_list">
+            <t-col
+                v-for="(value, index) in imagesUrlList"
                 :key="index"
+                flex="shrink"
             >
-              {{ item }}
-              <!--            <template #action>-->
-              <!--              <t-link theme="primary" hover="color" style="margin-left: 16px"> 操作1 </t-link>-->
-              <!--            </template>-->
-            </t-list-item>
-          </t-list>
+              <t-image
+                  :src="value.src"
+                  class="image_item"
+                  fit="cover"
+                  shape="round"
+              >
+                <template #overlayContent>
+                  <div class="image_overlay"></div>
+                </template>
+              </t-image>
+
+            </t-col>
+          </t-row>
+
         </t-form-item>
 
         <t-space size="small" style="float: right;">
@@ -57,10 +66,49 @@
 <script>
 // import postManager from './components/manager.vue'
 import api from '@/service'
+import utils from '@/utils'
 
 export default {
   name: 'createPost',
   methods: {
+    freshPage() {
+
+      let reqs = []
+
+      for (let i in this.formData.images) {
+        console.info(this.formData.images[i])
+        reqs.push(
+            api.sdImageApi.getStaticImageUrl(
+                {id: this.formData.images[i]}
+            )
+                .then((resp) => {
+                  utils.array.insertItem(
+                      this.imagesUrlList,
+                      {
+                        id: this.formData.images[i],
+                        src: utils.images.getThumbnailUrl(resp.data.url)
+                      }
+                  )
+                })
+        )
+      }
+
+      Promise.all(reqs)
+          .catch(err => {
+            this.$message.error("获取数据失败: " + err)
+          })
+    },
+
+    handleImageOnClick(id){
+      this.$store.commit(
+          'imageDialogSetDisplay',
+          {
+            display: true,
+            imageId: id
+          }
+      );
+    },
+
     handleCancel() {
       this.$router.back();
     },
@@ -78,7 +126,7 @@ export default {
         api.sdPostApi.createSdPost(DATA)
             .then(() => {
               this.$message.success('发布成功');
-              this.$router.push('/user/center')
+              this.$router.back()
             })
             .catch(error => {
               this.$message.error('发布失败：' + error);
@@ -94,7 +142,8 @@ export default {
   components: {
     // postManager,
   },
-  computed: {},
+  computed: {
+  },
   data() {
     return {
       formData: {
@@ -110,6 +159,7 @@ export default {
           {required: true, message: '请输入内容', type: 'error'},
         ],
       },
+      imagesUrlList: [],
 
       managerVisible: false,
       managerData: [],
@@ -119,7 +169,36 @@ export default {
   },
   created() {
     this.formData.images = this.$route.query.selectedImages;
-    console.info("im", this.formData.images)
+    this.freshPage();
   }
 }
 </script>
+
+<style scoped>
+.image_list {
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  width: 100%;
+  justify-content: flex-start;
+
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+}
+
+.image_item {
+  width: 100px;
+  height: 100px;
+  margin-right: 8px;
+}
+
+.image_overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+</style>

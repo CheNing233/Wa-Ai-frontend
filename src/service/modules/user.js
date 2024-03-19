@@ -115,6 +115,11 @@ const getUsernameById = (params) => request(
     params, {}
 );
 
+const getUserInfoById = (params) => request(
+    `${USER_API_URL}${USER_API_LIST.getUserInfoById}/${params.id}`, 'get',
+    params, {}
+);
+
 const sendMailCode = (params) => request(
     `${USER_API_URL}${USER_API_LIST.sendMailCode}`, 'post',
     params, {}
@@ -143,6 +148,7 @@ export default {
     isLogin,
     me,
     getUsernameById,
+    getUserInfoById,
     sendMailCode,
     resetPasswordByMailCode,
     uploadAvatar,

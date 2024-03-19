@@ -293,7 +293,11 @@ export default {
     },
 
     handleBtnCreatePost() {
-      this.$router.push({ path: '/create/post', query: { selectedImages: this.manageSelected } });
+      if (this.manageSelected.length === 0) {
+        this.$message.warning('请先选择要发帖的图片');
+        return;
+      }
+      this.$router.push({path: '/create/post', query: {selectedImages: this.manageSelected}});
     },
 
     onFileChange(event) {
@@ -388,7 +392,10 @@ export default {
   },
   created() {
     this.freshPage();
-  }
+  },
+  mounted() {
+    this.freshPage();
+  },
 }
 
 </script>

@@ -249,40 +249,31 @@ export default {
 
       this.delTaskLoading = true;
 
-      let reqs = []
-
-      for (let i in this.manageSelected) {
-        console.info(this.manageSelected[i])
-        reqs.push(
-            api.sdImageApi.deleteSdImage(
-                {id: this.manageSelected[i]}
-            )
-        )
-      }
-
-      Promise.all(reqs)
-          .then(resp => {
-            this.$message.success(`删除成功（共 ${resp.length} 个）`);
+      api.sdPostApi.deletePost(this.manageSelected)
+          .then(() => {
+            this.$message.success(`删除成功（共 ${this.manageSelected.length} 个）`);
             this.freshPage();
           })
           .catch(err => {
             this.$message.error("删除失败: " + err)
-          }).finally(() => {
-        this.delTaskLoading = false;
-        this.handleChangeManageStatus();
-        this.freshPage();
-      });
+          })
+          .finally(() => {
+            this.delTaskLoading = false;
+            this.handleChangeManageStatus();
+            this.freshPage();
+          })
+
     },
 
     handleBtnCreatePost() {
-      // this.$router.push({path: '/create/post', query: {selectedImages: this.manageSelected}});
+      this.$message.info('选择一些图片进行发帖喵~')
+      this.$router.push({path: '/user/center', query: {filter_name: 'images'}});
     },
 
 
     onPageSizeChange(pageSize) {
       this.pageSize = pageSize;
       this.freshPage();
-
     },
 
     onCurrentChange(pageCurrent) {
@@ -340,7 +331,7 @@ export default {
   },
   created() {
     this.freshPage();
-  }
+  },
 }
 
 </script>
