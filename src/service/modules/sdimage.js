@@ -33,6 +33,12 @@ const request = (url, method, params, data, headers = null, onUploadProgress = n
     });
 }
 
+const getStaticImageUrl = (params) => request(
+    `${IMAGE_API_URL}${IMAGE_API_LIST.getStaticImageUrl}`, "get",
+    params, {}
+);
+
+
 const getSdImageDetail = (params) => request(
     `${IMAGE_API_URL}${IMAGE_API_LIST.getSdImageDetail}/${params.id}`, 'get',
     params, {}
@@ -59,6 +65,7 @@ const deleteSdImage = (params) => request(
 )
 
 export default {
+    getStaticImageUrl,
     getMySdImageList,
     getSdImageDetail,
     likeSdImage,

@@ -65,12 +65,17 @@ export default {
           nickName: '正在请求...',
           email: '正在请求...',
           gender: '正在请求...',
+          avatar: null,
           description: '正在请求...',
         }
       }
 
       return data;
-    }
+    },
+
+    avatarUrl() {
+      return this.formData.avatar;
+    },
   },
   data() {
     return {

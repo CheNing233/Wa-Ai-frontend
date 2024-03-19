@@ -95,6 +95,7 @@ const me = () => new Promise((resolve, reject) => {
         {}, {}
     ).then((res) => {
         store.commit('userSetInfo', res.data);
+        store.commit('userSetAvatar', res.data.avatar);
 
         if (store.getters.userGetWebsocket === null) {
             store.commit('userSetWebsocket', ws.baseWs.initBaseWs());

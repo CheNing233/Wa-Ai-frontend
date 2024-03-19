@@ -1,7 +1,11 @@
+import api from '@/service'
+import utils from '@/utils'
+
 const User = {
     namespace: true,
     state: {
         user: null,
+        userAvatar: null,
         userWebsocket: null,
         userIDB: null,
         userDarkMode: false,
@@ -9,6 +13,22 @@ const User = {
     mutations: {
         userSetInfo(state, user) {
             state.user = user;
+        },
+        userSetAvatar(state, avatarId) {
+            const PARAMS = {
+                id: avatarId,
+            }
+
+            api.sdImageApi.getStaticImageUrl(PARAMS)
+                .then((resp) => {
+                    state.userAvatar = utils.images.getQiniuImageUrlWithParams(
+                        resp.data.url, 128, 128, 100, "webp"
+                    );
+                })
+                .catch((err) => {
+                    state.userAvatar = null;
+                    console.log(err);
+                })
         },
         userSetWebsocket(state, websocket) {
             state.userWebsocket = websocket;
@@ -27,6 +47,9 @@ const User = {
     getters: {
         userGetInfo(state) {
             return state.user;
+        },
+        userGetAvatar(state) {
+            return state.userAvatar;
         },
         userGetWebsocket(state) {
             return state.userWebsocket;

@@ -5,7 +5,7 @@
           :style="{ width: '108px', height: '108px' }"
           fit="cover"
           shape="circle"
-          :src="require('@/assets/placeHolder/card-no-preview.png')"
+          :src="avatarUrl"
       />
     </t-col>
     <t-col :span="12" align="center">
@@ -46,6 +46,7 @@ import UserImages from './components/images.vue';
 import UserPosts from './components/posts.vue'
 
 import {UserModelsTypes} from '@/config/UserModelsTypes.js';
+// import api from "@/service";
 
 
 export default {
@@ -67,6 +68,12 @@ export default {
         return '正在请求...';
       }
       return this.$store.getters.userGetInfo.nickName;
+    },
+    avatarUrl(){
+      if (this.$store.getters.userGetInfo === null) {
+        return require('@/assets/placeHolder/card-no-preview.png');
+      }
+      return this.$store.getters.userGetAvatar;
     }
   },
   methods: {
