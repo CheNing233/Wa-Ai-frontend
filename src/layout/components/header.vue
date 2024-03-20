@@ -27,9 +27,39 @@
     <template #operations>
       <t-space :size="8">
 
-        <t-button disabled v-show="!displayMobile" shape="square" variant="text">
-          <LogoGithubIcon slot="icon" shape="square"/>
-        </t-button>
+        <t-popup>
+          <t-button shape="square" variant="text">
+            <LogoGithubIcon slot="icon" shape="square"/>
+          </t-button>
+
+          <template #content>
+            <t-list :split="false" style="padding-top: 16px">
+              <t-list-item
+                  v-for="(item, index) in repository"
+                  :key="index"
+              >
+                <t-list-item-meta
+                    :title="item.title"
+                    :image="item.image"
+                    :description="item.desc"
+                />
+
+                <template #action>
+                  <t-space size="small">
+                    <t-button
+                        :href="item.repoLink"
+                        target="_blank"
+                        variant="outline" shape="square"
+                    >
+                      <LinkIcon/>
+                    </t-button>
+                  </t-space>
+                </template>
+              </t-list-item>
+            </t-list>
+          </template>
+        </t-popup>
+
 
         <t-button disabled shape="square" variant="text">
           <NotificationIcon slot="icon" shape="square"/>
@@ -111,11 +141,14 @@ import {
   SettingIcon,
   SunnyIcon,
   UserIcon,
+  LinkIcon,
 } from 'tdesign-icons-vue';
 
 import {mapState} from 'vuex';
 
 import {NavItems} from '@/config/NavConfig.js';
+
+import aboutLists from '@/constants/about'
 
 
 export default {
@@ -132,11 +165,13 @@ export default {
     SettingIcon,
     LoginIcon,
     LogoutIcon,
+    LinkIcon,
   },
   data() {
     return {
       headMenuValue: '',
       menu_items: NavItems,
+      repository: aboutLists.repository,
     };
   },
   computed: {
