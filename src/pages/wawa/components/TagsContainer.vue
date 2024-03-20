@@ -40,54 +40,58 @@
 
       <t-col :span="12">
 
-        <t-space class="portal_baserow" size="8px">
-
-          <t-tag
+        <t-row :gutter="[8,8]" class="portal_baserow">
+          <t-col
               v-for="(value, index) in tagsCollector"
               :key="index"
-              size="large"
+              flex="shrink"
           >
+            <t-tag size="large">
             <span style="padding-right: 6px;">
                 {{ value.weight != 1 ? '(' : null }}{{
                 value.value
               }}{{ value.weight != 1 ? ':' + value.weight + ')' : null }}
             </span>
-            <t-button shape="square" variant="text"
-                      @click="IncTag(index)"
-            >
-              <AddIcon slot="icon" shape="square" style="margin: 0px;"/>
-            </t-button>
-            <t-button shape="square" variant="text"
-                      @click="DecTag(index)"
-            >
-              <RemoveIcon slot="icon" shape="square" style="margin: 0px;"/>
-            </t-button>
-            <t-button shape="square" variant="text"
-                      @click="delTag(index)"
-            >
-              <CloseIcon slot="icon" shape="square" style="margin: 0px;"/>
-            </t-button>
-          </t-tag>
+              <t-button shape="square" variant="text"
+                        @click="IncTag(index)"
+              >
+                <AddIcon slot="icon" shape="square" style="margin: 0px;"/>
+              </t-button>
+              <t-button shape="square" variant="text"
+                        @click="DecTag(index)"
+              >
+                <RemoveIcon slot="icon" shape="square" style="margin: 0px;"/>
+              </t-button>
+              <t-button shape="square" variant="text"
+                        @click="delTag(index)"
+              >
+                <CloseIcon slot="icon" shape="square" style="margin: 0px;"/>
+              </t-button>
+            </t-tag>
 
-        </t-space>
+          </t-col>
+        </t-row>
 
       </t-col>
 
 
       <t-col :span="12">
 
-        <t-space class="portal_baserow" size="8px">
-
-          <t-button
+        <t-row :gutter="[8,8]" class="portal_baserow">
+          <t-col
               v-for="(value, index) in transformedPageContent"
+              flex="shrink"
               :key="index"
-              variant="outline"
-              @click="addTag(value.label, value.value)"
           >
-            {{ value.value }} {{ value.label }}
-          </t-button>
+            <t-button
+                variant="outline"
+                @click="addTag(value.label, value.value)"
+            >
+              {{ value.value }} {{ value.label }}
+            </t-button>
+          </t-col>
 
-        </t-space>
+        </t-row>
 
       </t-col>
 
