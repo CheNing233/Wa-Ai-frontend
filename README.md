@@ -26,6 +26,7 @@
 ## Join us
 
 在此界面加入交流群讨论
+
 https://wa.glcn.top/portal/about
 
 ## License
@@ -35,5 +36,6 @@ https://wa.glcn.top/portal/about
 **THANKS**
 
 - https://github.com/AUTOMATIC1111/stable-diffusion-webui (stable-diffusion-webui)
+- https://github.com/Tencent/tdesign-vue (TDesign)
 - https://github.com/1328411791/Wa-Ai-backend (backend)
 
