@@ -1,5 +1,9 @@
 # WA AI Generation Platform
 
+## 重构项目地址
+项目已使用React+Arco重构，以下为新项目地址：
+[WA-AI-frontend-React](https://github.com/CheNing233/WA-AI-frontend-React)
+
 最初的目的是想蹭学校的显卡，打造一个类似吐司的stable-diffusion AI生成平台，提供多种AI绘画生成服务，包括但不限于：
 
 - 图像生成
